@@ -1,0 +1,282 @@
+#applicant-detail{
+    width: 830px;
+}
+#applicant-detail #left-side {
+    width: 530px;
+    margin-right: 60px;
+    float: left;
+}
+#applicant-detail #right-side {
+    width: 240px;
+    float: left;
+}
+#applicant-detail #right-side .well{
+    margin-top:35px;
+}
+#applicant-detail #applicant-resume{
+    width:100%;
+    height: 600px;
+    border:solid 1px #ddd;
+    margin-top:20px;
+}
+#applicant-detail #applicant-resume iframe{
+    width:100%;
+    height: 100%;
+    border:none;
+}
+#applicant-detail .applicant-header{
+    border-bottom:solid 2px #DDD;
+    margin-bottom: 15px;
+    margin-top: 10px;
+}
+#applicant-detail .applicant-header h2{
+    margin-bottom:5px;
+}
+#applicant-detail .applicant-cover-letter{
+    padding-top:20px;
+}
+#applicant-detail .applicant-cover-letter p{
+    font-size: 12px;
+    color: #616161;
+    line-height: 17px;
+    clear: both;
+    background: url('../img/comments_quotes.gif') no-repeat;
+    padding-left: 40px;
+    padding-top: 10px;
+}
+#applicant-detail #right-side .applicant-box{
+    margin-top: 15px;
+}
+#applicant-detail .applicant-information{
+    margin-top:15px;
+    height: 105px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+}
+#applicant-detail .applicant-information #left-side{
+    width: 300px;
+}
+#applicant-detail .applicant-information p{
+    font-size: 12px;
+    color: #616161;
+    clear: both;
+    margin-bottom:6px;
+    margin-top:1px;
+}
+#applicant-detail .applicant-information #right-side {
+    margin-top: 41px;
+}
+#applicant-detail .applicant-information label {
+    color: #616161;
+    font-size: 14px;
+    font-weight: bold;
+}
+.half {
+    width: 50%;
+    float:left;
+}
+.half label {
+    padding-right: 5px;
+}
+#applicant-detail .rater{
+    margin:5px 0;
+    height: 20px
+}
+#applicant-detail .applied-for{
+    display: block;
+    padding-top:10px;
+    color:#616161;
+}
+#applicant-detail .status-icon{
+    width:60px;
+    height:61px;
+    float:left;
+    margin-right:10px;
+    background-image: url(../img/status.png);
+}
+#applicant-detail .note{
+    padding:0;
+    background-image: url(../img/note.png);
+    background-repeat: repeat-y;
+    margin-top: 10px;
+}
+#applicant-detail .note-date{
+    float:right;
+    font-size:15px;
+    line-height: 14px;
+    font-weight:bold;
+    text-transform: lowercase;
+    color:#bababe;
+    padding:15px 15px 0 0;
+}
+#applicant-detail .note-date b{
+    float:left;
+    margin-right:4px;
+    line-height: 30px;
+    font-size:32px;
+}
+#applicant-detail .note-date span{
+    float:left;
+}
+#applicant-detail .note-actions{
+    float:left;
+    font-size:10px;
+    padding-top:4px;
+    padding:15px 0px 0 25px;
+}
+#applicant-detail .note-actions a.delete_note{
+    color:#ec6f69;
+    display: block;
+    text-transform: uppercase;
+}
+#applicant-detail .note-actions a.edit_note{
+    color:#95b929;
+    display: block;
+    text-transform: uppercase;
+}
+#applicant-detail .note p{
+    background-image: url(../img/line.gif);
+    padding: 0px 15px 00px 25px;
+    margin-top: 15px;
+    line-height: 17px;
+    clear: both;
+    background-position-y: -1px;
+    font-size: 12px;
+    color:#616161;
+}
+#applicant-detail .sidebar-title{
+    font-size:21px;
+    font-weight: normal;
+    color:#616161;
+    margin-bottom:0px;
+    margin-top: 15px;
+}
+#applicant-detail .sidebar-title a{
+    float:right;
+    height: 14px;
+}
+#applicant-detail .sidebar-title i{
+    padding-right: 4px;
+padding-left: 4px;
+float: right;
+margin-left: 10px;
+margin-top: 1px;
+top:0px !important;
+}
+.rounded-well{
+    border-radius:4px;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+}
+#killerquestions .well{
+    position: relative;
+}
+/*
+label.score{
+position: absolute;
+right:15px;
+top:15px;
+
+    transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+    -o-transition: all 0.2s;
+}
+label.score .score-box{
+    border-radius:5px 5px 0 0;
+    background-color:orange;
+    width: 59px;
+}
+label.score .score-unit{
+    display: block;
+    width:100%;
+    font-size:30px;
+    line-height: 30px;
+    color:#ffffff;
+    text-align: center;
+    font-weight: bold;
+    font-style: normal;
+    padding-top:6px;
+}
+label.score span.help{
+    display: block;
+    width:100%;
+    font-size:11px;
+    line-height: 11px;
+    padding-bottom:4px;
+    text-align: center;
+    color:rgba(0,0,0,0.3);
+}
+label.score .score-manage{
+    border-top:solid 1px rgba(255,255,255,0.3);
+    background-color: rgba(0,0,0,0.2);
+}
+label.score .select-box{
+
+}
+label.score .select-box-trigger {
+    background-color: transparent;
+    border: 0;
+    text-decoration: none;
+    height: 14px;
+    padding: 4px 2px 5px 2px;
+    font-size: 12px;
+    color: #474749;
+    overflow: hidden;
+    display: block;
+    background-image: none;
+    background-image: none;
+    background-image: none;
+    background-image: none;
+    background-image: none;
+    background-image: none;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    width: 55px;
+    color: white;
+}
+label.score .select-box-label {
+width: 100%;
+text-align: center;
+}
+label.score select{
+width:100%;
+}
+label.score .select-box-icon {
+    z-index: 0;
+    position: absolute;
+    right: 13px;
+    top: -2px;
+    right: 0;
+    height: 20px;
+    width: 23px;
+    text-decoration: none;
+    display: none;
+}
+label.show-box{
+    margin-top:-27px;
+}
+label.show-box .score-manage{
+    display:block !important;
+}
+label.score .score-manage{
+    display: none
+
+}*/
+.score-unit{
+    margin-top:5px;
+}
+#killerquestions .well .select-box{
+    vertical-align: top;
+    margin-left:7px;
+}
+#killerquestions .well textarea{
+    width: 755px;
+}
+
+.jobboard-title {
+    font-size: 18px!important;
+    padding-top:15px;
+}
