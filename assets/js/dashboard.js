@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
     $('.widget-box-title .tabs li').each(function(){
     var dest = function(el){
         var dests = new Array();
@@ -14,6 +15,7 @@ $(document).ready(function(){
         return false;
     });
     }).filter(':first').click();
+
     $('.widget-box-title .tabs').each(function(){
     $(this).find('li:first').click();
     })
@@ -41,44 +43,44 @@ $(document).ready(function(){
         id: "hello",
         steps: [
         {
-          target: 'btn-dashboard-create',
-          title: jobboard.langs.hopscotch.dashboard.step1.title,
-          content: jobboard.langs.hopscotch.dashboard.step1.content,
-          placement: "left",
-          yOffset: "-20px",
-          arrowOffset: "13px"
+        target:  'btn-dashboard-create' ,
+        title: jobboard.langs.hopscotch.dashboard.step1.title,
+        content: jobboard.langs.hopscotch.dashboard.step1.content,
+        placement: "left",
+        yOffset: "-20px",
+        arrowOffset: "13px"
         },
         {
-          target: 'menu_items',
-          title: jobboard.langs.hopscotch.dashboard.step2.title,
-          content: jobboard.langs.hopscotch.dashboard.step2.content,
-          placement: "right"
+        target: ($('#menu_items').css('display') == 'none' /*&& !$('body').hasClass( "compact" )*/) ?  'show-more' : 'menu_items' ,
+        title: jobboard.langs.hopscotch.dashboard.step2.title,
+        content: jobboard.langs.hopscotch.dashboard.step2.content,
+        placement: "right"
         },
         {
-          target: 'menu_corporateboard',
-          title: jobboard.langs.hopscotch.dashboard.step3.title,
-          content: jobboard.langs.hopscotch.dashboard.step3.content,
-          placement: "right"
+        target: ($('#menu_corporateboard').css('display') == 'none'  /*&& !$('body').hasClass( "compact" )*/) ?  'show-more' : 'menu_corporateboard',
+        title: jobboard.langs.hopscotch.dashboard.step3.title,
+        content: jobboard.langs.hopscotch.dashboard.step3.content,
+        placement: "right"
         },
         {
-          target: 'menu_settings',
-          title: jobboard.langs.hopscotch.dashboard.step4.title,
-          content: jobboard.langs.hopscotch.dashboard.step4.content,
-          placement: "right"
+        target: ($('#menu_settings').css('display') == 'none' /*&& !$('body').hasClass( "compact" )*/) ?  'show-more' : 'menu_settings',
+        title: jobboard.langs.hopscotch.dashboard.step4.title,
+        content: jobboard.langs.hopscotch.dashboard.step4.content,
+        placement: "right"
         },
         {
-          target: 'menu_appearance',
-          title: jobboard.langs.hopscotch.dashboard.step5.title,
-          content: jobboard.langs.hopscotch.dashboard.step5.content,
-          placement: "right"
+        target: ($('#menu_appearance').css('display') == 'none' /* && !$('body').hasClass( "compact" )*/) ?  'show-more' : 'menu_appearance',
+        title: jobboard.langs.hopscotch.dashboard.step5.title,
+        content: jobboard.langs.hopscotch.dashboard.step5.content,
+        placement: "right"
         },
         {
-          target: 'dashboard_tour_link',
-          title: jobboard.langs.hopscotch.dashboard.step6.title,
-          content: jobboard.langs.hopscotch.dashboard.step6.content,
-          placement: "top",
-          arrowOffset: "260px",
-          xOffset: "-250px"
+        target: 'dashboard_tour_link',
+        title: jobboard.langs.hopscotch.dashboard.step6.title,
+        content: jobboard.langs.hopscotch.dashboard.step6.content,
+        placement: "top",
+        arrowOffset: "260px",
+        xOffset: "-250px"
         }
         ],
         showPrevButton: true,
@@ -106,4 +108,5 @@ $(document).ready(function(){
     }
     }
     dashboard.init();
+
 });
