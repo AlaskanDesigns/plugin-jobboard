@@ -174,26 +174,39 @@ if(!function_exists('_jobboard_time_elapsed_string')) {
      * @param type $ptime
      * @return string
      */
-    function _jobboard_time_elapsed_string($ptime) {
+    function _jobboard_time_elapsed_string($ptime, $ago = false) {
         $etime = time() - $ptime;
 
         if ($etime < 1) {
             return '0 '.__('seconds', 'jobboard');
         }
-
-        $a = array( 12 * 30 * 24 * 60 * 60  =>  __('year', 'jobboard'),
-                    30 * 24 * 60 * 60       =>  __('month', 'jobboard'),
-                    24 * 60 * 60            =>  __('day', 'jobboard'),
-                    60 * 60                 =>  __('hour', 'jobboard'),
-                    60                      =>  __('minute', 'jobboard'),
-                    1                       =>  __('second', 'jobboard')
+        $a = array( 12 * 30 * 24 * 60 * 60  => 'year',
+                    30 * 24 * 60 * 60       => 'month',
+                    24 * 60 * 60            => 'day',
+                    60 * 60                 => 'hour',
+                    60                      => 'minute',
+                    1                       => 'second',
                     );
-
         foreach ($a as $secs => $str) {
             $d = $etime / $secs;
             if ($d >= 1) {
                 $r = round($d);
-                return $r . ' ' . $str . ($r > 1 ? 's' : '');
+
+                if($str == 'year') {
+                    $ret = ($ago === true ) ? sprintf(_n('%1$d year ago', '%1$d years ago', $r), $r) : sprintf(_n('%1$d year', '%1$d years', $r), $r);
+                } else if($str == 'month') {
+                    $ret = ($ago === true ) ? sprintf(_n('%1$d month ago', '%1$d months ago', $r), $r) : sprintf(_n('%1$d month', '%1$d months', $r), $r);
+                } else if($str == 'day') {
+                    $ret = ($ago === true ) ? sprintf(_n('%1$d day ago', '%1$d days ago', $r), $r) : sprintf(_n('%1$d day', '%1$d days', $r), $r);
+                } else if($str == 'hour') {
+                    $ret = ($ago === true ) ? sprintf(_n('%1$d hour ago', '%1$d hours ago', $r), $r) : sprintf(_n('%1$d hour', '%1$d hours', $r), $r);
+                } else if($str == 'minute') {
+                    $ret = ($ago === true ) ? sprintf(_n('%1$d minute ago', '%1$d minutes ago', $r), $r) : printf(_n('%1$d minute', '%1$d minutes', $r), $r);
+                } else if($str == 'second') {
+                    $ret = ($ago === true ) ? sprintf(_n('%1$d second ago', '%1$d seconds ago', $r), $r) : sprintf(_n('%1$d second', '%1$d seconds', $r), $r);
+                }
+
+                return $ret;
             }
         }
     }
