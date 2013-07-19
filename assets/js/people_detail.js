@@ -107,36 +107,46 @@ $(document).ready(function() {
 	    'json'
 	);
 	$('#dialog-applicant-status').dialog('close');
+	$('.option-send-email').hide();
     });
     $("#applicant-status-cancel").click(function() {
 	$('#dialog-applicant-status').dialog('close');
     });
 
     $("#applicant_status").change(function(){
-	$.getJSON(jobboard.ajax.applicant_status,
-	    {
-		"applicantId" : $(this).attr('data-applicant-id'),
-		"status" : $("#applicant_status option:selected").attr("value")
-	    },
-	    function(data){}
-	);
-	$.getJSON(jobboard.ajax.applicant_status_message,
-	    {
-		"applicantID" : $(this).attr('data-applicant-id'),
-		"status" : $("#applicant_status option:selected").attr("value")
-	    },
-	    function(data){
-		if( data.error) {
-		    return false;
-		}
-		$("#applicant-status-notification-message").val(data.message);
-		tinyMCE.activeEditor.setContent(data.message);
-		$("#dialog-applicant-status").dialog({width:740}).dialog('open');
-	    }
-	);
-	setIcon();
+        $(".option-send-email").show();
+        setIcon();
     });
     setIcon();
+
+    $(".option-send-email").hide();
+    $("#cancel-send-email").click(function(){
+        $(".option-send-email").hide();
+    });
+
+    $("#send-email").click(function(){
+        $.getJSON(jobboard.ajax.applicant_status,
+            {
+                "applicantId" : $("#applicant_status").attr('data-applicant-id'),
+                "status" : $("#applicant_status option:selected").attr("value")
+            },
+            function(data){}
+        );
+        $.getJSON(jobboard.ajax.applicant_status_message,
+            {
+                "applicantID" : $("#applicant_status").attr('data-applicant-id'),
+                "status" : $("#applicant_status option:selected").attr("value")
+            },
+            function(data){
+                if( data.error) {
+                    return false;
+                }
+                $("#applicant-status-notification-message").val(data.message);
+                tinyMCE.activeEditor.setContent(data.message);
+                $("#dialog-applicant-status").dialog({width:740}).dialog('open');
+            }
+        );
+    });
 
     $('.auto-star').rating({
 	callback: function(value, link, input){
