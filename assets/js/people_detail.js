@@ -114,6 +114,13 @@ $(document).ready(function() {
     });
 
     $("#applicant_status").change(function(){
+        $.getJSON(jobboard.ajax.applicant_status,
+            {
+                "applicantId" : $("#applicant_status").attr('data-applicant-id'),
+                "status" : $("#applicant_status option:selected").attr("value")
+            },
+            function(data){}
+        );
         $(".option-send-email").show();
         setIcon();
     });
@@ -125,13 +132,6 @@ $(document).ready(function() {
     });
 
     $("#send-email").click(function(){
-        $.getJSON(jobboard.ajax.applicant_status,
-            {
-                "applicantId" : $("#applicant_status").attr('data-applicant-id'),
-                "status" : $("#applicant_status option:selected").attr("value")
-            },
-            function(data){}
-        );
         $.getJSON(jobboard.ajax.applicant_status_message,
             {
                 "applicantID" : $("#applicant_status").attr('data-applicant-id'),
