@@ -48,12 +48,11 @@
 
         foreach($aApplicants as $aApplicant) {
             $aPdf = ModelJB::newInstance()->getCVFromApplicant($aApplicant["pk_i_id"]);
-            $aPdf = current($aPdf);
+            //$aPdf = current($aPdf);
 
             // Adding files into zip
             $zip->addFile($path.$aPdf["s_name"], osc_sanitizeString($aApplicant["s_name"]) . ".pdf");
         }
-
         $zip->close();
 
         if(file_exists($zip_name)){
