@@ -57,5 +57,13 @@ class JobboardAdminMenu
             'jobboard_locations',
             'moderator'
         );
+
+        osc_add_admin_submenu_page(
+            'jobboard',
+            __('Default locations', 'jobboard'),
+            osc_admin_render_plugin_url("jobboard/admin/settings.php"),
+            'jobboard_locations',
+            'moderator'
+        );
     }
 }

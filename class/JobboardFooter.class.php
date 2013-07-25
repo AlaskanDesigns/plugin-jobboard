@@ -27,7 +27,15 @@ class JobboardFooter
 			'id' => 'dashboard_tour_link'
 		    )
 		);
-	    break;
+		$footer['unsubscribe'] = array(
+		    'class' => '',
+		    'link'  => osc_admin_render_plugin_url("jobboard/delete_jobboard.php"),
+		    'text'  => __('Delete jobboard', 'jobboard'),
+		    'attr'  => array(
+			'id' => 'unsubscribe_jobboard'
+		    )
+		);
+            break;
 	}
 
 	return $footer;

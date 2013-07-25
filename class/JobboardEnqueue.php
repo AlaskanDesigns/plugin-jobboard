@@ -71,6 +71,9 @@ class JobboardEnqueue
             case('jobboard/manage_killer.php'):
                 osc_enqueue_script('jobboard-manage-killer-form');
             break;
+            case('jobboard/delete_jobboard.php'):
+                osc_enqueue_script('jobboard-delete_jobboard');
+            break;
         }
         if(Params::getParam('page')=='items') {
             osc_enqueue_script('jquery-metadata');

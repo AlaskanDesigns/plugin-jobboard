@@ -88,6 +88,9 @@ class JobboardCustomTitles
             if(Params::getParam('file') == 'jobboard/people.php') {
                 $string = __('Applicants', 'jobboard') . '<a href="#" class="btn ico ico-32 ico-help float-right"></a>';
             }
+            if(Params::getParam('file') == 'jobboard/delete_jobboard.php') {
+                $string = __('Delete Job board', 'jobboard') . '<a href="#" class="btn ico ico-32 ico-help float-right"></a>';
+            }
         }
         return $string;
     }

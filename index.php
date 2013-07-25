@@ -67,7 +67,7 @@ osc_register_script('jobboard-init-tinymce', osc_plugin_url(__FILE__) . 'assets/
 osc_register_script('jobboard-item-add', osc_plugin_url(__FILE__) . 'assets/js/item_add.js', array('jquery'));
 osc_register_script('jobboard-admin-page', osc_plugin_url(__FILE__) . 'assets/js/jb_admin.js', 'jquery');
 osc_register_script('hopscotch', osc_plugin_url(__FILE__) . 'assets/lib/hopscotch/js/hopscotch-0.1.min.js', array('jquery'));
-
+osc_register_script('jobboard-delete_jobboard', osc_plugin_url(__FILE__) . 'assets/js/delete_jobboard.js', array('jquery'));
 /* -- Register js and css scripts -- */
 
 /*
