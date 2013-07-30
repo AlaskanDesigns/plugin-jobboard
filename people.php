@@ -3,6 +3,41 @@
         die;
     }
 
+    if(Params::getParam("add_new_applicant"))
+    {
+	$applName   = Params::getParam("applicant-name");
+	$applEmail  = Params::getParam("applicant-email");
+	$applPhone  = Params::getParam("applicant-phone");
+	$applBday   = date("Y-m-d", strtotime(Params::getParam("applicant-birthday")));
+
+	$applSex    = Params::getParam("applicant-sex");
+	$applJob    = Params::getParam("applicant-job");
+	$applStatus = Params::getParam("applicant-status");
+	$applFile   = Params::getFiles("applicant-attachment");
+	$applRating = Params::getParam("applicant-rating");
+
+	//insert applicant
+	ModelJB::newInstance()->insertApplicant($applJob, $applName, $applEmail, '', $applPhone, $applBday, $applSex);
+
+	//get Applicant id
+	$aApplicant = current(ModelJB::newInstance()->getLastApplicant());
+
+	//set rating
+	ModelJB::newInstance()->setRating($aApplicant["pk_i_id"], $applRating);
+
+	//update status
+	if($applStatus != '') {
+	    ModelJB::newInstance()->changeStatus($aApplicant["pk_i_id"], $applStatus);
+	}
+
+	//insert file in DB
+	ModelJB::newInstance()->insertFile($aApplicant["pk_i_id"], $applFile["name"]);
+
+	//insert file in disk
+	$path  = osc_get_preference('upload_path', 'jobboard_plugin') . $applFile["name"];
+	move_uploaded_file($applFile["tmp_name"], $path);
+    }
+
     $iDisplayLength = Params::getParam('iDisplayLength');
     $iPage = Params::getParam('iPage');
     $iPage = is_numeric($iPage)?($iPage):1;
@@ -73,7 +108,10 @@
     $aItems = $mSearch->doSearch();
     View::newInstance()->_exportVariableToView('items', $aItems) ;
 ?>
-<h2 class="render-title"><?php _e('Resumes', 'jobboard'); ?>  <a id="show-filters" class="btn btn-mini"><?php _e('Show filters', 'jobboard'); ?></a></h2>
+<h2 class="render-title"><?php _e('Resumes', 'jobboard'); ?>
+    <a id="show-filters" class="btn btn-mini"><?php _e('Show filters', 'jobboard'); ?></a>
+    <a id="add-applicant" class="btn btn-green float-right"><?php _e('Add applicant', 'jobboard'); ?></a>
+</h2>
 <div class="relative resumes">
     <div class="search-filter hide">
         <form method="get" action="<?php echo osc_admin_base_url(true); ?>" id="shortcut-filters" class="">
@@ -383,3 +421,58 @@
         </div>
     </div>
 </form>
+<div id="new_applicant_dialog">
+<h2><?php _e('Add new applicant', 'jobboard') ?></h2>
+<ul id="error_list"></ul>
+<form enctype="multipart/form-data" method="post" action="" id="add_new_applicant_form" name="add_new_applicant_form">
+    <input type="hidden" id="add_new_applicant" name="add_new_applicant" value="true">
+    <input type="text" id="applicant-name"     name="applicant-name"     placeholder="Name">
+    <input type="text" id="applicant-email"    name="applicant-email"    placeholder="Email">
+    <input type="text" id="applicant-phone"    name="applicant-phone"    placeholder="Phone">
+    <input type="text" id="applicant-birthday" name="applicant-birthday" placeholder="MM/DD/YYYY">
+    <div class="applicant-selector">
+    <select id="applicant-sex" name="applicant-sex">
+    <?php $aSex = _jobboard_get_sex_array(); ?>
+    <option value="" selected="selected"><?php echo __("Choose sex", 'jobboard'); ?></option>
+    <?php foreach($aSex as $key => $value) {?>
+	<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+    <?php } ?>
+    </select>
+    </div>
+    <div class="applicant-selector">
+    <select id="applicant-job" name="applicant-job">
+	<option value="-1"><?php _e('Assign to a job?', 'jobboard'); ?></option>
+	<option value="-1" <?php if( Params::getParam('jobId') == '-1' ) echo "selected"; ?>>- <?php _e("Only spontaneous", "jobboard"); ?> -</option>
+	<?php osc_reset_items();
+	while( osc_has_items() ) { ?>
+	<option value="<?php echo osc_item_id(); ?>"><?php echo osc_item_title(); ?></option>
+	<?php } ?>
+    </select>
+    </div>
+    <div class="applicant-selector">
+    <select id="applicant-status" name="applicant-status">
+	<option value="" selected="selected"><?php _e("Select a status", "jobboard"); ?></option>
+	<?php $st_array = jobboard_status();
+	foreach($st_array as $k => $v) {
+	    echo '<option value="'.$k.'">'.$v.'</option>';
+	} ?>
+    </select>
+    </div>
+    <div id="file">
+	<label><?php _e("Attach CV"); ?></label>
+	<input type="file" name="applicant-attachment" id="applicant-attachment">
+    </div>
+    <div id="rating">
+	<label><?php _e("Select a rating"); ?></label>
+	<div id="rating-filter" class="rater big-star">
+	<?php for($k=1; $k<=5; $k++) {
+	    echo '<input name="applicant-rating" type="radio" class="filter-star" value="'.$k.'" title="'.$k.'" '.($k==Params::getParam('rating')?'checked="checked"':'').'/>';
+	} ?>
+    </div>
+    </div>
+    <div id="applicant-buttons">
+    <button type="submit" class="btn btn-blue float-right"><?php _e('Add', 'jobboard') ; ?></button>
+    <button type="button" class="btn float-right" id="cancel-dialog" name="cancel-dialog"><?php _e('Cancel', 'jobboard') ; ?></button>
+    </div>
+</form>
+</div>
