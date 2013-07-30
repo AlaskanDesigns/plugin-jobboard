@@ -421,8 +421,8 @@
         </div>
     </div>
 </form>
-<div id="new_applicant_dialog">
-<h2><?php _e('Add new applicant', 'jobboard') ?></h2>
+<div id="new_applicant_dialog" title="<?php _e('Add new applicant', 'jobboard') ?>">
+
 <ul id="error_list"></ul>
 <form enctype="multipart/form-data" method="post" action="" id="add_new_applicant_form" name="add_new_applicant_form">
     <input type="hidden" id="add_new_applicant" name="add_new_applicant" value="true">
