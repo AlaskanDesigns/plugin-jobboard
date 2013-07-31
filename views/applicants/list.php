@@ -245,6 +245,7 @@
                             <div class="actions">
                                 <ul>
                                     <li><a href="javascript:delete_applicant(<?php echo $p['pk_i_id']; ?>);" ><?php _e("Delete", "jobboard"); ?></a></li>
+                                    <li><a href="javascript:send_email(<?php echo $p['pk_i_id']; ?>);" id="contact-mail" ><?php _e("Contact", "jobboard"); ?></a></li>
                                 </ul>
                             </div>
                         </td>

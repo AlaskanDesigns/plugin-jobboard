@@ -105,6 +105,7 @@ $(document).ready(function() {
                 "applicantID" : $('#applicant_status').attr('data-applicant-id'),
                 "message" : tinyMCE.activeEditor.getContent(),
                 "subject" : $("#applicant-status-notification-subject").val()
+
             },
             function(data){},
             'json'
@@ -118,6 +119,7 @@ $(document).ready(function() {
             function(data){
                 $('#dialog-applicant-status').dialog('close');
                 $('.option-send-email').hide();
+
                 if($('.show-mails-applicant-box').css('display') == 'none') {
                     location.href += "&show=cvs";
                 } else {
@@ -127,27 +129,38 @@ $(document).ready(function() {
             },
             'json'
         );
-
     });
 
     $("#applicant-status-cancel").click(function() {
         $('#dialog-applicant-status').dialog('close');
         $(".option-send-email").hide();
     });
-
     $("#applicant_status").change(function() {
-        $.post(jobboard.ajax.applicant_status,
-            {
-                "applicantId" : $("#applicant_status").attr('data-applicant-id'),
-                "status" : $("#applicant_status option:selected").attr("value")
-            },
-            function(data){},
-            'json'
-        );
-        $(".option-send-email").show();
-        setIcon();
+
+    $.getJSON(jobboard.ajax.applicant_status,
+        {
+        "applicantId" : $(this).attr('data-applicant-id'),
+        "status" : $("#applicant_status option:selected").attr("value")
+        },
+        function(data){}
+    );
+        $.getJSON(jobboard.ajax.applicant_status_message,
+        {
+        "applicantID" : $(this).attr('data-applicant-id'),
+        "status" : $("#applicant_status option:selected").attr("value")
+        },
+        function(data){
+        if( data.error) {
+            return false;
+        }
+        $("#applicant-status-notification-subject").val(data.subject);
+        $("#applicant-status-notification-message").val(data.message);
+        tinyMCE.activeEditor.setContent(data.message);
+        $("#dialog-applicant-status").dialog({width:740}).dialog('open');
+        }
+        ); //setIcon();
     });
-    setIcon();
+    //setIcon();
 
     $(".option-send-email").hide();
     $("#cancel-send-email").click(function(){
@@ -173,10 +186,11 @@ $(document).ready(function() {
     });
 
     $('.auto-star').rating({
-    callback: function(value, link, input){
-        if( typeof value === 'undefined' ) {
-        value = 0;
-        }
+        callback: function(value, link, input){
+            if( typeof value === 'undefined' ) {
+            value = 0;
+            }
+
 
         $.post(jobboard.ajax.rating,
         {
@@ -191,68 +205,63 @@ $(document).ready(function() {
 
     // ajax set open answer punctuation, and refresh final score
     $('select.answer_punctuation').change(function(){
-
-//        $(this).next().find('.select-box-label').text($(this).find('option:eq(0)').text());
-
-    $('#jobboard-loading-container').show();
-
-    var killerFormId = $(this).attr('data-killerform-id');
-    var applicantId  = $(this).attr('data-applicant-id');
-    var questionId   = $(this).attr('data-question-id');
-    var punctuation  = $(this).find('option:selected').attr('value');
-    $.post(jobboard.ajax.answer_punctuation,
-        {
-        "killerFormId" : killerFormId,
-        "applicantId" : applicantId,
-        "questionId"  : questionId,
-        "punctuation" : punctuation
-        },
-        function(data){
-        // recived object
-        // obj.punctuation -> var punctuation
-        if(data.punctuation=='reject') {
-            $('select#applicant_status>option[value=2]').attr('selected', true);
-            $('select#applicant_status').triggerHandler('change');
-            $('#question_'+questionId+' i.score-unit').html(jobboard.langs.reject);
-        } else  if(data.punctuation != '') {
-            $('#question_'+questionId+' i.score-unit').html(punctuation);
-        } else {
-            $('#question_'+questionId+' i.score-unit').html('?');
-        }
-
-        // update killer form score
-        var temp_score = 0;
-        var is_rejected = 0;
-        $('#killer_questions_applicant i.score-unit').each(function() {
-            var punctuation_aux = $(this).html();
-            if(punctuation_aux!='reject' && punctuation_aux!=''){
-            if( !isNaN(parseInt(punctuation_aux)) ) {
-                temp_score = temp_score+parseInt(punctuation_aux);
-            }
-            }else if(punctuation_aux=='reject') {
-            is_rejected = 1;
+        $('#jobboard-loading-container').show();
+        var killerFormId = $(this).attr('data-killerform-id');
+        var applicantId  = $(this).attr('data-applicant-id');
+        var questionId   = $(this).attr('data-question-id');
+        var punctuation  = $(this).find('option:selected').attr('value');
+        $.getJSON(jobboard.ajax.answer_punctuation,
+            {
+            "killerFormId" : killerFormId,
+            "applicantId" : applicantId,
+            "questionId"  : questionId,
+            "punctuation" : punctuation
+            },
+            function(data){
+            // recived object
+            // obj.punctuation -> var punctuation
+            if(data.punctuation=='reject') {
+                $('select#applicant_status>option[value=2]').attr('selected', true);
+                $('select#applicant_status').triggerHandler('change');
+                $('#question_'+questionId+' i.score-unit').html(jobboard.langs.reject);
+            } else  if(data.punctuation != '') {
+                $('#question_'+questionId+' i.score-unit').html(punctuation);
+            } else {
+                $('#question_'+questionId+' i.score-unit').html('?');
             }
 
-        });
-        var num_questions = $('#killer_questions_applicant select').length;
-        var score = temp_score/num_questions;
-        $('span#sum_punctuations').html(score);
-        $('span.sum_punctuations').html(score);
+            // update killer form score
+            var temp_score = 0;
+            var is_rejected = 0;
+            $('#killer_questions_applicant i.score-unit').each(function() {
+                var punctuation_aux = $(this).html();
+                if(punctuation_aux!='reject' && punctuation_aux!=''){
+                if( !isNaN(parseInt(punctuation_aux)) ) {
+                    temp_score = temp_score+parseInt(punctuation_aux);
+                }
+                }else if(punctuation_aux=='reject') {
+                is_rejected = 1;
+                }
 
-        if(is_rejected==1) {
-            $('#applicant_status').html(jobboard.langs.reject);
-        } else {
+            });
+            var num_questions = $('#killer_questions_applicant select').length;
+            var score = temp_score/num_questions;
+            $('span#sum_punctuations').html(score);
+            $('span.sum_punctuations').html(score);
 
-        }
-        // if(corrected)
-        if(data.corrected) {
-            // add corrected circle
-            // TODO FER
-        }
-        $('#jobboard-loading-container').hide();
-        },
-        'json'
-    );
+            if(is_rejected==1) {
+                $('#applicant_status').html(jobboard.langs.reject);
+            } else {
+            }
+            // if(corrected)
+            if(data.corrected) {
+                // add corrected circle
+                // TODO FER
+            }
+
+            $('#jobboard-loading-container').hide();
+            }
+        );
     });
 
     $("#view-more-mails").click(function(){
@@ -261,8 +270,60 @@ $(document).ready(function() {
     });
 
     $('label.score').hover(function(){
-        $(this).addClass('show-box');
-    }, function(){
-        $(this).removeClass('show-box');
+    $(this).addClass('show-box');
+    },function(){
+    $(this).removeClass('show-box');
+    });
+
+    $(".nav-options").click(function() {
+        $('.nav-options').removeClass("active");
+        $(this).addClass("active");
+    });
+
+    hideNotes();
+    hideMails();
+    $("#viewCV").click(function() {
+        showCv();
+        hideNotes();
+        hideMails();
+    });
+    $("#viewNotes").click(function() {
+        showNotes();
+        hideCv();
+        hideMails();
+    });
+    $("#viewEmails").click(function() {
+        showMails();
+        hideNotes();
+        hideCv();
+    });
+
+    $("#send-email").click(function() {
+        $("#dialog-applicant-status").dialog({width:740}).dialog("open");
     });
 });
+
+function showNotes(){
+    $("#dashboard_notes").show();
+    $(".note_plus").show();
+}
+function hideNotes(){
+    $("#dashboard_notes").hide();
+    $(".note_plus").hide();
+}
+function hideCv() {
+    $(".applicant-cover-letter").hide();
+    $("#applicant-resume").hide();
+    $("#applicant-resume-title").hide();
+}
+function showCv() {
+    $(".applicant-cover-letter").show();
+    $("#applicant-resume").show();
+    $("#applicant-resume-title").show();
+}
+function hideMails() {
+    $(".show-mails-applicant-box").hide();
+}
+function showMails() {
+    $(".show-mails-applicant-box").show();
+}

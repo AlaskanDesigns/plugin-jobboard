@@ -7,9 +7,12 @@ $(document).ready(function() {
         modal: true
     });
 
-    // tooltips notes
-    $.each($('.note'), function(index, value) {
-        $(value).osc_tooltip($(value).attr('data-tooltip'), {layout: 'gray-tooltip', position: {x: 'right', y: 'middle'}});
+    $("#dialog-send-mail").dialog({
+	autoOpen: false,
+	modal: true,
+        resizable: false,
+        height: 450,
+        width: 620
     });
 
     $('#show-filters').click( function(){
@@ -70,6 +73,15 @@ $(document).ready(function() {
         }
     });
 
+    $("#contact-cancel").click(function(){
+        $("#dialog-send-mail").dialog('close');
+    });
+
+    $("#contact-submit").click(function() {
+        console.log(tinyMCE.activeEditor.getContent());
+        console.log($("#subject").val());
+    });
+
     $('#applicant-birthday').rules(
         "add", {
             'regex_bday': true,
@@ -125,4 +137,8 @@ var applicant = {
 function delete_applicant(id) {
     $("#delete_id").attr("value", id);
     $("#dialog-people-delete").dialog('open');
+}
+function send_email(id) {
+    $("#delete_id").attr("value", id);
+    $("#dialog-send-mail").dialog({width:600}).dialog("open");
 }
