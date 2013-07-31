@@ -63,6 +63,8 @@ class JobboardEnqueue
                 osc_enqueue_script('jquery-rating');
                 osc_enqueue_script('jquery-metadata');
                 osc_enqueue_script('jobboard-people');
+                osc_enqueue_script('tiny_mce');
+                osc_enqueue_script('jobboard-init-tinymce');
 		osc_enqueue_style('jquery-rating', osc_plugin_url(dirname(__FILE__)) . 'assets/lib/rating/jquery.rating.css');
             break;
             case('jobboard/killer_form_frm.php'):

@@ -315,6 +315,7 @@
                             <div class="actions">
                                 <ul>
                                     <li><a href="javascript:delete_applicant(<?php echo $p['pk_i_id']; ?>);" ><?php _e("Delete", "jobboard"); ?></a></li>
+                                    <li><a href="javascript:send_email(<?php echo $p['pk_i_id']; ?>);" id="contact-mail" ><?php _e("Contact", "jobboard"); ?></a></li>
                                 </ul>
                             </div>
                         </td>
@@ -383,3 +384,26 @@
         </div>
     </div>
 </form>
+<form id="dialog-send-mail" method="post" action="" title="<?php echo osc_esc_html(__('Contact')); ?>">
+    <div class="form-horizontal">
+        <ul id="error_list"></ul>
+        <div class="form-row"><input type="text" id="subject" name="subject"></div>
+        <div class="form-row"><textarea id="applicant-status-notification-message" name="body"></textarea></div>
+        <div class="form-actions">
+            <div class="wrapper">
+                <a id="contact-cancel" class="btn" href="javascript:void(0);"><?php _e("Cancel", 'jobboard'); ?></a>
+                <a id="contact-submit" class="btn btn-blue" ><?php echo osc_esc_html( __('Send', 'jobboard') ); ?></a>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+</form>
+<style>
+/*    #dialog-send-mail {
+        display: block;
+        width: auto;
+        min-height: 0px;
+        height: 405px;
+    }*/
+    #subject {width: 97%; margin-left: 1px;}
+</style>

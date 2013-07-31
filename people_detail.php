@@ -52,13 +52,27 @@
     }
     $score = (float)number_format($people['d_score'],1);
 ?>
+<style>
+    .options-people-details {
+        font-size: 14px;
+        padding: 1em;
+        margin-top: -15px;
+    }
+    .options-people-details:hover {
+        background-color: #F1F0F0;
+        border-radius: 5px;
+    }
+    #send-email:hover { cursor: pointer; }
+    #applicant-header h2 a:active {
+        background-color: #ccc;
+    }
+</style>
 <div id="applicant-detail">
     <span><a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>" ><?php _e('Applicants', 'jobboard'); ?></a> &raquo; <?php echo @$people['s_name']; ?></span>
     <div class="applicant-header">
         <h2 class="render-title"><?php echo @$people['s_name']; ?>
-            <div class="options">
-            <a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>&amp;jb_action=unread&amp;applicantID=<?php echo $applicantId; ?>"><?php _e('Mark as unread', 'jobboard'); ?></a>
-            </div>
+            <a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>&amp;jb_action=unread&amp;applicantID=<?php echo $applicantId; ?>" class="options-people-details float-right" style="height:14px;"><?php _e('Mark as unread', 'jobboard'); ?></a>
+            <a id="send-email" class="options-people-details float-right" style="height:14px;"><?php _e('Send an email', 'jobboard'); ?></a>
         </h2>
     </div>
     <div>
