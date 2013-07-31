@@ -6,9 +6,6 @@
     $has_submited_more_vacancies = false;
     $applicantId = Params::getParam("people");
 
-    $show = '';
-    $show = Params::getParam("show");
-
     $mjb    = ModelJB::newInstance();
     $people = $mjb->getApplicant($applicantId);
 
@@ -53,19 +50,14 @@
         }
         $maxPunctuation = count($aAnswers)*10;
     }
-
-    $score          = (float)number_format($people['d_score'],1);
+    $score = (float)number_format($people['d_score'],1);
 ?>
 <div id="applicant-detail">
-    <input type="hidden" name="show" id="show" value="<?php echo $show; ?>">
     <span><a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>" ><?php _e('Applicants', 'jobboard'); ?></a> &raquo; <?php echo @$people['s_name']; ?></span>
     <div class="applicant-header">
         <h2 class="render-title"><?php echo @$people['s_name']; ?>
             <div class="options">
-            <a href="<?php echo osc_admin_render_plugin_url("jobboard/people_detail.php"); ?>&people=<?php echo $applicantId; ?>&show=mails" id="show-send-mails" class="btn"><?php _e('View sent mails', 'jobboard'); ?></a>
-            <a href="<?php echo osc_admin_render_plugin_url("jobboard/people_detail.php"); ?>&people=<?php echo $applicantId; ?>&show=cv" id="show-cv" class="btn"><?php _e('View resume', 'jobboard'); ?></a>
-            <a href="<?php echo osc_base_url(true).'?page=ajax&action=custom&ajaxfile='; ?>jobboard/download.php?data=<?php echo $applicantId; ?>|<?php echo $file['s_secret']; ?>" class="btn btn-blue"><?php _e('Download resume', 'jobboard'); ?></a>
-            <a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>&amp;jb_action=unread&amp;applicantID=<?php echo $applicantId; ?>" class="btn"><?php _e('Mark as unread', 'jobboard'); ?></a>
+            <a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>&amp;jb_action=unread&amp;applicantID=<?php echo $applicantId; ?>"><?php _e('Mark as unread', 'jobboard'); ?></a>
             </div>
         </h2>
     </div>
@@ -85,11 +77,8 @@
 
                 <div class="clear"></div>
             </div>
+
             <div class="clear"></div>
-            <div class="applicant-cover-letter">
-                <h3 class="render-title jobboard-title"><?php _e('Cover letter', 'jobboard'); ?></h3>
-                <p><?php echo nl2br($people['s_cover_letter']); ?></p>
-            </div>
         </div>
         <div id="right-side">
             <div class="well ui-rounded-corners applicant-box">
@@ -125,7 +114,18 @@
         </div>
         <div style="clear:both;"></div>
     </div>
-    <h3 class="render-title jobboard-title"><?php _e('Applicant CV', 'jobboard'); ?></h3>
+    <ul class="nav nav-tabs">
+        <li><a id="viewCV"     class="nav-options active" href="#"><?php _e("View cover letter and CV", "jobboard"); ?></a></li>
+        <li><a id="viewNotes"  class="nav-options" href="#"><?php _e("View notes", "jobboard"); ?></a></li>
+        <li><a id="viewEmails" class="nav-options" href="#"><?php _e("View emails sent", "jobboard"); ?></a></li>
+    </ul>
+    <div class="applicant-cover-letter">
+        <h3 class="render-title jobboard-title"><?php _e('Cover letter', 'jobboard'); ?></h3>
+        <p><?php echo nl2br($people['s_cover_letter']); ?></p>
+    </div>
+    <h3  id="applicant-resume-title" class="render-title jobboard-title"><?php _e('Applicant CV', 'jobboard'); ?>
+    <a class="btn btn-blue btn-mini float-right" style="height:14px" href="<?php echo osc_base_url(true).'?page=ajax&action=custom&ajaxfile='; ?>jobboard/download.php?data=<?php echo $applicantId; ?>|<?php echo $file['s_secret']; ?>"><?php _e('Download', 'jobboard'); ?></a>
+    </h3>
     <div id="applicant-resume">
         <?php if(empty($file)) {
             _e("This applicant has not sumitted any resume", "jobboard");
@@ -133,11 +133,9 @@
         <iframe src="<?php echo osc_base_url(true) .'?page=ajax&action=custom&ajaxfile='.osc_plugin_folder(__FILE__).'viewer/viewer.php'; ?>?file=<?php echo osc_base_url() . str_replace(osc_base_path(), '', osc_uploads_path()) . $file['s_name']; ?>" ></iframe>
         <?php } ?>
     </div>
-    <h3 class="sidebar-title render-title jobboard-title">
-        <?php _e("Notes", "jobboard"); ?> <span class="note_plus"><a class="add_note btn btn-mini" href="javascript:void(0);"><?php _e("Add note", "jobboard"); ?></a></span>
-    </h3>
     <div style="clear:both;"></div>
     <div id="dashboard_notes">
+    <h3 class="sidebar-title render-title jobboard-title"><?php _e("Notes", "jobboard"); ?> <span class="note_plus"><a class="add_note btn btn-mini" href="javascript:void(0);"><?php _e("Add note", "jobboard"); ?></a></span></h3>
         <div id="nots_table_div">
             <?php if(count($notes)>0) { ?>
                 <?php foreach($notes as $note) { ?>
@@ -239,28 +237,33 @@
         <div id="jobboard-loading-image" ></div>
     </div>
     <?php } ?>
+    <div class="show-mails-applicant-box">
+        <h3 class="render-title jobboard-title"><?php _e('Mails sent', 'jobboard'); ?></h3>
+
+    <?php if(count($aMails) > 0)  { ?>
+        <?php $countMail = 1; ?>
+        <?php foreach($aMails as $aMail)  { ?>
+                <?php if($countMail > 5) { echo " <div class='show-more-mails'>";} ?>
+                <div class="p-mail">
+                <?php $aMessage = json_decode($aMail["s_mail"], true); ?>
+                <label class="mail-subject"><?php echo $aMessage["subject"] . " - "; ?></label>
+                <label class="mail-date"><?php echo date("d-M-Y H:i:s", strtotime($aMail["dt_date"])); ?></label>
+                <label class="mail-body"><?php echo $aMessage["body"]; ?></label>
+                </div>
+                <?php if($countMail > 5) { echo " </div>";} else { $countMail++; } ?>
+        <?php } ?>
+        <?php if($countMail > 5) { ?> <div id="view-more-mails"><label><?php _e("View all", "jobboard") ?></label></div> <?php } ?>
+    <?php } else { ?>
+        <label id="no-mail"><?php _e("No sent any mail yet.", "jobboard"); ?></label>
+    <?php } ?>
+    </div>
+
+
+
+
 </div>
 
-<div class="show-mails-applicant-box">
-    <h3 class="render-title jobboard-title"><?php _e('Mails sent', 'jobboard'); ?></h3>
 
-   <?php if(count($aMails) > 0)  { ?>
-       <?php $countMail = 1; ?>
-       <?php foreach($aMails as $aMail)  { ?>
-             <?php if($countMail > 5) { echo " <div class='show-more-mails'>";} ?>
-            <div class="p-mail">
-            <?php $aMessage = json_decode($aMail["s_mail"], true); ?>
-            <label class="mail-subject"><?php echo $aMessage["subject"] . " - "; ?></label>
-            <label class="mail-date"><?php echo date("d-M-Y H:i:s", strtotime($aMail["dt_date"])); ?></label>
-            <label class="mail-body"><?php echo $aMessage["body"]; ?></label>
-            </div>
-             <?php if($countMail > 5) { echo " </div>";} else { $countMail++; } ?>
-       <?php } ?>
-       <?php if($countMail > 5) { ?> <div id="view-more-mails"><label><?php _e("View all", "jobboard") ?></label></div> <?php } ?>
-   <?php } else { ?>
-    <label id="no-mail"><?php _e("No sent any mail yet.", "jobboard"); ?></label>
-   <?php } ?>
-</div>
 
 <div id="dialog-note-delete" title="<?php echo osc_esc_html(__('Delete note', 'jobboard')); ?>" class="has-form-actions hide" data-note-id="">
     <div class="form-horizontal">

@@ -247,34 +247,53 @@ $(document).ready(function() {
 	$(this).addClass('show-box');
     },function(){
 	$(this).removeClass('show-box');
-    })
+    });
 
-    showCv();
+    $(".nav-options").click(function() {
+        $('.nav-options').removeClass("active");
+        $(this).addClass("active");
+    });
+
+    hideNotes();
     hideMails();
-    if($("#show").val() == 'mails') {
+    $("#viewCV").click(function() {
+        showCv();
+        hideNotes();
+        hideMails();
+    });
+    $("#viewNotes").click(function() {
+        showNotes();
         hideCv();
+        hideMails();
+    });
+    $("#viewEmails").click(function() {
         showMails();
-    }
-
-    function hideCv() {
-        $(".applicant-cover-letter").hide();
-        $(".render-title.jobboard-title").hide();
-        $("#applicant-resume").hide();
-        $("#dashboard_notes").hide();
-    }
-    function showCv() {
-        $(".applicant-cover-letter").show();
-        $(".render-title.jobboard-title").show();
-        $("#applicant-resume").show();
-        $("#dashboard_notes").show();
-    }
-    function hideMails() {
-        $(".show-mails-applicant-box").hide();
-        $(".show-mails-applicant-box h3").hide();
-    }
-    function showMails() {
-        $(".show-mails-applicant-box").show();
-        $(".show-mails-applicant-box h3").show();
-    }
-
+        hideNotes();
+        hideCv();
+    });
 });
+
+function showNotes(){
+    $("#dashboard_notes").show();
+    $(".note_plus").show();
+}
+function hideNotes(){
+    $("#dashboard_notes").hide();
+    $(".note_plus").hide();
+}
+function hideCv() {
+    $(".applicant-cover-letter").hide();
+    $("#applicant-resume").hide();
+    $("#applicant-resume-title").hide();
+}
+function showCv() {
+    $(".applicant-cover-letter").show();
+    $("#applicant-resume").show();
+    $("#applicant-resume-title").show();
+}
+function hideMails() {
+    $(".show-mails-applicant-box").hide();
+}
+function showMails() {
+    $(".show-mails-applicant-box").show();
+}

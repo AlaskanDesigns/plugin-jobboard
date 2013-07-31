@@ -34,6 +34,7 @@
 }
 #applicant-detail .applicant-cover-letter{
     padding-top:20px;
+    margin-bottom: 40px;
 }
 #applicant-detail .applicant-cover-letter p{
     font-size: 12px;
@@ -342,4 +343,47 @@ label.score .score-manage{
     font-size: 15px;
     font-weight: bold;
     color: #969696;
+}
+.options a { font-size: 14px; padding: 10px; }
+.options a:hover { background-color: #f3f3f3; border-radius: 5px; text-decoration: underline; }
+.nav {
+  margin-top: 50px;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+.nav:before,.nav:after {display: table;content: " ";}
+.nav:after {clear: both;}
+.nav > li > a {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+}
+.nav > li > a:hover,
+.nav > li > a:focus {
+  text-decoration: none;
+  background-color: #eeeeee;
+}
+.nav-tabs {
+  border-bottom: 1px solid #dddddd;
+}
+.nav-tabs > li {
+  float: left;
+  margin-bottom: -1px;
+}
+.nav-tabs > li > a {
+  border: 1px solid transparent;
+  border-radius: 4px 4px 0 0;
+}
+.nav-tabs > li > a:hover {
+  border-color: #eeeeee;
+}
+.nav-tabs > li > a.active,
+.nav-tabs > li > a.active:hover,
+.nav-tabs > li > a a.active:focus {
+  color: #555555;
+  cursor: pointer;
+  /*background-color: #f3f3f3;*/
+  border: 1px solid #dddddd;
+  border-bottom-color: white;
 }
