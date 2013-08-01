@@ -75,6 +75,7 @@ class JobboardEnqueue
         if(Params::getParam('page')=='items') {
             osc_enqueue_script('jquery-metadata');
             osc_enqueue_script('jobboard-killer-form');
+            osc_enqueue_script('jobboard-items');
             if(Params::getParam('action')=='post') {
                 osc_enqueue_script('jobboard-item-add');
             }

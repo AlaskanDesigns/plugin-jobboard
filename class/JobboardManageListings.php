@@ -6,6 +6,9 @@
 class JobboardManageListings
 {
     public function __construct() {
+
+        osc_add_filter('admin_body_class', array(&$this, 'add_item_body_class'));
+
         osc_add_hook('admin_header',            array(&$this, 'jobboard_delete_dialog_js'), 6);
         // modify manage listings table header
         osc_add_hook('admin_items_table',       array(&$this, 'job_items_table_header') );
@@ -88,6 +91,14 @@ class JobboardManageListings
         }
         $options[] = '<a href="' . osc_admin_base_url(true) . '?page=items&amp;action=post&amp;duplicatefrom=' . $aRow['pk_i_id'] . '">' . __('Duplicate', 'jobboard') . '</a>' ;
         return $options;
+    }
+
+    function add_item_body_class($content) {
+    if(urldecode(Params::getParam('page')) === 'items' && Params::getParam('action') === '' ) {
+            $content[] = 'items';
+    }
+
+    return $content;
     }
 
 
