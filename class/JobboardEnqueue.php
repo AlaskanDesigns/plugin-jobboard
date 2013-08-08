@@ -183,15 +183,21 @@ class JobboardEnqueue
             'applicant_status_notification' => osc_admin_ajax_hook_url('applicant_status_notification'),
             'applicant_save_notification' => osc_admin_ajax_hook_url('applicant_save_notification'),
             'applicant_status_message' => osc_admin_ajax_hook_url('applicant_status_message'),
-            'applicant_status' => osc_admin_ajax_hook_url('applicant_status'),
-            'note_add' => osc_admin_ajax_hook_url('note_add'),
-            'note_edit' => osc_admin_ajax_hook_url('note_edit'),
-            'note_delete' => osc_admin_ajax_hook_url('note_delete'),
-            'dismiss_tip' => osc_admin_ajax_hook_url('dismiss_tip'),
-            'question_delete' => osc_admin_ajax_hook_url('question_delete'),
-            'answer_punctuation' => osc_admin_ajax_hook_url('jobboard_answer_punctuation'),
-            'dashboard_tour' => osc_admin_ajax_hook_url('dashboard_tour')
-        );
+	    'applicant_status' => osc_admin_ajax_hook_url('applicant_status'),
+	    'note_add' => osc_admin_ajax_hook_url('note_add'),
+	    'note_edit' => osc_admin_ajax_hook_url('note_edit'),
+	    'note_delete' => osc_admin_ajax_hook_url('note_delete'),
+	    'dismiss_tip' => osc_admin_ajax_hook_url('dismiss_tip'),
+	    'question_delete' => osc_admin_ajax_hook_url('question_delete'),
+	    'answer_punctuation' => osc_admin_ajax_hook_url('jobboard_answer_punctuation'),
+	    'dashboard_tour' => osc_admin_ajax_hook_url('dashboard_tour'),
+	    'new_status_applicant' => osc_admin_ajax_hook_url('new_status_applicant'),
+	    'delete_status_applicant' => osc_admin_ajax_hook_url('delete_status_applicant'),
+	    'update_statuses' => osc_admin_ajax_hook_url('update_statuses'),
+	    'get_current_statuses' => osc_admin_ajax_hook_url('get_current_statuses'),
+	    'get_current_applicants_by_status' => osc_admin_ajax_hook_url('get_current_applicants_by_status'),
+	    'save_applicant_status' => osc_admin_ajax_hook_url('save_applicant_status')
+            );
 
         return $ajax;
     }

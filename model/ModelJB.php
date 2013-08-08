@@ -559,17 +559,14 @@
             return $total['total'];
         }
 
-        public function countApplicantsByStatus($status)
+        public function countApplicantsByStatus($statusId)
         {
-            if( !in_array($status, array('0', '1', '2', '3')) ) {
-                return 0;
-            }
             $this->dao->select('COUNT(*) AS total');
             $this->dao->from($this->getTable_JobsApplicants());
             if( Params::getParam('jobId') !== '' ) {
                 $this->dao->where('fk_i_item_id', Params::getParam('jobId'));
             }
-            $this->dao->where('i_status', $status);
+            $this->dao->where('i_status', $statusId);
             $result = $this->dao->get();
             if( !$result ) {
                 return  0;
@@ -896,6 +893,54 @@
                     array(  'd_score'       => $score,
                             'b_corrected'   => $bCorrected),
                     array('pk_i_id' => $applicantId));
+        }
+
+        /**
+         * Get number
+         *
+         * @param type $locale
+         */
+        public function getEmailsPerApplicant($applicantId) {
+            $this->dao->select();
+            $this->dao->from($this->getTable_JobsEmails());
+            $this->dao->where("fk_i_applicant_id", $applicantId);
+            $this->dao->orderBy("pk_i_id", 'desc');
+            $result = $this->dao->get();
+            if( !$result) {
+                return array() ;
+            }
+
+            return $result->result();
+        }
+
+        /**
+         * Insert a notification by mail in DB
+         *
+         * @param int $applicantId
+         * @param string $jsonMail defaul FALSE
+         */
+        public function insertEmail($applicantId, $jsonMail = false) {
+            if(empty($jsonMail)) {
+                return null;
+            }
+            $aSet = array(
+                'fk_i_applicant_id' => $applicantId,
+                'dt_date         '  => date("Y-m-d H:i:s"),
+                's_mail'            => $jsonMail
+            );
+
+            return $this->dao->insert($this->getTable_JobsEmails(), $aSet);
+        }
+
+        public function changeApplicantsNewStatus($oldStatus, $newStatus, $applicantID = false) {
+            $aSet   = array('i_status' => $newStatus);
+            $aWhere = array('i_status' => $oldStatus);
+            if($applicantID) {
+                $aWhere["pk_i_id"] = $applicantID;
+            }
+
+            return $this->dao->update($this->getTable_JobsApplicants(), $aSet , $aWhere);
+
         }
     }
 

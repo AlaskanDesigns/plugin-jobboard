@@ -127,18 +127,37 @@ function jobboard_rating($applicantId, $rating = 0) {
 }
 
 /**
- * Return array with posible status
+ * Return array with current statuses
  *
  * @return type
  */
 function jobboard_status() {
-    $status_array = array();
-    $status_array[0] = __("Active", "jobboard");
-    $status_array[1] = __("Interview", "jobboard");
-    $status_array[2] = __("Rejected", "jobboard");
-    $status_array[3] = __("Hired", "jobboard");
-    return $status_array;
+
+    $statuses = osc_get_preference("applicant_statuses", "jobboard");
+    $aStatus  = json_decode($statuses, true);
+
+    return $aStatus;
 }
+
+/**
+ * Return array with current statuses
+ *
+ * @return type
+ */
+function jobboard_status_by_id($statusID) {
+    $statuses  = osc_get_preference("applicant_statuses", "jobboard");
+    $aStatuses = json_decode($statuses, true);
+    $aStatus   = array();
+    foreach($aStatuses as $status) {
+        if($status["id"] == $statusID) {
+
+            $aStatus = $status;
+        }
+    }
+
+    return $aStatus;
+}
+
 
 /**
  * Return sex string given input value
@@ -250,4 +269,22 @@ if(!function_exists('_jobboard_get_sex_array')) {
         );
         return $aSex;
     }
+}
+
+
+function osc_set_applicant_statuses($statuses) {
+    if(!is_array($statuses)) {
+        $statuses = json_decode($statuses, true);
+    }
+
+    $aStatuses = array();
+    foreach ($statuses as $key => $status) {
+        if(!is_array($status)) {
+            $aStatuses[] = array("id" => $key, "name" => $status);
+        } else {
+            $aStatuses[] = $status;
+        }
+    }
+    $statuses = json_encode($aStatuses);
+    osc_set_preference("applicant_statuses", $statuses, "jobboard");
 }

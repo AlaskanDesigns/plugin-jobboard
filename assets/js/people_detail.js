@@ -1,8 +1,8 @@
-function setIcon(){
+/*function setIcon(){
     $('.status-icon').css({
         backgroundPosition: $("#applicant_status").val() * 60
     });
-}
+}*/
 
 $(document).ready(function() {
     //Scroll
@@ -135,15 +135,16 @@ $(document).ready(function() {
         $('#dialog-applicant-status').dialog('close');
         $(".option-send-email").hide();
     });
-    $("#applicant_status").change(function() {
 
-    $.getJSON(jobboard.ajax.applicant_status,
-        {
-        "applicantId" : $(this).attr('data-applicant-id'),
-        "status" : $("#applicant_status option:selected").attr("value")
-        },
-        function(data){}
-    );
+    $("#applicant_status").change(function()
+    {
+        $.getJSON(jobboard.ajax.applicant_status,
+            {
+            "applicantId" : $(this).attr('data-applicant-id'),
+            "status" : $("#applicant_status option:selected").attr("value")
+            },
+            function(data){}
+        );
         $.getJSON(jobboard.ajax.applicant_status_message,
         {
         "applicantID" : $(this).attr('data-applicant-id'),
@@ -180,10 +181,19 @@ $(document).ready(function() {
                 $("#applicant-status-notification-message").val(data.message);
                 tinyMCE.activeEditor.setContent(data.message);
                 $("#dialog-applicant-status").dialog({width:740}).dialog('open');
-            },
-            'json'
+            }
         );
+        $.post(jobboard.ajax.save_applicant_status,
+            {
+                "applicantID" : $('#applicant_status').attr('data-applicant-id'),
+                "statusId"  : $("#applicant_status option:selected").attr("value")
+            }).done(function(data) {
+                console.log(data);
+                //location.reload();
+            });
+
     });
+   // setIcon();
 
     $('.auto-star').rating({
         callback: function(value, link, input){

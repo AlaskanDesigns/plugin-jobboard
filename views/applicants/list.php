@@ -1,7 +1,8 @@
 <?php if ( ! defined('ABS_PATH')) exit('ABS_PATH is not loaded. Direct access is not allowed.'); ?>
 <h2 class="render-title"><?php _e('Resumes', 'jobboard'); ?>
     <a id="show-filters" class="btn btn-mini"><?php _e('Show filters', 'jobboard'); ?></a>
-    <a id="add-applicant" class="btn btn-blue float-right"><?php _e('Add applicant', 'jobboard'); ?></a>
+    <a id="status_manage" class="btn btn-blue float-right"><?php _e('Manage statuses', 'jobboard'); ?></a>
+    <a id="add-applicant" class="btn btn-green float-right"><?php _e('Add applicant', 'jobboard'); ?></a>
 </h2>
 <div class="relative resumes">
     <div class="search-filter hide">
@@ -382,6 +383,48 @@
         </div>
     </form>
 </div>
+<div id="dialog-new_status" title="<?php _e("Manage statuses", "jobboard"); ?>">
+    <ul id="error_list"></ul>
+    <table class="table" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th><?php _e("Status Name", "jobboard"); ?></th>
+                <th><?php _e("Option", "jobboard"); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php $aStatuses = jobboard_status(); ?>
+        <?php foreach($aStatuses as $aStatus) { ?>
+        <tr>
+            <td><label id="<?php echo $aStatus["id"]; ?>"><?php echo $aStatus["name"]; ?></label></td>
+            <td><a class="delete_status" href="#" data-status-id="<?php echo $aStatus["id"]; ?>" ><div class="icon-delete-status"> </div></a></td>
+        </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+    <div id="reallocating-applicants">
+        <input type="hidden" id="old-status-delete">
+        <span id="status-appl-info"><?php _e("Number applicants: ", "jobboard"); ?><label id="status-appl-num-info"></label></span>
+        <input type="hidden" id="unread-option" value="<?php _e("Unread", "jobboard"); ?>">
+        <select id="selector-new-statuses"> </select>
+        <button type="button" class="btn btn-blue btn-mini" id="button-reallocate"><?php _e("Reallocate!", "jobboard"); ?></button>
+        <button type="button" class="btn btn-mini" id="button-reallocate-close"><?php _e("Cancel", "jobboard"); ?></button>
+    </div>
+    <div class="adding-new-status">
+        <div class="form-row">
+            <label for="new_status_input" id="new_status_label"><?php _e("New Status", "jobboard"); ?></label>
+            <input type="text" name="new_status_input" id="new_status_input" class="text" placeholder="<?php _e("Status name", "jobboard"); ?>" />
+                <a name="add-new-status-submit" id="add-new-status-submit" class="btn btn-blue"><?php _e("Add", "jobboard"); ?></a>
+        </div>
+    </div>
+    <div class="">
+        <div class="wrapper">
+            <a href="#" class="btn ico ico-32 ico-help float-left"></a>
+            <a name="add-new-status-cancel" id="add-new-status-cancel" class="btn float-right" /><?php _e("Close", "jobboard"); ?></a>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
 <?php if( ((int) osc_get_preference('new_feature_add_applicant', 'jobboard_plugin')) === 0 ) { ?>
 <script type="text/javascript">
     $(document).ready(function(){
@@ -392,3 +435,12 @@
     div.hopscotch-bubble .hopscotch-bubble-number{ font-size: 11px; text-transform: uppercase; }
 </style>
 <?php } ?>
+<style>
+ #reallocating-applicants #status-appl-info {font-weight: bold;color: #727270;margin-top: 9px;float: left;margin-right: 20px;}
+ #reallocating-applicants #status-appl-info label {margin-left: 5px;}
+ #reallocating-applicants { display: none;margin-top: 30px;}
+ #reallocating-applicants button {font-weight: normal; }
+ #dialog-new_status .adding-new-status {margin-top: 30px;}
+ #new_status table tbody tr:hover{cursor: pointer;}
+ #subject {width: 97%; margin-left: 1px;}
+</style>

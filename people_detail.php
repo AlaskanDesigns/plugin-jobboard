@@ -63,12 +63,53 @@
         border-radius: 5px;
     }
     #send-email:hover { cursor: pointer; }
-    #applicant-header h2 a:active {
+    #applicant-detail .applicant-header {margin-top: 85px;}
+    .applicant-header h2 a:active {
         background-color: #ccc;
+    }
+    .applicant-name .icon-checked {
+        width: 1%;
+        height: 6px;
+        border: 5px solid #ccc;
+        background-color: #9EFF44;
+        border-radius: 100%;
+        position: relative;
+        top: 43px;
+    }
+
+    .applicant-name .name-status {
+        width: 15%;
+        font-weight: bold;
+        position: relative;
+        top: -5px;
+        /*left: 0;*/
+        color: #ccc;
+        -webkit-transform: rotate(-29deg);
+        -moz-transform: rotate(-29deg);
+        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+    }
+    .applicant-name .border {
+        border: 1px solid #ccc;
+        width: 8%;
+        height: 7px;
+        background-color: #ccc;
+        top: 60px;
+        right: 55px;
+        position: relative;
     }
 </style>
 <div id="applicant-detail">
-    <span><a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>" ><?php _e('Applicants', 'jobboard'); ?></a> &raquo; <?php echo @$people['s_name']; ?></span>
+    <span class="applicant-name"><a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>" ><?php _e('Applicants', 'jobboard'); ?></a> &raquo; <?php echo @$people['s_name']; ?>
+    <?php if(osc_get_preference("applicant_" . $applicantId , "jobboard")) { ?>
+        <?php $aStatusPerApplicant = array_reverse(json_decode(osc_get_preference("applicant_" . $applicantId , "jobboard") , true)); ?>
+        <?php $leftSpan = 0; $leftIcon = 21; ?>
+        <?php foreach ($aStatusPerApplicant as $k => $aStatusApplicant) { ?>
+        <?php if($k > 0) {$leftSpan = $leftSpan + 80; $leftIcon = $leftIcon + 80; } ?>
+            <span class="float-right name-status" style="left:<?php echo $leftSpan; ?>px;" ><?php echo $aStatusApplicant["name"]; ?></span>
+            <div class="float-right icon-checked" style="left:<?php echo $leftIcon; ?>px;" >  </div>
+        <?php } ?>
+    <?php } ?>
+    </span>
     <div class="applicant-header">
         <h2 class="render-title"><?php echo @$people['s_name']; ?>
             <a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>&amp;jb_action=unread&amp;applicantID=<?php echo $applicantId; ?>" class="options-people-details float-right" style="height:14px;"><?php _e('Mark as unread', 'jobboard'); ?></a>
@@ -103,9 +144,9 @@
                 </div>
                 <select id="applicant_status" name="applicant_status" class="select-box-medium" data-applicant-id="<?php echo $applicantId; ?>">
                     <?php
-                    $st_array = jobboard_status();
-                    foreach($st_array as $k => $v) {
-                        echo '<option value="'.$k.'" '.($k==$people['i_status']?'selected="selected"':'').'>'.$v.'</option>';
+                    $aStatuses = jobboard_status();
+                    foreach($aStatuses as $aStatus) {
+                        echo '<option value="'.$aStatus["id"].'" '.($aStatus["id"]==$people['i_status']?'selected="selected"':'').'>'.$aStatus["name"].'</option>';
                     }
                     ?>
                 </select>
