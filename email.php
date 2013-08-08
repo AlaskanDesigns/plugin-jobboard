@@ -20,35 +20,16 @@
             break;
         }
 
-        $email_msg = array();
-        $email_msg['en_US'] = "Hi {$email_txt['applicant_name']},
+        $email_subject = sprintf(__('Job application received at %1$s', 'jobboard'), $email_txt['company_name']);
+        $email_body    = sprintf(__('Hi %1$s,
 
-You have just applied to {$email_txt['job_offer_link']} job offer at {$email_txt['company_link']}.
+You have just applied to %2$s job offer at %3$s.
 
-This is just an automatic message, to check the status of your application go to {$email_txt['company_name']}.
+This is just an automatic message, to check the status of your application go to %4$s.
 
 Thanks and good luck!
-{$email_txt['company_link']}";
-        $email_msg['es_ES'] = "Hola {$email_txt['applicant_name']},
+%5$s', "jobboard"), $email_txt['applicant_name'], $email_txt['job_offer_link'],$email_txt['company_link'], $email_txt['company_name'], $email_txt['company_link']);
 
-Acabas de inscribirte a la oferta de empleo {$email_txt['job_offer_link']} de {$email_txt['company_link']}.
-
-Este es un mensaje automático, para saber el estado de tu candidatura deberías dirigirte a {$email_txt['company_name']}.
-
-Gracias y suerte!
-{$email_txt['company_link']}";
-        $email_body = $email_msg['en_US'];
-        if( array_key_exists(osc_current_user_locale(), $email_msg) ) {
-            $email_body = $email_msg[osc_current_user_locale()];
-        }
-
-        $email_title = array();
-        $email_title['en_US'] = sprintf('Job application received at %1$s', $email_txt['company_name']);
-        $email_title['es_ES'] = sprintf('Candidato recibido en %1$s', $email_txt['company_name']);
-        $email_subject = $email_title['en_US'];
-        if( array_key_exists(osc_current_user_locale(), $email_title) ) {
-            $email_subject = $email_title[osc_current_user_locale()];
-        }
 
         $params = array(
             'to'       => Params::getParam('yourEmail'),
@@ -84,39 +65,18 @@ Gracias y suerte!
             break;
         }
 
-        $email_msg = array();
-        $email_msg['en_US'] = "Dear {$email_txt['company_name']},
 
-A new candidate has just applied for a job offer: {$email_txt['job_offer_link']}.
+        $email_subject = __('A new candidate has applied to a job offer', 'jobboard');
+        $email_body    = sprintf(__('Dear %1$s,
 
-To view and manage his/her CV, please click here: {$email_txt['applicant_link']}.
+A new candidate has just applied for a job offer: %2$s.
 
-Remember that you can access your job board anytime at: {$email_txt['admin_login_url']}
+To view and manage his/her CV, please click here: %3$s.
+
+Remember that you can access your job board anytime at: %4$s
 
 Thank you and regards,
-Osclass.com";
-        $email_msg['es_ES'] = "Estimado {$email_txt['company_name']},
-
-Un nuevo candidato se ha apuntado a tu oferta de empleo: {$email_txt['job_offer_link']}.
-
-Para consultar y gestionar su currículo haz click aquí: {$email_txt['applicant_link']}.
-
-Recuerda que puedes acceder a tu job board desde la dirección: {$email_txt['admin_login_url']}
-
-Gracias,
-Osclass.com";
-        $email_body = $email_msg['en_US'];
-        if( array_key_exists(osc_current_user_locale(), $email_msg) ) {
-            $email_body = $email_msg[osc_current_user_locale()];
-        }
-
-        $email_title = array();
-        $email_title['en_US'] = 'A new candidate has applied to a job offer';
-        $email_title['es_ES'] = 'Se ha apuntado un nuevo candidato a una oferta de empleo';
-        $email_subject = $email_title['en_US'];
-        if( array_key_exists(osc_current_user_locale(), $email_title) ) {
-            $email_subject = $email_title[osc_current_user_locale()];
-        }
+Osclass.com', 'jobboard'), $email_txt['company_name'], $email_txt['job_offer_link'], $email_txt['applicant_link'], $email_txt['admin_login_url'] );
 
         $params = array(
             'to'       => osc_contact_email(),
