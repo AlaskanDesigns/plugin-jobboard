@@ -80,7 +80,7 @@ class JobboardAjax
             'company_name'     => osc_page_title(),
             'admin_login_url'  => osc_admin_base_url(),
             'applicant_name'   => $aApplicant['s_name'],
-            'applicant_status' => $aStatus[$aApplicant['i_status']]
+            'applicant_status' => $aStatus[$status] //$aApplicant['i_status']
         );
 
         if( !is_null($aApplicant['fk_i_item_id']) ) {

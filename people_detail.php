@@ -109,6 +109,13 @@
                     <a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php").'&statusId=-1&sEmail='.urlencode($people['s_email']); ?>"><?php _e('This user has applied to more jobs', 'jobboard'); ?></a>
                     <?php } ?>
                 </div>
+                <div class="option-send-email">
+                    <h4><?php _e("Do you want to send an email?","jobboard"); ?></h4>
+                    <div class="send-email-buttons">
+                        <button type="button" id="send-email" class="btn btn-blue"><?php _e("Send","jobboard"); ?></button>
+                        <button type="button" id="cancel-send-email" class="btn"><?php _e("Not now","jobboard"); ?></button>
+                    </div>
+                </div>
             </div>
             <div style="clear:both;"></div>
         </div>

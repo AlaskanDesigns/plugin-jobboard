@@ -7,156 +7,192 @@ function setIcon(){
 $(document).ready(function() {
     //Scroll
     $('.animated-scroll').click(function(){
-    $("html,body").animate({scrollTop: $($(this).attr('href')).offset().top-$('#header').outerHeight()}, 500 );
-    return false;
+        $("html,body").animate({scrollTop: $($(this).attr('href')).offset().top-$('#header').outerHeight()}, 500 );
+        return false;
     });
     // notes
     $("#dialog-note-delete").dialog({
-    autoOpen: false,
-    modal: true
+        autoOpen: false,
+        modal: true
     });
     $("#dialog-note-form").dialog({
-    autoOpen: false,
-    modal: true
+        autoOpen: false,
+        modal: true
     });
 
     $('.edit_note').live('click', function(){
-    $("#dialog-note-form").attr('data-note-action', 'edit');
-    $("#dialog-note-form").attr('data-note-id', $(this).attr('data-note-id'));
-    $("#note_edit_text").attr('value', $(this).attr('data-note-text'));
-    $("#dialog-note-form").dialog('open');
+        $("#dialog-note-form").attr('data-note-action', 'edit');
+        $("#dialog-note-form").attr('data-note-id', $(this).attr('data-note-id'));
+        $("#note_edit_text").attr('value', $(this).attr('data-note-text'));
+        $("#dialog-note-form").dialog('open');
     });
 
     $('.add_note').live('click', function(){
-    $("#dialog-note-form").attr('data-note-action', 'add');
-    $("#dialog-note-form").attr('data-note-id', '');
-    $("#note_edit_text").attr('value', '');
-    $("#dialog-note-form").dialog('open');
+        $("#dialog-note-form").attr('data-note-action', 'add');
+        $("#dialog-note-form").attr('data-note-id', '');
+        $("#note_edit_text").attr('value', '');
+        $("#dialog-note-form").dialog('open');
     });
 
     $('.delete_note').live('click', function(){
-    $("#dialog-note-delete").attr('data-note-id', $(this).attr('data-note-id'));
-    $("#dialog-note-delete").dialog('open');
+        $("#dialog-note-delete").attr('data-note-id', $(this).attr('data-note-id'));
+        $("#dialog-note-delete").dialog('open');
     });
 
     $('#note-delete-submit').bind('click', function(){
-    $.getJSON(jobboard.ajax.note_delete,
-        {
-        'noteID': $("#dialog-note-delete").attr('data-note-id')
-        },
-        function(data) {
-        $('.delete_note[data-note-id="' + $("#dialog-note-delete").attr('data-note-id') + '"]').parents('.note').remove();
-        var note_container = $('<div>').attr('class', 'note empty-note well ui-rounded-corners').append($('<p>').html(jobboard.langs.empty_note_text));
-        $('#nots_table_div').append(note_container);
-        $(note_container).effect("highlight", {}, 500);
-        $("#dialog-note-delete").dialog('close');
-        }
-    );
+        $.getJSON(jobboard.ajax.note_delete,
+            {
+                'noteID': $("#dialog-note-delete").attr('data-note-id')
+            },
+            function(data) {
+                $('.delete_note[data-note-id="' + $("#dialog-note-delete").attr('data-note-id') + '"]').parents('.note').remove();
+                var note_container = $('<div>').attr('class', 'note empty-note well ui-rounded-corners').append($('<p>').html(jobboard.langs.empty_note_text));
+                $('#nots_table_div').append(note_container);
+                $(note_container).effect("highlight", {}, 500);
+                $("#dialog-note-delete").dialog('close');
+            }
+        );
     });
 
-    $('#note-form-submit').bind('click', function(){
-    var ajax_url = '';
-    if( $("#dialog-note-form").attr('data-note-action') == 'add') {
-        ajax_url = jobboard.ajax.note_add;
-    } else {
-        ajax_url = jobboard.ajax.note_edit;
-    }
-    $.getJSON(ajax_url,
-        {
-        'applicantID': $("#dialog-note-form").attr('data-applicant-id'),
-        'noteID': $("#dialog-note-form").attr('data-note-id'),
-        'noteText' : $("#note_edit_text").val()
-        },
-        function(data) {
+    $('#note-form-submit').bind('click', function() {
+        var ajax_url = '';
         if( $("#dialog-note-form").attr('data-note-action') == 'add') {
-            var note_container = $('<div>').attr('class', 'note well ui-rounded-corners');
-            var note_actions = $('<div>').attr('class', 'note-actions');
-            var delete_note = $('<a>').attr('class', 'delete_note').attr('href', 'javascript:void(0);').attr('data-note-id', data.pk_i_id).html(jobboard.langs.delete_string);
-            var edit_note = $('<a>').attr('class', 'edit_note').attr('href', 'javascript:void(0);').attr('data-note-id', data.pk_i_id).attr('data-note-text', data.s_text).html(jobboard.langs.edit_string);
-            var date_note = $('<div>').attr('class', 'note-date').append($('<b>').html(data.day)).append($('<span>').html(data.month + '<br/>' + data.year));
-            var clear_div = $('<div>').attr('class', 'clear');
-            var note_text = $('<p>').attr('class', 'note_text').html(data.s_text.replace(/\n/g, '<br/>'));
-
-            $(note_container).append($(note_actions).append(delete_note).append(edit_note)).append(date_note).append(clear_div).append(note_text);
-            $('#nots_table_div').prepend(note_container);
-            $('.empty-note').remove();
-            $(note_container).effect("highlight", {}, 500);
+            ajax_url = jobboard.ajax.note_add;
         } else {
-            var note = $('.delete_note[data-note-id="' + $("#dialog-note-form").attr('data-note-id') + '"]').parents('.note');
-            $(note).children('.edit_note').attr('data-note-text', data.s_text);
-            $(note).children('.note_text').html(data.s_text);
-            $(note).effect("highlight", {}, 500);
+            ajax_url = jobboard.ajax.note_edit;
         }
-        $('#dialog-note-form').dialog('close');
-        }
-    );
+        $.getJSON(ajax_url,
+            {
+                'applicantID': $("#dialog-note-form").attr('data-applicant-id'),
+                'noteID': $("#dialog-note-form").attr('data-note-id'),
+                'noteText' : $("#note_edit_text").val()
+            },
+            function(data) {
+                if( $("#dialog-note-form").attr('data-note-action') == 'add') {
+                    var note_container = $('<div>').attr('class', 'note well ui-rounded-corners');
+                    var note_actions = $('<div>').attr('class', 'note-actions');
+                    var delete_note = $('<a>').attr('class', 'delete_note').attr('href', 'javascript:void(0);').attr('data-note-id', data.pk_i_id).html(jobboard.langs.delete_string);
+                    var edit_note = $('<a>').attr('class', 'edit_note').attr('href', 'javascript:void(0);').attr('data-note-id', data.pk_i_id).attr('data-note-text', data.s_text).html(jobboard.langs.edit_string);
+                    var date_note = $('<div>').attr('class', 'note-date').append($('<b>').html(data.day)).append($('<span>').html(data.month + '<br/>' + data.year));
+                    var clear_div = $('<div>').attr('class', 'clear');
+                    var note_text = $('<p>').attr('class', 'note_text').html(data.s_text.replace(/\n/g, '<br/>'));
+
+                    $(note_container).append($(note_actions).append(delete_note).append(edit_note)).append(date_note).append(clear_div).append(note_text);
+                    $('#nots_table_div').prepend(note_container);
+                    $('.empty-note').remove();
+                    $(note_container).effect("highlight", {}, 500);
+                } else {
+                    var note = $('.delete_note[data-note-id="' + $("#dialog-note-form").attr('data-note-id') + '"]').parents('.note');
+                    $(note).children('.edit_note').attr('data-note-text', data.s_text);
+                    $(note).children('.note_text').html(data.s_text);
+                    $(note).effect("highlight", {}, 500);
+                }
+                $('#dialog-note-form').dialog('close');
+            }
+        );
     });
     // /notes
 
     $("#dialog-applicant-status").dialog({
-    autoOpen: false,
-    modal: true
+        autoOpen: false,
+        modal: true
     });
     $("#applicant-status-submit").click(function() {
-    $.post(jobboard.ajax.applicant_status_notification,
-        {
-        "applicantID" : $('#applicant_status').attr('data-applicant-id'),
-        "message" : tinyMCE.activeEditor.getContent(),
-        "subject" : $("#applicant-status-notification-subject").val()
-        },
-        function(data){},
-        'json'
-    );
-    $.post(jobboard.ajax.applicant_save_notification,
-        {
-        "applicantID" : $('#applicant_status').attr('data-applicant-id'),
-        "message" : tinyMCE.activeEditor.getContent(),
-        "subject" : $("#applicant-status-notification-subject").val()
-        },
-        function(data){
-            $('#dialog-applicant-status').dialog('close');
-            if($('.show-mails-applicant-box').css('display') == 'none') {
-                location.href += "&show=cvs";
-            } else {
-                location.href += "&show=mails";
-            }
-            location.reload();
-        },
-        'json'
-    );
+
+        $.post(jobboard.ajax.applicant_status_notification,
+            {
+                "applicantID" : $('#applicant_status').attr('data-applicant-id'),
+                "message" : tinyMCE.activeEditor.getContent(),
+                "subject" : $("#applicant-status-notification-subject").val()
+            },
+            function(data){},
+            'json'
+        );
+        $.post(jobboard.ajax.applicant_save_notification,
+            {
+                "applicantID" : $('#applicant_status').attr('data-applicant-id'),
+                "message" : tinyMCE.activeEditor.getContent(),
+                "subject" : $("#applicant-status-notification-subject").val()
+            },
+            function(data){
+                $('#dialog-applicant-status').dialog('close');
+                $('.option-send-email').hide();
+                if($('.show-mails-applicant-box').css('display') == 'none') {
+                    location.href += "&show=cvs";
+                } else {
+                    location.href += "&show=mails";
+                }
+                location.reload();
+            },
+            'json'
+        );
 
     });
 
     $("#applicant-status-cancel").click(function() {
-    $('#dialog-applicant-status').dialog('close');
+        $('#dialog-applicant-status').dialog('close');
     });
 
     $("#applicant_status").change(function(){
+
     $.getJSON(jobboard.ajax.applicant_status,
         {
-        "applicantId" : $(this).attr('data-applicant-id'),
-        "status" : $("#applicant_status option:selected").attr("value")
+            "applicantId" : $(this).attr('data-applicant-id'),
+            "status" : $("#applicant_status option:selected").attr("value")
         },
         function(data){}
     );
         $.getJSON(jobboard.ajax.applicant_status_message,
         {
-        "applicantID" : $(this).attr('data-applicant-id'),
-        "status" : $("#applicant_status option:selected").attr("value")
+            "applicantID" : $(this).attr('data-applicant-id'),
+            "status" : $("#applicant_status option:selected").attr("value")
         },
         function(data){
-        if( data.error) {
-            return false;
-        }
-        $("#applicant-status-notification-subject").val(data.subject);
-                $("#applicant-status-notification-message").val(data.message);
-        tinyMCE.activeEditor.setContent(data.message);
-        $("#dialog-applicant-status").dialog({width:740}).dialog('open');
+            if( data.error) {
+                return false;
+            }
+            $("#applicant-status-notification-subject").val(data.subject);
+                    $("#applicant-status-notification-message").val(data.message);
+            tinyMCE.activeEditor.setContent(data.message);
+            $("#dialog-applicant-status").dialog({width:740}).dialog('open');
         }
     );
+        $(".option-send-email").show();
     setIcon();
+
+        $.getJSON(jobboard.ajax.applicant_status,
+            {
+                "applicantId" : $("#applicant_status").attr('data-applicant-id'),
+                "status" : $("#applicant_status option:selected").attr("value")
+            },
+            function(data){}
+        );
+        $(".option-send-email").show();
+        setIcon();
     });
     setIcon();
+
+    $(".option-send-email").hide();
+    $("#cancel-send-email").click(function(){
+        $(".option-send-email").hide();
+    });
+
+    $("#send-email").click(function(){
+        $.getJSON(jobboard.ajax.applicant_status_message,
+            {
+                "applicantID" : $("#applicant_status").attr('data-applicant-id'),
+                "status" : $("#applicant_status option:selected").attr("value")
+            },
+            function(data){
+                if( data.error) {
+                    return false;
+                }
+                $("#applicant-status-notification-message").val(data.message);
+                tinyMCE.activeEditor.setContent(data.message);
+                $("#dialog-applicant-status").dialog({width:740}).dialog('open');
+            }
+        );
+    });
 
     $('.auto-star').rating({
     callback: function(value, link, input){
