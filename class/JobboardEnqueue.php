@@ -111,7 +111,12 @@ class JobboardEnqueue
 	$langs['title_msg_required']    = __('Title cannot be empty', 'jobboard');
 	$langs['openquestion']          = __('Open question by default', 'jobboard');
 	$langs['removeQuestionLink']    = __('Remove question', 'jobboard');
-	// hopscotch
+	$langs['removeQuestionLink']    = __('Remove question', 'jobboard');
+        $langs['country_required']      = __('Country is obligatory. ', 'jobboard');
+        $langs['region_required']       = __('Region is obligatory. ', 'jobboard');
+        $langs['city_required']         = __('City is obligatory. ', 'jobboard');
+
+        // hopscotch
 	$langs['hopscotch']['i18n'] = array(
 	    'nextBtn'      => __('Next', 'jobboard'),
 	    'prevBtn'      => __('Back', 'jobboard'),
