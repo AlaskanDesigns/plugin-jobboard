@@ -73,7 +73,10 @@
     $aItems = $mSearch->doSearch();
     View::newInstance()->_exportVariableToView('items', $aItems) ;
 ?>
-<h2 class="render-title"><?php _e('Resumes', 'jobboard'); ?>  <a id="show-filters" class="btn btn-mini"><?php _e('Show filters', 'jobboard'); ?></a></h2>
+<h2 class="render-title"><?php _e('Resumes', 'jobboard'); ?>
+    <a id="show-filters" class="btn btn-mini"><?php _e('Show filters', 'jobboard'); ?></a>
+    <a id="status_manage" class="btn btn-blue float-right"><?php _e('Manage statuses', 'jobboard'); ?></a>
+</h2>
 <div class="relative resumes">
     <div class="search-filter hide">
         <form method="get" action="<?php echo osc_admin_base_url(true); ?>" id="shortcut-filters" class="">
@@ -171,11 +174,11 @@
                                 </div>
                                 <div class="form-controls">
                                     <?php $statusId = Params::getParam('statusId'); ?>
-                                    <select name="statusId" class="">  <!-- status selector         -->
-                                        <option value="-1" <?php if( $statusId != '' && $statusId == (int)$key ) echo "selected"; ?>><?php _e('All status', 'jobboard'); ?></option>
-                                        <?php $aStatus = jobboard_status();
-                                        foreach( $aStatus as $key => $value ) { ?>
-                                        <option value="<?php echo $key; ?>" <?php if( $statusId != '' && $statusId == (int)$key ) echo "selected"; ?>><?php echo $value; ?></option>
+                                    <select name="statusId" class="">
+                                        <option value="-1" selected="selected"><?php _e('All status', 'jobboard'); ?></option>
+                                        <?php $aStatuses = jobboard_status();
+                                        foreach( $aStatuses as $aStatus ) { ?>
+                                        <option value="<?php echo $aStatus["id"]; ?>" <?php if( $statusId != '' && $statusId == (int)$aStatus["id"] ) echo "selected"; ?>><?php echo $aStatus["name"]; ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -208,13 +211,12 @@
         </form>
     </div>
     <div class="applicant-shortcuts">
-            <?php $shortcuts = JobboardManageApplicants::applicants_shortcuts(); ?>
-            <?php $i = 0; foreach($shortcuts as $k => $v) { $class = array(); ?>
-            <?php if($v['active']) $class[] = 'btn-blue'; ?>
-            <?php if($i == 0) $class[] = 'first'; ?>
-            <?php if(($i == (count($shortcuts) - 1)) && $i !== 0) $class[] = 'last'; ?>
-                <a class="btn <?php echo implode(' ', $class); ?>" href="<?php echo $v['url'] ?>"><?php echo $v['text']; ?></a>
-            <?php $i++; } ?>
+        <?php $shortcuts = JobboardManageApplicants::applicants_shortcuts(jobboard_status()); ?>
+        <select id="statuses">
+            <?php foreach($shortcuts as $k => $v) { ?>
+            <option <?php echo  'value="' . $v['url'] . '"'; if(Params::getParam("statusId") == $v['statusId']) { echo 'selected="selected"'; } ?> ><?php echo $v['text']; ?></option>
+            <?php } ?>
+        </select>
         <form method="get" action="<?php echo osc_admin_base_url(true); ?>" class="inline">
             <?php foreach( Params::getParamsAsArray('get') as $key => $value ) { ?>
             <?php if( $key != 'iDisplayLength' ) { ?>
@@ -386,7 +388,7 @@
 </form>
 <form id="dialog-send-mail" method="post" action="" title="<?php echo osc_esc_html(__('Contact')); ?>">
     <div class="form-horizontal">
-        <ul id="error_list"></ul>
+        <!--<ul id="error_list"></ul>-->
         <div class="form-row"><input type="text" id="subject" name="subject"></div>
         <div class="form-row"><textarea id="applicant-status-notification-message" name="body"></textarea></div>
         <div class="form-actions">
@@ -398,12 +400,54 @@
         </div>
     </div>
 </form>
+<div id="dialog-new_status" title="<?php _e("Manage statuses", "jobboard"); ?>">
+    <ul id="error_list"></ul>
+    <table class="table" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th><?php _e("Status Name", "jobboard"); ?></th>
+                <th><?php _e("Option", "jobboard"); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php $aStatuses = jobboard_status(); ?>
+        <?php foreach($aStatuses as $aStatus) { ?>
+        <tr>
+            <td><label id="<?php echo $aStatus["id"]; ?>"><?php echo $aStatus["name"]; ?></label></td>
+            <td><a class="delete_status" href="#" data-status-id="<?php echo $aStatus["id"]; ?>" ><div class="icon-delete-status"> </div></a></td>
+        </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+    <div id="reallocating-applicants">
+        <input type="hidden" id="old-status-delete">
+        <span id="status-appl-info"><?php _e("Number applicants: ", "jobboard"); ?><label id="status-appl-num-info"></label></span>
+        <input type="hidden" id="unread-option" value="<?php _e("Unread", "jobboard"); ?>">
+        <select id="selector-new-statuses"> </select>
+        <button type="button" class="btn btn-blue btn-mini" id="button-reallocate"><?php _e("Reallocate!", "jobboard"); ?></button>
+        <button type="button" class="btn btn-mini" id="button-reallocate-close"><?php _e("Cancel", "jobboard"); ?></button>
+    </div>
+    <div class="adding-new-status">
+        <div class="form-row">
+            <label for="new_status_input" id="new_status_label"><?php _e("New Status", "jobboard"); ?></label>
+            <input type="text" name="new_status_input" id="new_status_input" class="text" placeholder="<?php _e("Status name", "jobboard"); ?>" />
+                <a name="add-new-status-submit" id="add-new-status-submit" class="btn btn-blue"><?php _e("Add", "jobboard"); ?></a>
+        </div>
+    </div>
+    <div class="">
+        <div class="wrapper">
+            <a href="#" class="btn ico ico-32 ico-help float-left"></a>
+            <a name="add-new-status-cancel" id="add-new-status-cancel" class="btn float-right" /><?php _e("Close", "jobboard"); ?></a>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
 <style>
-/*    #dialog-send-mail {
-        display: block;
-        width: auto;
-        min-height: 0px;
-        height: 405px;
-    }*/
-    #subject {width: 97%; margin-left: 1px;}
+ #reallocating-applicants #status-appl-info {font-weight: bold;color: #727270;margin-top: 9px;float: left;margin-right: 20px;}
+ #reallocating-applicants #status-appl-info label {margin-left: 5px;}
+ #reallocating-applicants { display: none;margin-top: 30px;}
+ #reallocating-applicants button {font-weight: normal; }
+ #dialog-new_status .adding-new-status {margin-top: 30px;}
+ #new_status table tbody tr:hover{cursor: pointer;}
+ #subject {width: 97%; margin-left: 1px;}
 </style>

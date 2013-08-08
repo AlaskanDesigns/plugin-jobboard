@@ -15,6 +15,12 @@ class JobboardAjax
 	osc_add_hook('ajax_admin_note_delete', array(&$this, 'ajax_note_delete'));
 	osc_add_hook('ajax_admin_question_delete', array(&$this, 'ajax_question_delete'));
 	osc_add_hook('ajax_admin_dashboard_tour', array(&$this, 'ajax_dashboard_tour'));
+	osc_add_hook('ajax_admin_new_status_applicant', array(&$this, 'ajax_new_status_applicant'));
+	osc_add_hook('ajax_admin_delete_status_applicant', array(&$this, 'ajax_delete_status_applicant'));
+	osc_add_hook('ajax_admin_update_statuses', array(&$this, 'ajax_update_statuses'));
+	osc_add_hook('ajax_admin_get_current_statuses', array(&$this, 'ajax_get_current_statuses'));
+	osc_add_hook('ajax_admin_get_current_applicants_by_status', array(&$this, 'ajax_get_current_applicants_by_status'));
+        osc_add_hook('ajax_admin_save_applicant_status', array(&$this, 'ajax_save_applicant_status'));
     }
 
     /**
@@ -47,7 +53,7 @@ class JobboardAjax
     }
 
     /**
-     * Change applicant statusm logging the action
+     * Change applicant status logging the action
      */
     function ajax_applicant_status() {
         $result = ModelJB::newInstance()->changeStatus(Params::getParam("applicantId"), Params::getParam("status"));
@@ -63,10 +69,9 @@ class JobboardAjax
      */
     function ajax_applicant_status_message() {
         $applicantID = Params::getParam('applicantID');
-        $status      = Params::getParam('status');
-
-        $aStatus    = jobboard_status();
-        $aApplicant = ModelJB::newInstance()->getApplicant($applicantID);
+        $statusId    = Params::getParam('status');
+        $aStatus     = jobboard_status_by_id($statusId);
+        $aApplicant  = ModelJB::newInstance()->getApplicant($applicantID);
 
         if( count($aApplicant) === 0 ) {
             $json = array('error' => true);
@@ -80,7 +85,7 @@ class JobboardAjax
             'company_name'     => osc_page_title(),
             'admin_login_url'  => osc_admin_base_url(),
             'applicant_name'   => $aApplicant['s_name'],
-            'applicant_status' => $aStatus[$aApplicant['i_status']]
+            'applicant_status' => $aStatus["id"] == $aApplicant["i_status"] ? $aStatus["name"] : ''
         );
 
         if( !is_null($aApplicant['fk_i_item_id']) ) {
@@ -109,6 +114,7 @@ class JobboardAjax
         %6$s','jobboard'),$email_txt['applicant_name'], $email_txt['company_name'], $email_txt['job_offer_link'], $email_txt['applicant_status'], $email_txt['company_link'], $email_txt['company_link']);
 
         $json = array('subject' => nl2br($email_subject), 'message' => nl2br($email_body), 'status' => $status, 'error' => false);
+
         echo json_encode($json);
         return true;
     }
@@ -239,6 +245,115 @@ class JobboardAjax
     {
 	osc_set_preference('dashboard_tour_visible', false, 'jobboard_plugin');
 	echo json_encode(array('status' => true));
+    }
+
+    function ajax_new_status_applicant()
+    {
+	$statusName = trim(Params::getParam("statusName"));
+
+        if($statusName) {
+           $statusName   = ucfirst($statusName);
+           $jsonStatuses = osc_get_preference("applicant_statuses", "jobboard");
+           $aStatuses    = json_decode($jsonStatuses, true);
+
+           foreach($aStatuses as $aStatus) {
+               if($aStatus["name"] == $statusName) {
+                    return printf(__('The status %1$s already exists', "jobboard"), $statusName);
+               }
+           }
+
+           $aStatuses[]  = array("id" => count($aStatuses), "name" => $statusName);
+           $jsonStatuses = json_encode($aStatuses);
+           osc_set_applicant_statuses($jsonStatuses);
+
+           echo json_encode(array("id" =>  count($aStatuses)-1, "name" => $statusName));
+           return true;
+        }
+
+        return null;
+    }
+
+    function ajax_delete_status_applicant()
+    {
+	$current_status = trim(Params::getParam("current_status"));
+	$new_status     = trim(Params::getParam("new_status")) == '' ? "-1" : trim(Params::getParam("new_status")) ;
+
+        //exists and is not a default status
+        if($current_status) {
+           $jsonStatuses = osc_get_preference("applicant_statuses", "jobboard");
+           $aStatuses    = json_decode($jsonStatuses, true);
+
+           foreach($aStatuses as $key => $aStatus) {
+               if($aStatus["id"] == $current_status ){
+                   unset($aStatuses[$key]);
+               }
+               $jsonStatuses = json_encode($aStatuses);
+               osc_set_applicant_statuses($jsonStatuses);
+
+               /* MOVE APPLICANTS FROM OLD STATUS TO NEW STATUS*/
+               ModelJB::newInstance()->changeApplicantsNewStatus($current_status, $new_status);
+           }
+        }
+
+        echo $jsonStatuses;
+        return true;
+    }
+
+    function ajax_update_statuses() {
+	$aStatuses = Params::getParam("statuses");
+
+        /* If status is empty add ACTIVE by default*/
+        if(empty($aStatuses)) {
+            $aStatus  = array(0 => __("Active", "jobboard"));
+            $jsonStatuses = json_encode($aStatus);
+            osc_set_applicant_statuses($jsonStatuses);
+
+        } else {
+            $aUpdateStatuses = array();
+            foreach($aStatuses as $key => $aStatus) {
+                $aUpdateStatuses[] = array("id" => $aStatus[0] , "name" => $aStatus[1]);
+            }
+           $jsonStatuses = json_encode($aUpdateStatuses);
+           osc_set_applicant_statuses($jsonStatuses);
+        }
+
+        echo $jsonStatuses;
+        return true;
+    }
+
+    function ajax_get_current_statuses()  {
+        $jsonStatuses = osc_get_preference("applicant_statuses", "jobboard");
+        echo $jsonStatuses;
+        return true;
+    }
+
+    function ajax_get_current_applicants_by_status() {
+        $statusID       = Params::getParam("statusID");
+        $num_applicants = JobboardManageApplicants::get_num_applicants_by_status($statusID);
+
+        echo $num_applicants;
+        return true;
+    }
+
+    function ajax_save_applicant_status() {
+        $applicantID  = Params::getParam("applicantID");
+        $statusId     = Params::getParam("statusId");
+        $aStatus      = jobboard_status_by_id($statusId);
+        $jsonStatuses = osc_get_preference("applicant_". $applicantID, "jobboard");
+
+        if($jsonStatuses) {
+            $aStatuses    = json_decode($jsonStatuses, true);
+            $aStatuses[]  = $aStatus;
+            $jsonStatuses = json_encode($aStatuses);
+            osc_set_preference("applicant_". $applicantID, $jsonStatuses, "jobboard");
+        } else {
+            $aStatuses    = array($aStatus);
+            $jsonStatuses = json_encode($aStatuses);
+            osc_set_preference("applicant_". $applicantID, $jsonStatuses, "jobboard");
+        }
+
+        echo $jsonStatuses;
+        return true;
     }
 }
 

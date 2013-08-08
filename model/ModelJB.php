@@ -569,17 +569,14 @@
             return $total['total'];
         }
 
-        public function countApplicantsByStatus($status)
+        public function countApplicantsByStatus($statusId)
         {
-            if( !in_array($status, array('0', '1', '2', '3')) ) {
-                return 0;
-            }
             $this->dao->select('COUNT(*) AS total');
             $this->dao->from($this->getTable_JobsApplicants());
             if( Params::getParam('jobId') !== '' ) {
                 $this->dao->where('fk_i_item_id', Params::getParam('jobId'));
             }
-            $this->dao->where('i_status', $status);
+            $this->dao->where('i_status', $statusId);
             $result = $this->dao->get();
             if( !$result ) {
                 return  0;
@@ -921,6 +918,17 @@
             );
 
             return $this->dao->insert($this->getTable_JobsEmails(), $aSet);
+        }
+
+        public function changeApplicantsNewStatus($oldStatus, $newStatus, $applicantID = false) {
+            $aSet   = array('i_status' => $newStatus);
+            $aWhere = array('i_status' => $oldStatus);
+            if($applicantID) {
+                $aWhere["pk_i_id"] = $applicantID;
+            }
+
+            return $this->dao->update($this->getTable_JobsApplicants(), $aSet , $aWhere);
+
         }
     }
 

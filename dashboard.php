@@ -8,7 +8,7 @@
 	osc_set_preference('dashboard_tour_times_seen', $times_seen + 1, 'jobboard_plugin');
     }
 
-    $status = jobboard_status();
+    $aStatuses = jobboard_status();
     $mjb = ModelJB::newInstance();
 ?>
 </div>
@@ -111,18 +111,18 @@
             <div class="widget-box">
                 <div class="widget-box-title"><h3 class="has-tabs"><?php _e('Recent applicants', 'jobboard'); ?></h3>
                     <ul class="tabs">
-                        <?php foreach($status as $k => $v) {
-                            echo '<li><a href="#status-'.$k.'">'.$v.'</a></li>';
+                        <?php foreach($aStatuses as $aStatus) {
+                            echo '<li><a href="#status-'.$aStatus["id"].'">'.$aStatus["name"].'</a></li>';
                         }
                         ?>
                     </ul>
                 </div>
                 <div class="widget-box-content">
-                    <?php foreach($status as $k => $v) {
-                        echo '<div id="status-'.$k.'">';
+                    <?php foreach($aStatuses as $aStatus) {
+                        echo '<div id="status-'.$aStatus["id"].'">';
                         echo '<table class="table" cellpadding="0" cellspacing="0"><tbody>';
                         echo '<thead><th>'.__('Applicant','jobboard').'</th><th>'.__('Job title','jobboard').'</th><th>'.__('Received','jobboard').'</th></thead>';
-                        $people = ModelJB::newInstance()->search(0, 6, array('status'=>$k), 'a.dt_date', 'DESC');
+                        $people = ModelJB::newInstance()->search(0, 6, array('status'=>$aStatus["id"]), 'a.dt_date', 'DESC');
                             if(count($people)){
                                 foreach($people as $applicant){
                                     $item = Item::newInstance()->findByPrimaryKey($applicant['fk_i_item_id']);
@@ -147,7 +147,7 @@
                                 }
                             }
                         echo '</tbody></table>';
-                        echo '<p class="view-all"><a href="'.osc_admin_render_plugin_url("jobboard/people.php").'&iStatus='.$k.'">'.__('View all','jobboard').' '.$v.'</a></p>';
+                        echo '<p class="view-all"><a href="'.osc_admin_render_plugin_url("jobboard/people.php").'&iStatus='.$k.'">'.__('View all','jobboard').' '.$aStatus["name"].'</a></p>';
                         echo '</div>';
                     }
                     ?>

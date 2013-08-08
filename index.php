@@ -135,6 +135,24 @@ function jobboard_post_actions() {
     }
 }
 osc_add_hook('init_admin', 'jobboard_post_actions');
+
+
+function add_applicant_status() {
+    $savedStatus = osc_get_preference("applicant_statuses", "jobboard");
+
+    if(!$savedStatus) {
+        $aStatus   = array();
+        $aStatus[] = array("id" => "0", "name" => __("Active", "jobboard"));
+        $aStatus[] = array("id" => "1", "name" => __("Interview", "jobboard"));
+        $aStatus[] = array("id" => "2", "name" => __("Rejected", "jobboard"));
+        $aStatus[] = array("id" => "3", "name" => __("Hired", "jobboard"));
+        $statuses  = json_encode($aStatus);
+
+        osc_set_applicant_statuses($statuses);
+    }
+}
+osc_add_hook('init_admin', 'add_applicant_status');
+
 // -----------------------------------------------------------------------------
 
 /**
