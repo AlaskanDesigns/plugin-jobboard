@@ -66,6 +66,7 @@ osc_register_script('jobboard-show-flashmessage', osc_plugin_url(__FILE__) . 'as
 osc_register_script('jobboard-init-tinymce', osc_plugin_url(__FILE__) . 'assets/js/init_tinymce.js', array('jquery', 'tiny_mce'));
 osc_register_script('jobboard-items', osc_plugin_url(__FILE__) . 'assets/js/items.js', array('jquery'));
 osc_register_script('jobboard-item-add', osc_plugin_url(__FILE__) . 'assets/js/item_add.js', array('jquery'));
+osc_register_script('jobboard-items', osc_plugin_url(__FILE__) . 'assets/js/items.js', array('jquery'));
 osc_register_script('jobboard-admin-page', osc_plugin_url(__FILE__) . 'assets/js/jb_admin.js', 'jquery');
 osc_register_script('hopscotch', osc_plugin_url(__FILE__) . 'assets/lib/hopscotch/js/hopscotch-0.1.min.js', array('jquery'));
 
