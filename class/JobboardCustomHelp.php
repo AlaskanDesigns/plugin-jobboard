@@ -25,7 +25,7 @@ class JobboardCustomHelp
 
     function help_detail_applicant()
     {
-        echo '<p>' . __("Here you can view a profile of the applicant, view or download his/her CV, add notes, rate profile and change applicant’s status (active, interviewed, hired or rejected).", 'jobboard') . '</p>';
+        echo '<p>' . __("Here you can view a profile of the applicant, view or download his/her CV, view emails sent, add notes, rate profile and change applicant’s status (active, interviewed, hired or rejected).", 'jobboard') . '</p>';
     }
 
     function help_jobboard_pages()

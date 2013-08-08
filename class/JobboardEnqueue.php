@@ -165,7 +165,8 @@ class JobboardEnqueue
 	$ajax = array(
 	    'rating' => osc_admin_ajax_hook_url('jobboard_rating'),
 	    'applicant_status_notification' => osc_admin_ajax_hook_url('applicant_status_notification'),
-	    'applicant_status_message' => osc_admin_ajax_hook_url('applicant_status_message'),
+	    'applicant_save_notification' => osc_admin_ajax_hook_url('applicant_save_notification'),
+            'applicant_status_message' => osc_admin_ajax_hook_url('applicant_status_message'),
 	    'applicant_status' => osc_admin_ajax_hook_url('applicant_status'),
 	    'note_add' => osc_admin_ajax_hook_url('note_add'),
 	    'note_edit' => osc_admin_ajax_hook_url('note_edit'),

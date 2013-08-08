@@ -9,7 +9,8 @@ class JobboardAjax
 	osc_add_hook('ajax_admin_applicant_status', array(&$this, 'ajax_applicant_status'));
 	osc_add_hook('ajax_admin_applicant_status_message', array(&$this, 'ajax_applicant_status_message'));
 	osc_add_hook('ajax_admin_applicant_status_notification', array(&$this, 'ajax_applicant_status_notification'));
-	osc_add_hook('ajax_admin_note_add', array(&$this, 'ajax_note_add'));
+	osc_add_hook('ajax_admin_applicant_save_notification', array(&$this, 'ajax_applicant_save_notification'));
+        osc_add_hook('ajax_admin_note_add', array(&$this, 'ajax_note_add'));
 	osc_add_hook('ajax_admin_note_edit', array(&$this, 'ajax_note_edit'));
 	osc_add_hook('ajax_admin_note_delete', array(&$this, 'ajax_note_delete'));
 	osc_add_hook('ajax_admin_question_delete', array(&$this, 'ajax_question_delete'));
@@ -95,30 +96,19 @@ class JobboardAjax
             $email_txt['job_offer_url']   = osc_contact_url();
         }
 
-        $email_msg = array();
-        $email_msg['en_US'] = "Hi {$email_txt['applicant_name']},
+        // prepare email subject
+        $email_subject = sprintf(__('Application status change at %1$s', 'jobboard'), osc_page_title());
 
-        The {$email_txt['company_name']} company would like to inform you that your application for {$email_txt['job_offer_link']} has changed to: {$email_txt['applicant_status']}.
+        $email_body = sprintf(__('Hi %1$s,
 
-        This is just an automatic message, to check the status of your application go to {$email_txt['company_link']}.
+        The %2$s company would like to inform you that your application for %3$s has changed to: %4$s.
+
+        This is just an automatic message, to check the status of your application go to %5$s.
 
         Thanks and good luck!,
-        {$email_txt['company_link']}";
-            $email_msg['es_ES'] = "Hola {$email_txt['applicant_name']},
+        %6$s','jobboard'),$email_txt['applicant_name'], $email_txt['company_name'], $email_txt['job_offer_link'], $email_txt['applicant_status'], $email_txt['company_link'], $email_txt['company_link']);
 
-        La empresa {$email_txt['company_name']} te comunica que tu candidatura para el empleo {$email_txt['job_offer_link']} ha pasado al estado: {$email_txt['applicant_status']}.
-
-        Este es un mensaje automático, para conocer más sobre el estado de tu candidatura deberás dirigirte a {$email_txt['company_link']}.
-
-        Gracias,
-        {$email_txt['company_link']}";
-
-        $email_body = $email_msg['en_US'];
-        if( array_key_exists(osc_current_user_locale(), $email_msg) ) {
-            $email_body = $email_msg[osc_current_user_locale()];
-        }
-
-        $json = array('message' => nl2br($email_body), 'status' => $status, 'error' => false);
+        $json = array('subject' => nl2br($email_subject), 'message' => nl2br($email_body), 'status' => $status, 'error' => false);
         echo json_encode($json);
         return true;
     }
@@ -131,6 +121,7 @@ class JobboardAjax
     function ajax_applicant_status_notification() {
         $applicantID = Params::getParam('applicantID');
         $message     = Params::getParam('message', false, false);
+        $subject     = Params::getParam('subject', false, false);
 
         if( $message === '' ) {
             echo 'false';
@@ -144,24 +135,46 @@ class JobboardAjax
             return false;
         }
 
-        // prepare email subject
-        $email_title = array();
-        $email_title['en_US'] = sprintf('Application status change at %1$s', osc_page_title());
-        $email_title['es_ES'] = sprintf('Cambio de estado de la solicitud de empleo en %1$s', osc_page_title());
-        $email_subject = $email_title['en_US'];
-        if( array_key_exists(osc_current_user_locale(), $email_title) ) {
-            $email_subject = $email_title[osc_current_user_locale()];
-        }
         // prepare email params
         $params = array(
             'to'       => $aApplicant['s_email'],
             'to_name'  => $aApplicant['s_name'],
-            'subject'  => $email_subject,
+            'subject'  => $subject,
             'body'     => $message
         );
         // send email
         osc_sendMail($params);
         echo 'true';
+        return true;
+    }
+
+    /**
+     * applicant save an email
+     *
+     * @return type
+     */
+    function ajax_applicant_save_notification() {
+        $applicantID = Params::getParam('applicantID');
+        $message     = Params::getParam('message', false, false);
+        $subject     = Params::getParam('subject', false, false);
+
+        if( $message === '' ) {
+            return NULL;
+        }
+
+        // check if the applicant exist
+        $aApplicant = ModelJB::newInstance()->getApplicant($applicantID);
+        if( count($aApplicant) === 0 ) {
+            return NULL;
+        }
+
+        // save email format json
+        $aMail = array();
+        $aMail["subject"] = $subject;
+        $aMail["body"]    = $message;
+        $jsonMail         = json_encode($aMail);
+        ModelJB::newInstance()->insertEmail($applicantID, $jsonMail);
+
         return true;
     }
 
