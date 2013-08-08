@@ -95,7 +95,7 @@
                             $i = 0;
                             foreach($aActivity as $log){ ?>
                             <tr <?php if($i == 0){ echo 'class="table-first-row"'; } ?>>
-                                <td><?php echo $log['s_data'];?><br/><span class='ago'><?php echo _jobboard_time_elapsed_string(strtotime($log['dt_date'])).' '.__('ago', 'jobboard'); ?></span></td>
+                                <td><?php echo $log['s_data'];?><br/><span class='ago'><?php echo _jobboard_time_elapsed_string(strtotime($log['dt_date']), true) ?></span></td>
                             </tr>
                             <?php
                             $i++;
