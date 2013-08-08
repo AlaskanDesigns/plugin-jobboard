@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Jobboard plugin package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2013-06-25 15:36+0100\n"
+"PO-Revision-Date: 2013-08-08 11:02+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,7 +16,7 @@ msgstr ""
 
 #: /Users/juanramon/Projects/www/osclass-plugins-git/jobboard/class/JobboardFooter.class.php:25
 msgid "Take a tour"
-msgstr "Zobacz jakie to proste"
+msgstr "Rozejrzyj się - zobacz jakie to proste!"
 
 #: /Users/juanramon/Projects/www/osclass-plugins-git/jobboard/class/JobboardCustomTitles.php:83
 msgid "Create new job"
@@ -878,7 +878,7 @@ msgstr "spontaniczna"
 
 #: /Users/juanramon/Projects/www/osclass-plugins-git/jobboard/dashboard.php:112
 msgid "Recent applicants"
-msgstr "Ostatni kandydaci"
+msgstr "Kandydaci"
 
 #: /Users/juanramon/Projects/www/osclass-plugins-git/jobboard/dashboard.php:21
 msgid "Activitiy"
