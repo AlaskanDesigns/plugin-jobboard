@@ -254,7 +254,7 @@
         <?php } ?>
         <?php if($countMail > 5) { ?> <div id="view-more-mails"><label><?php _e("View all", "jobboard") ?></label></div> <?php } ?>
     <?php } else { ?>
-        <label id="no-mail"><?php _e("No sent any mail yet.", "jobboard"); ?></label>
+        <label id="no-mail"><?php _e("You haven't sent any emails yet.", "jobboard"); ?></label>
     <?php } ?>
     </div>
 
