@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Jobboard plugin package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2013-08-08 17:27+0100\n"
+"PO-Revision-Date: 2013-08-09 11:43+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,6 +13,30 @@ msgstr ""
 "POT-Creation-Date: \n"
 "Last-Translator: Juan Ramón <juanramon.diaz@gmail.com>\n"
 "Language-Team: \n"
+
+#: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/dashboard.php:79
+msgid "%1$d view"
+msgid_plural "%1$d views"
+msgstr[0] "%1$d wyświetlenie"
+msgstr[1] "%1$d wyświetlenia"
+msgstr[2] "%1$d wyświetleń"
+
+#: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/class/JobboardNotices.class.php:226
+msgid ""
+"There is <strong>%1$s</strong> new applicant. <a href=\"%2$s\">See them all</"
+"a>"
+msgid_plural ""
+"There are <strong>%1$s</strong> new applicants. <a href=\"%2$s\">See them "
+"all</a>"
+msgstr[0] ""
+"Zaaplikował <strong>%1$s</strong> nowy kandydat. <a href=\"%2$s\">Zobacz "
+"wszystkich</a>"
+msgstr[1] ""
+"Zaaplikowało <strong>%1$s</strong> nowych kandydatów. <a href=\"%2$s"
+"\">Zobacz wszystkich</a>"
+msgstr[2] ""
+"Zaaplikowało <strong>%1$s</strong> nowych kandydatów. <a href=\"%2$s"
+"\">Zobacz wszystkich</a>"
 
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/email.php:23
 msgid "Job application received at %1$s"
@@ -374,11 +398,6 @@ msgstr ""
 "Wystąpił błąd podczas usuwania formularza z dodatkowymi pytaniami. Spróbuj "
 "ponownie."
 
-#: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/helpers.php:97
-#: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/class/JobboardEnqueue.php:106
-msgid "Punctuation"
-msgstr "Wynik"
-
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/helpers.php:98
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/people_detail.php:222
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/class/JobboardEnqueue.php:107
@@ -562,7 +581,9 @@ msgstr "Wyniki pytań killer questions"
 msgid "Needs correction"
 msgstr "Potrzebna korekta"
 
+#: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/helpers.php:97
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/people_detail.php:75
+#: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/class/JobboardEnqueue.php:106
 msgid "Score"
 msgstr "Wynik"
 
@@ -723,14 +744,6 @@ msgstr "%1$s stworzył nową ofertę pracy:\"%2$s\""
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/class/Stream.class.php:61
 msgid "%1$s signed in."
 msgstr "%1$s zalogował się."
-
-#: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/class/JobboardNotices.class.php:226
-msgid ""
-"There are <strong>%1$s</strong> new applicants. <a href=\"%2$s\">See them "
-"all</a>"
-msgstr ""
-"Jest <strong>%1$s</strong> nowych kandydatów. <a href=\"%2$s\">Zobacz "
-"wszystkich.</a>"
 
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/class/JobboardNotices.class.php:213
 msgid ""
@@ -1028,10 +1041,6 @@ msgstr "Tytuł oferty pracy"
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/class/Stream.class.php:86
 msgid "%1$s has deleted the job offer: \"%2$s\""
 msgstr "%1$s skasował ofertę pracy: \"%2$s\""
-
-#: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/dashboard.php:79
-msgid "views"
-msgstr "wyświetleń"
 
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/dashboard.php:90
 msgid "Recent activity"

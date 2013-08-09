@@ -222,8 +222,8 @@
         {
             // unread messages notice
             $numUnread = count( ModelJB::newInstance()->search(0,1000, array('unread' => true) ) );
-            if($numUnread>0) {
-                $notice['notice_unread_applicants'] = sprintf(__('There are <strong>%1$s</strong> new applicants. <a href="%2$s">See them all</a>', 'jobboard'), $numUnread, osc_admin_render_plugin_url('jobboard/people.php') . '&viewUnread=1');
+            if($numUnread > 0) {
+                $notice['notice_unread_applicants'] = sprintf(_n('There is <strong>%1$s</strong> new applicant. <a href="%2$s">See them all</a>', 'There are <strong>%1$s</strong> new applicants. <a href="%2$s">See them all</a>', $numUnread, 'jobboard'), $numUnread, osc_admin_render_plugin_url('jobboard/people.php') . '&viewUnread=1');
             }
             return $notice;
         }

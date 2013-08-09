@@ -76,7 +76,7 @@
                                         $mSearch4->set_rpp(1);
                                         $mSearch4->addGroupBy("fk_i_item_id");
                                         $mostViewedJob = $mSearch4->doSearch();?>
-                                <td colspan="5"><div class="most-viwed"><span><?php _e('Most viewed', 'jobboard'); ?> - <b><?php echo $mostViewedJob[0]['i_num_views']." ".__('views', 'jobboard'); ?></b></span><a href="<?php echo osc_item_admin_edit_url($mostViewedJob[0]['fk_i_item_id']); ?>"><?php echo osc_highlight($mostViewedJob[0]['s_title'],30); ?></a></div></td>
+                                <td colspan="5"><div class="most-viwed"><span><?php _e('Most viewed', 'jobboard'); ?> - <b><?php printf(_n('%1$d view', '%1$d views', $mostViewedJob[0]['i_num_views'], 'jobboard'), $mostViewedJob[0]['i_num_views']); ?></b></span><a href="<?php echo osc_item_admin_edit_url($mostViewedJob[0]['fk_i_item_id']); ?>"><?php echo osc_highlight($mostViewedJob[0]['s_title'],30); ?></a></div></td>
                             </tr>
                         </tbody>
                     </table>
@@ -142,7 +142,7 @@
                                     } else {
                                         echo '<td>'.__('Spontaneous application', 'jobboard').'</td>';
                                     }
-                                    echo '<td>'._jobboard_time_elapsed_string( strtotime(@$applicant['dt_date']) ) .'</td>';
+                                    echo '<td>'._jobboard_time_elapsed_string( strtotime(@$applicant['dt_date']), true ) .'</td>';
                                     echo '</tr>';
                                 }
                             }

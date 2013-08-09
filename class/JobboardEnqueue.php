@@ -103,7 +103,7 @@ class JobboardEnqueue
 	// killer questions related
 	$langs['question']              = __('Question', 'jobboard');
 	$langs['answer']                = __('Answer', 'jobboard');
-	$langs['punctuation']           = __('Punctuation', 'jobboard');
+	$langs['punctuation']           = __('Score', 'jobboard');
 	$langs['reject']                = __('Reject', 'jobboard');
 	$langs['insertAnswersLink']     = __('Add answers', 'jobboard');
 	$langs['removeAnswersLink']     = __('Remove answers', 'jobboard');

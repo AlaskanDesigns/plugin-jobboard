@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Job Board 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-08 17:07+0100\n"
-"PO-Revision-Date: 2013-08-08 17:07+0100\n"
+"POT-Creation-Date: 2013-08-09 11:40+0100\n"
+"PO-Revision-Date: 2013-08-09 11:40+0100\n"
 "Last-Translator: Juan Ramón <juanramon.diaz@gmail.com>\n"
 "Language-Team: Translations <translations@osclass.org>\n"
 "Language: en_US\n"
@@ -56,8 +56,11 @@ msgid "Most viewed"
 msgstr ""
 
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/dashboard.php:79
-msgid "views"
-msgstr ""
+#, php-format
+msgid "%1$d view"
+msgid_plural "%1$d views"
+msgstr[0] ""
+msgstr[1] ""
 
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/dashboard.php:90
 msgid "Recent activity"
@@ -179,8 +182,9 @@ msgid "Prefer not say"
 msgstr ""
 
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/helpers.php:97
+#: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/people_detail.php:75
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/class/JobboardEnqueue.php:106
-msgid "Punctuation"
+msgid "Score"
 msgstr ""
 
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/helpers.php:98
@@ -677,10 +681,6 @@ msgstr ""
 
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/people_detail.php:73
 msgid "Apply date"
-msgstr ""
-
-#: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/people_detail.php:75
-msgid "Score"
 msgstr ""
 
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/people_detail.php:75
@@ -1292,9 +1292,13 @@ msgstr ""
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/class/JobboardNotices.class.php:226
 #, php-format
 msgid ""
+"There is <strong>%1$s</strong> new applicant. <a href=\"%2$s\">See them all</"
+"a>"
+msgid_plural ""
 "There are <strong>%1$s</strong> new applicants. <a href=\"%2$s\">See them "
 "all</a>"
-msgstr ""
+msgstr[0] ""
+msgstr[1] ""
 
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/class/ShareJobOffer.class.php:23
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/class/ShareJobOffer.class.php:33
