@@ -78,13 +78,28 @@ $(document).ready(function() {
         }
     });
 
-    $("#contact-cancel").click(function(){
+    $("#contact-cancel").on("click", function(){
         $("#dialog-send-mail").dialog('close');
     });
 
-    $("#contact-submit").click(function() {
-        console.log(tinyMCE.activeEditor.getContent());
-        console.log($("#subject").val());
+    $("#contact-submit").on("click", function()
+    {
+        var sent_email  = false;
+        var saved_email = false;
+        $.post(jobboard.ajax.applicant_status_notification,
+            {
+               "applicantID" : $('.applicantid').val(),
+               "message" : tinyMCE.activeEditor.getContent(),
+               "subject" : $("#subject").val()
+            }, function(data){}, 'json' );
+        $.post(jobboard.ajax.applicant_save_notification,
+            {
+               "applicantID" : $('.applicantid').val(),
+               "message" : tinyMCE.activeEditor.getContent(),
+               "subject" : $("#subject").val()
+            }, function(){ },'json');
+
+            $('#dialog-send-mail').dialog('close');
     });
 
     $('#applicant-birthday').rules(
@@ -186,34 +201,36 @@ $(document).ready(function() {
         var statusId = $(this).data("status-id");
         /* assign old status value to input hidden that will be needed when reallocate applicants */
         $("#reallocating-applicants #old-status-delete").attr("value", statusId);
-        $.post(jobboard.ajax.get_current_applicants_by_status, { 'statusID' : statusId })
+        $.post(jobboard.ajax.get_current_applicants_by_status, {'statusID' : statusId})
         .done(function(num_applicants){
-
             if(num_applicants > 0)
             {
                 /* reset values for current status */
                 $("#status-appl-num-info").empty();
                 $("#selector-new-statuses").empty();
-
                 $("#status-appl-num-info").append(num_applicants);
                 $(".adding-new-status").hide();
-
                 /* get current statuses to reasign */
                 $.post( jobboard.ajax.get_current_statuses, {}).done(function(data)
                 {
                     /* assing new values to selector */
                     var statuses = jQuery.parseJSON(data);
-                    $("#selector-new-statuses").append("<option value='-1' selected='selected'>" + $("#unread-option").val()  + "</option>");
-                    for(var status in statuses) {
-                        if(statusId != statuses[status].id) {
-                            $("#selector-new-statuses").append("<option value='" + statuses[status].id + "'>" + statuses[status].name + "</option>");
+                    if(statuses.length > 1 ) {
+                        $("#selector-new-statuses").append("<option value='-1'>" + $("#unread-option").val()  + "</option>");
+                        for(var status in statuses) {
+                            if(statusId != statuses[status].id) {
+                                $("#selector-new-statuses").append("<option value='" + statuses[status].id + "'>" + statuses[status].name + "</option>");
+                            }
                         }
+                    } else {
+                        $("#selector-new-statuses").append("<option value='-1'>" + $("#unread-option").val()  + "</option>");
                     }
                     $("#reallocating-applicants").show();
                 });
             } else {
-                $.post( jobboard.ajax.delete_status_applicant,{ 'current_status' : $("#reallocating-applicants #old-status-delete").val() }).done(function(data)
-                {
+                /* IF THERE ARE NO APPLICANTS REMOVE STATUS DIRECTLY */
+                $.post( jobboard.ajax.delete_status_applicant, { 'current_status' : $("#reallocating-applicants #old-status-delete").val()}
+                ).done(function(data) {
                     $("#" + $("#reallocating-applicants #old-status-delete").val() ).closest('tr').remove();
                 });
                 $("#reallocating-applicants").hide();
@@ -227,8 +244,8 @@ $(document).ready(function() {
         $(".adding-new-status").show();
     });
 
-
-    $("#button-reallocate").on("click", function() {
+    $("#button-reallocate").on("click", function()
+    {
         $.post( jobboard.ajax.delete_status_applicant,{
         'current_status' : $("#reallocating-applicants #old-status-delete").val(),
         'new_status': $("#reallocating-applicants #selector-new-statuses").val()
@@ -236,11 +253,17 @@ $(document).ready(function() {
             $("#" + $("#reallocating-applicants #old-status-delete").val() ).closest('tr').remove();
             $("#reallocating-applicants").hide();
         });
-
         $("#reallocating-applicants").hide();
         $(".adding-new-status").show();
-
     });
+
+    $("#dialog-new_status #help-box a").on("click", function() {
+        $("#dialog-new_status #help-box").hide();
+    });
+
+    $("#dialog-new_status .ico-help").on("click", function(){
+        $("#dialog-new_status #help-box").show();
+    })
 });
 
 var applicant = {
@@ -271,8 +294,4 @@ var applicant = {
 function delete_applicant(id) {
     $("#delete_id").attr("value", id);
     $("#dialog-people-delete").dialog('open');
-}
-function send_email(id) {
-    $("#delete_id").attr("value", id);
-    $("#dialog-send-mail").dialog({width:600}).dialog("open");
 }

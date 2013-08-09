@@ -932,15 +932,17 @@
             return $this->dao->insert($this->getTable_JobsEmails(), $aSet);
         }
 
-        public function changeApplicantsNewStatus($oldStatus, $newStatus, $applicantID = false) {
+        public function changeApplicantsNewStatus($oldStatus, $newStatus = -1, $applicantID = false) {
             $aSet   = array('i_status' => $newStatus);
             $aWhere = array('i_status' => $oldStatus);
+            if($newStatus == '-1') {
+                $aSet["b_read"] = '0';                
+            }
             if($applicantID) {
                 $aWhere["pk_i_id"] = $applicantID;
             }
 
             return $this->dao->update($this->getTable_JobsApplicants(), $aSet , $aWhere);
-
         }
     }
 

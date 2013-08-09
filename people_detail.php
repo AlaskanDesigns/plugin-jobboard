@@ -52,55 +52,10 @@
     }
     $score = (float)number_format($people['d_score'],1);
 ?>
-<style>
-    .options-people-details {
-        font-size: 14px;
-        padding: 1em;
-        margin-top: -15px;
-    }
-    .options-people-details:hover {
-        background-color: #F1F0F0;
-        border-radius: 5px;
-    }
-    #send-email:hover { cursor: pointer; }
-    #applicant-detail .applicant-header {margin-top: 85px;}
-    .applicant-header h2 a:active {
-        background-color: #ccc;
-    }
-    .applicant-name .icon-checked {
-        width: 1%;
-        height: 6px;
-        border: 5px solid #ccc;
-        background-color: #9EFF44;
-        border-radius: 100%;
-        position: relative;
-        top: 43px;
-    }
-
-    .applicant-name .name-status {
-        width: 15%;
-        font-weight: bold;
-        position: relative;
-        top: -5px;
-        /*left: 0;*/
-        color: #ccc;
-        -webkit-transform: rotate(-29deg);
-        -moz-transform: rotate(-29deg);
-        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-    }
-    .applicant-name .border {
-        border: 1px solid #ccc;
-        width: 8%;
-        height: 7px;
-        background-color: #ccc;
-        top: 60px;
-        right: 55px;
-        position: relative;
-    }
-</style>
 <div id="applicant-detail">
     <span class="applicant-name"><a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>" ><?php _e('Applicants', 'jobboard'); ?></a> &raquo; <?php echo @$people['s_name']; ?>
-    <?php if(osc_get_preference("applicant_" . $applicantId , "jobboard")) { ?>
+
+    <!--<?php if(osc_get_preference("applicant_" . $applicantId , "jobboard")) { ?>
         <?php $aStatusPerApplicant = array_reverse(json_decode(osc_get_preference("applicant_" . $applicantId , "jobboard") , true)); ?>
         <?php $leftSpan = 0; $leftIcon = 21; ?>
         <?php foreach ($aStatusPerApplicant as $k => $aStatusApplicant) { ?>
@@ -108,7 +63,8 @@
             <span class="float-right name-status" style="left:<?php echo $leftSpan; ?>px;" ><?php echo $aStatusApplicant["name"]; ?></span>
             <div class="float-right icon-checked" style="left:<?php echo $leftIcon; ?>px;" >  </div>
         <?php } ?>
-    <?php } ?>
+    <?php } ?>-->
+
     </span>
     <div class="applicant-header">
         <h2 class="render-title"><?php echo @$people['s_name']; ?>
@@ -165,8 +121,8 @@
                 <div class="option-send-email">
                     <h4><?php _e("Do you want to send an email?","jobboard"); ?></h4>
                     <div class="send-email-buttons">
-                        <button type="button" id="send-email" class="btn btn-blue"><?php _e("Send","jobboard"); ?></button>
-                        <button type="button" id="cancel-send-email" class="btn"><?php _e("Not now","jobboard"); ?></button>
+                        <button type="button" id="send-email" class="btn btn-blue btn-mini"><?php _e("Send","jobboard"); ?></button>
+                        <button type="button" id="cancel-send-email" class="btn btn-mini"><?php _e("Not now","jobboard"); ?></button>
                     </div>
                 </div>
             </div>
@@ -308,29 +264,28 @@
                 <div id="jobboard-loading-image" ></div>
             </div>
         </div>
-        <!-- /killer-questions -->
-        <?php } ?>
-        <div id="messages" class="tab-pane">
-            <h3 class="render-title jobboard-title"><?php _e('Mails sent', 'jobboard'); ?></h3>
-            <?php if(count($aMails) > 0)  { ?>
-                <?php $countMail = 1; ?>
-                <?php foreach($aMails as $aMail)  { ?>
-                        <?php if($countMail > 5) { echo " <div class='show-more-mails'>";} ?>
-                        <div class="p-mail">
-                        <?php $aMessage = json_decode($aMail["s_mail"], true); ?>
-                        <label class="mail-subject"><?php echo $aMessage["subject"] . " - "; ?></label>
-                        <label class="mail-date"><?php echo date("d-M-Y H:i:s", strtotime($aMail["dt_date"])); ?></label>
-                        <label class="mail-body"><?php echo $aMessage["body"]; ?></label>
-                        </div>
-                        <?php if($countMail > 5) { echo " </div>";} else { $countMail++; } ?>
-                <?php } ?>
-                <?php if($countMail > 5) { ?> <div id="view-more-mails"><label><?php _e("View all", "jobboard") ?></label></div> <?php } ?>
-            <?php } else { ?>
-            <label id="no-mail"><?php _e("You haven't sent any emails yet.", "jobboard"); ?></label>
-        <?php } ?>
-        </div>
     </div>
-    <!-- /tab-content -->
+    <div id="jobboard-loading-container" style="display:none;">
+        <div id="jobboard-loading-image" ></div>
+    </div>
+    <?php } ?>
+    <div class="show-mails-applicant-box">
+        <h3 class="render-title jobboard-title"><?php _e('Mails sent', 'jobboard'); ?></h3>
+    <?php if(count($aMails) > 0)  { ?>
+        <?php $numMail = 1; ?>
+        <?php foreach($aMails as $aMail)  { ?>
+                <div class="p-mail<?php if($numMail >= 6) { echo " show-mail";} else { $numMail++; } ?>">
+                <?php $aMessage = json_decode($aMail["s_mail"], true); ?>
+                <label class="mail-subject"><?php echo $aMessage["subject"] . " - "; ?></label>
+                <label class="mail-date"><?php echo date("d-M-Y H:i:s", strtotime($aMail["dt_date"])); ?></label>
+                <label class="mail-body"><?php echo $aMessage["body"]; ?></label>
+                </div>
+        <?php } ?>
+        <?php if($numMail >= 6) { ?> <div id="view-all-mails"><label><?php _e("View all", "jobboard") ?></label></div> <?php } ?>
+    <?php } else { ?>
+        <label id="no-mail"><?php _e("You haven't sent any emails yet.", "jobboard"); ?></label>
+    <?php } ?>
+    </div>
 </div>
 <div id="dialog-note-delete" title="<?php echo osc_esc_html(__('Delete note', 'jobboard')); ?>" class="has-form-actions hide" data-note-id="">
     <div class="form-horizontal">

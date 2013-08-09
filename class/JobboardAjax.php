@@ -244,6 +244,11 @@ class JobboardAjax
 	echo json_encode(array('status' => true));
     }
 
+    /**
+     * save a new status
+     *
+     * @return type
+     */
     function ajax_new_status_applicant()
     {
 	$statusName = trim(Params::getParam("statusName"));
@@ -270,13 +275,18 @@ class JobboardAjax
         return null;
     }
 
+    /**
+     * delete a selected status from DB
+     *
+     * @return type
+     */
     function ajax_delete_status_applicant()
     {
 	$current_status = trim(Params::getParam("current_status"));
 	$new_status     = trim(Params::getParam("new_status")) == '' ? "-1" : trim(Params::getParam("new_status")) ;
 
         //exists and is not a default status
-        if($current_status) {
+        if($current_status >=0) {
            $jsonStatuses = osc_get_preference("applicant_statuses", "jobboard");
            $aStatuses    = json_decode($jsonStatuses, true);
 
@@ -295,17 +305,15 @@ class JobboardAjax
         echo $jsonStatuses;
         return true;
     }
-
+    /**
+     * update statuses
+     *
+     * @return type
+     */
     function ajax_update_statuses() {
 	$aStatuses = Params::getParam("statuses");
 
-        /* If status is empty add ACTIVE by default*/
-        if(empty($aStatuses)) {
-            $aStatus  = array(0 => __("Active", "jobboard"));
-            $jsonStatuses = json_encode($aStatus);
-            osc_set_applicant_statuses($jsonStatuses);
-
-        } else {
+        if(!empty($aStatuses)) {
             $aUpdateStatuses = array();
             foreach($aStatuses as $key => $aStatus) {
                 $aUpdateStatuses[] = array("id" => $aStatus[0] , "name" => $aStatus[1]);
@@ -318,12 +326,22 @@ class JobboardAjax
         return true;
     }
 
+    /**
+     * get current atatuses
+     *
+     * @return json
+     */
     function ajax_get_current_statuses()  {
         $jsonStatuses = osc_get_preference("applicant_statuses", "jobboard");
         echo $jsonStatuses;
         return true;
     }
 
+    /**
+     * get num applicant by status
+     *
+     * @return integer
+     */
     function ajax_get_current_applicants_by_status() {
         $statusID       = Params::getParam("statusID");
         $num_applicants = JobboardManageApplicants::get_num_applicants_by_status($statusID);
@@ -332,6 +350,11 @@ class JobboardAjax
         return true;
     }
 
+    /**
+     * save each status used by applicant
+     *
+     * @return type
+     */
     function ajax_save_applicant_status() {
         $applicantID  = Params::getParam("applicantID");
         $statusId     = Params::getParam("statusId");
