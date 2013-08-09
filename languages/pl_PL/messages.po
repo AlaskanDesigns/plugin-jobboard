@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Jobboard plugin package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2013-08-09 11:43+0100\n"
+"PO-Revision-Date: 2013-08-09 11:55+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,6 +13,10 @@ msgstr ""
 "POT-Creation-Date: \n"
 "Last-Translator: Juan Ramón <juanramon.diaz@gmail.com>\n"
 "Language-Team: \n"
+
+#: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/people_detail.php:221
+msgid "Select score"
+msgstr "Wybierz wynik"
 
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/dashboard.php:79
 msgid "%1$d view"
@@ -602,10 +606,6 @@ msgstr "Killer questions"
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/people_detail.php:172
 msgid "Corrected"
 msgstr "Poprawione"
-
-#: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/people_detail.php:221
-msgid "Select punctuation"
-msgstr "Wybierz wynik"
 
 #: /Users/juanramon/Projects/www/osclass-jobboard/web/oc-content/plugins/jobboard/class/JobboardContact.php:172
 msgid "All questions are required"

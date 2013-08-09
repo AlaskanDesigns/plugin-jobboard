@@ -218,7 +218,7 @@
                             <select class="answer_punctuation" data-question-id="<?php echo $q['pk_i_id'];?>"
                             data-killerform-id="<?php echo @$aAnswers[$q['pk_i_id']]['fk_i_killer_form_id']; ?>"
                             data-applicant-id="<?php echo @$aAnswers[$q['pk_i_id']]['fk_i_applicant_id']; ?>">
-                                <option value="" <?php if(@$default==''){ echo 'selected'; } ?>><?php _e('Select punctuation', 'jobboard'); ?></option>
+                                <option value="" <?php if(@$default==''){ echo 'selected'; } ?>><?php _e('Select score', 'jobboard'); ?></option>
                                 <option value="reject" <?php if(@$default=='reject'){ echo 'selected'; } ?>><?php _e('Reject', 'jobboard'); ?></option>
                                 <option value="1" <?php if(@$default=='1'){ echo 'selected'; } ?>>1</option>
                                 <option value="2" <?php if(@$default=='2'){ echo 'selected'; } ?>>2</option>
