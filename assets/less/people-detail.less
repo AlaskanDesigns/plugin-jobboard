@@ -378,12 +378,19 @@ label.score .score-manage{
 .nav-tabs > li > a:hover {
   border-color: #eeeeee;
 }
-.nav-tabs > li > a.active,
-.nav-tabs > li > a.active:hover,
-.nav-tabs > li > a a.active:focus {
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
   color: #555555;
   cursor: pointer;
   /*background-color: #f3f3f3;*/
   border: 1px solid #dddddd;
   border-bottom-color: white;
+}
+.tab-content > .tab-pane{
+  display: none;
+}
+
+.tab-content > .active {
+  display: block;
 }

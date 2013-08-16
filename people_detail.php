@@ -74,10 +74,8 @@
                     <p><label><?php _e('Birthday', 'jobboard'); ?> </label><br/><?php echo @$people['dt_birthday']; ?></p>
                     <p><label><?php _e('Score', 'jobboard'); ?> </label><br/><span class="sum_punctuations"><?php if(count($aQuestions)>0) { if ($correctedForm) { echo $score;?></span>/10<?php }?><a href="#kq" class="animated-scroll">  <?php _e('View answers','jobobard'); ?></a><?php }?></p>
                 </div>
-
                 <div class="clear"></div>
             </div>
-
             <div class="clear"></div>
         </div>
         <div id="right-side">
@@ -117,161 +115,168 @@
                     </div>
                 </div>
             </div>
-            <div style="clear:both;"></div>
+            <div class="clear"></div>
         </div>
-        <div style="clear:both;"></div>
+        <div class="clear"></div>
     </div>
     <ul class="nav nav-tabs">
-        <li><a id="viewCV"     class="nav-options active" href="#"><?php _e("View cover letter and CV", "jobboard"); ?></a></li>
-        <li><a id="viewNotes"  class="nav-options" href="#"><?php _e("View notes", "jobboard"); ?></a></li>
-        <li><a id="viewEmails" class="nav-options" href="#"><?php _e("View emails sent", "jobboard"); ?></a></li>
-    </ul>
-    <div class="applicant-cover-letter">
-        <h3 class="render-title jobboard-title"><?php _e('Cover letter', 'jobboard'); ?></h3>
-        <p><?php echo nl2br($people['s_cover_letter']); ?></p>
-    </div>
-    <h3  id="applicant-resume-title" class="render-title jobboard-title"><?php _e('Applicant CV', 'jobboard'); ?>
-    <a class="btn btn-blue btn-mini float-right" style="height:14px" href="<?php echo osc_base_url(true).'?page=ajax&action=custom&ajaxfile='; ?>jobboard/download.php?data=<?php echo $applicantId; ?>|<?php echo $file['s_secret']; ?>"><?php _e('Download', 'jobboard'); ?></a>
-    </h3>
-    <div id="applicant-resume">
-        <?php if(empty($file)) {
-            _e("This applicant has not sumitted any resume", "jobboard");
-        } else { ?>
-        <iframe src="<?php echo osc_base_url(true) .'?page=ajax&action=custom&ajaxfile='.osc_plugin_folder(__FILE__).'viewer/viewer.php'; ?>?file=<?php echo osc_base_url() . str_replace(osc_base_path(), '', osc_uploads_path()) . $file['s_name']; ?>" ></iframe>
+        <li class="active"><a class="nav-options" href="#profile" data-toggle="tab"><?php _e("Profile", "jobboard"); ?></a></li>
+        <?php if(count($aQuestions) > 0) { ?>
+        <li><a class="nav-options" href="#killer_questions" data-toggle="tab"><?php _e("Killer Questions", "jobboard"); ?></a></li>
         <?php } ?>
-    </div>
-    <div style="clear:both;"></div>
-    <div id="dashboard_notes">
-    <h3 class="sidebar-title render-title jobboard-title"><?php _e("Notes", "jobboard"); ?> <span class="note_plus"><a class="add_note btn btn-mini" href="javascript:void(0);"><?php _e("Add note", "jobboard"); ?></a></span></h3>
-        <div id="nots_table_div">
-            <?php if(count($notes)>0) { ?>
-                <?php foreach($notes as $note) { ?>
-                    <div class="note well ui-rounded-corners">
-                        <div class="note-actions">
-                            <a class="delete_note" href="javascript:void(0);" data-note-id="<?php echo $note['pk_i_id']; ?>"><?php _e("Delete", "jobboard"); ?></a>
-                            <a class="edit_note" href="javascript:void(0);" data-note-id="<?php echo $note['pk_i_id']; ?>" data-note-text="<?php echo osc_esc_html($note['s_text']); ?>" ><?php _e("Edit", "jobboard"); ?></a>
-                        </div>
-                        <div class="note-date">
-                            <b><?php echo date('d', strtotime($note['dt_date'])); ?></b>
-                            <span><?php echo date('M', strtotime($note['dt_date'])); ?><br>
-                            <?php echo date('Y', strtotime($note['dt_date'])); ?></span>
-                        </div>
-                        <div class="clear"></div>
-                        <p class="note_text"><?php echo nl2br($note['s_text']); ?></p>
-                    </div>
-                <?php }; ?>
-            <?php } else { ?>
-                <div class="note empty-note well ui-rounded-corners">
-                    <p><?php _e("No notes have been added to this applicant", "jobboard"); ?></p>
-                </div>
-            <?php } ?>
-        </div>
-    </div>
-    <?php if(count($aQuestions)>0) { ?>
-    <h3 class="sidebar-title render-title" style="display:inline-block;" id="kq">
-        <?php _e("Killer questions", "jobboard"); ?> <span id="sum_punctuations"><?php echo $score; ?></span>/10<?php if(@$people['b_corrected']) { ?><i id="applicant_status" class="circle circle-green" style="position: relative;top: 6px;padding-right: 4px;padding-left: 4px;"> <?php _e('Corrected', 'jobboard'); ?> </i><?php } ?>
-    </h3>
-    <div style="clear:both;"></div>
-    <div id="killer_questions_applicant" style="margin-top:15px;">
-        <div id="kq_table_div">
-            <div id="killerquestions">
-                <?php foreach($aQuestions['questions'] as $key => $q) { ?>
-                <div id="question_<?php echo $q['pk_i_id'];?>" data-id="<?php echo $q['pk_i_id'];?>" class="well rounded-well" style="margin-bottom: 15px;">
-                    <?php _e('Question', 'jobboard'); ?> <?php echo $key;?>
-                    <p><?php echo $q['s_text'];?></p>
-                    <?php if($q['a_answers']!==false){ ?>
-                    <p>
-                        <ol style="padding-left:0px;">
-                            <?php foreach($q['a_answers'] as $key_ => $a){ ?>
-                            <li>
-                                <?php $b_answer = @$aAnswers[$q['pk_i_id']]['fk_i_answer_id'] == $a['pk_i_id'];
-                                if($b_answer) { ?>
-                                <i class="circle circle-green" style="width: 25px;position: relative;top: 6px;">&#10142;</i>
-                                <?php } else { ?>
-                                <i style="width: 29px;display: inline-block;"></i>
-                                <?php } ?>
-                                <span class="input-large"><?php echo osc_esc_html($a['s_text']);?></span>
-                                <span style="display:inline-block;">
-                                    <i class="circle circle-<?php if($b_answer) { echo "red";} else {echo "gray";}?>" style="position: relative;top: 6px;padding-right: 4px;padding-left: 4px;"> <?php echo $a['s_punctuation'];?> </i>
-                                </span>
-                            </li>
-                            <?php } ?>
-                        </ol>
-                    </p>
-                    <?php } else { // opened answer
-                        // get punctuation of open question ! -> $default
-                        $default = $aAnswers[$q['pk_i_id']]['s_punctuation'];
-                        ?>
-                    <p>
-                        <i class="circle circle-green" style="width: 25px;position: relative;top: 6px;">&#10142;</i>
-                        <textarea class="required" name="question[<?php echo $q['pk_i_id']; ?>][open]"><?php echo osc_esc_html(@$aAnswers[$q['pk_i_id']]['s_answer_opened']); ?></textarea>
-                        <label class="score">
-                            <?php
-                            $hide_circle = false;
-                            $puntuationShow = '?';
-                            if(@$aAnswers[$q['pk_i_id']]['s_punctuation']!='') {
-                                $puntuationShow = @$aAnswers[$q['pk_i_id']]['s_punctuation'];
-                            }
-                            ?>
-                            <i class="score-unit circle circle-red"><?php echo $puntuationShow;?></i>
-                            <?php if($q['a_answers']===false){ ?>
-                            <select class="answer_punctuation" data-question-id="<?php echo $q['pk_i_id'];?>"
-                            data-killerform-id="<?php echo @$aAnswers[$q['pk_i_id']]['fk_i_killer_form_id']; ?>"
-                            data-applicant-id="<?php echo @$aAnswers[$q['pk_i_id']]['fk_i_applicant_id']; ?>">
-                                <option value="" <?php if(@$default==''){ echo 'selected'; } ?>><?php _e('Select score', 'jobboard'); ?></option>
-                                <option value="reject" <?php if(@$default=='reject'){ echo 'selected'; } ?>><?php _e('Reject', 'jobboard'); ?></option>
-                                <option value="1" <?php if(@$default=='1'){ echo 'selected'; } ?>>1</option>
-                                <option value="2" <?php if(@$default=='2'){ echo 'selected'; } ?>>2</option>
-                                <option value="3" <?php if(@$default=='3'){ echo 'selected'; } ?>>3</option>
-                                <option value="4" <?php if(@$default=='4'){ echo 'selected'; } ?>>4</option>
-                                <option value="5" <?php if(@$default=='5'){ echo 'selected'; } ?>>5</option>
-                                <option value="6" <?php if(@$default=='6'){ echo 'selected'; } ?>>6</option>
-                                <option value="7" <?php if(@$default=='7'){ echo 'selected'; } ?>>7</option>
-                                <option value="8" <?php if(@$default=='8'){ echo 'selected'; } ?>>8</option>
-                                <option value="9" <?php if(@$default=='9'){ echo 'selected'; } ?>>9</option>
-                                <option value="10" <?php if(@$default=='10'){ echo 'selected'; } ?>>10</option>
-                            </select>
-                            <?php } ?>
-                        </label>
-                    </p>
-                    <?php }  ?>
-                </div>
+        <li><a class="nav-options" href="#messages" data-toggle="tab"><?php _e("Messages", "jobboard"); ?></a></li>
+        <li><a class="nav-options" href="#notes" data-toggle="tab"><?php _e("Notes", "jobboard"); ?></a></li>
+    </ul>
+    <div class="tab-content">
+        <!-- cover-letter-cv-section -->
+        <div id="profile" class="tab-pane active">
+            <div class="applicant-cover-letter">
+                <h3 class="render-title jobboard-title"><?php _e('Cover letter', 'jobboard'); ?></h3>
+                <p><?php echo nl2br($people['s_cover_letter']); ?></p>
+            </div>
+            <h3  id="applicant-resume-title" class="render-title jobboard-title"><?php _e('Applicant CV', 'jobboard'); ?>
+            <a class="btn btn-blue btn-mini float-right" style="height:14px" href="<?php echo osc_base_url(true).'?page=ajax&action=custom&ajaxfile='; ?>jobboard/download.php?data=<?php echo $applicantId; ?>|<?php echo $file['s_secret']; ?>"><?php _e('Download', 'jobboard'); ?></a>
+            </h3>
+            <div id="applicant-resume">
+                <?php if(empty($file)) {
+                    _e("This applicant has not sumitted any resume", "jobboard");
+                } else { ?>
+                <iframe src="<?php echo osc_base_url(true) .'?page=ajax&action=custom&ajaxfile='.osc_plugin_folder(__FILE__).'viewer/viewer.php'; ?>?file=<?php echo osc_base_url() . str_replace(osc_base_path(), '', osc_uploads_path()) . $file['s_name']; ?>" ></iframe>
                 <?php } ?>
             </div>
         </div>
-    </div>
-    <div id="jobboard-loading-container" style="display:none;">
-        <div id="jobboard-loading-image" ></div>
-    </div>
-    <?php } ?>
-    <div class="show-mails-applicant-box">
-        <h3 class="render-title jobboard-title"><?php _e('Mails sent', 'jobboard'); ?></h3>
-
-    <?php if(count($aMails) > 0)  { ?>
-        <?php $countMail = 1; ?>
-        <?php foreach($aMails as $aMail)  { ?>
-                <?php if($countMail > 5) { echo " <div class='show-more-mails'>";} ?>
-                <div class="p-mail">
-                <?php $aMessage = json_decode($aMail["s_mail"], true); ?>
-                <label class="mail-subject"><?php echo $aMessage["subject"] . " - "; ?></label>
-                <label class="mail-date"><?php echo date("d-M-Y H:i:s", strtotime($aMail["dt_date"])); ?></label>
-                <label class="mail-body"><?php echo $aMessage["body"]; ?></label>
+        <!-- /cover-letter-cv-section -->
+        <!-- dashboard_notes -->
+        <div id="notes" class="tab-pane">
+            <h3 class="sidebar-title render-title jobboard-title"><?php _e("Notes", "jobboard"); ?> <span class="note_plus"><a class="add_note btn btn-mini" href="javascript:void(0);"><?php _e("Add note", "jobboard"); ?></a></span></h3>
+            <div id="nots_table_div">
+                <?php if(count($notes)>0) { ?>
+                    <?php foreach($notes as $note) { ?>
+                        <div class="note well ui-rounded-corners">
+                            <div class="note-actions">
+                                <a class="delete_note" href="javascript:void(0);" data-note-id="<?php echo $note['pk_i_id']; ?>"><?php _e("Delete", "jobboard"); ?></a>
+                                <a class="edit_note" href="javascript:void(0);" data-note-id="<?php echo $note['pk_i_id']; ?>" data-note-text="<?php echo osc_esc_html($note['s_text']); ?>" ><?php _e("Edit", "jobboard"); ?></a>
+                            </div>
+                            <div class="note-date">
+                                <b><?php echo date('d', strtotime($note['dt_date'])); ?></b>
+                                <span><?php echo date('M', strtotime($note['dt_date'])); ?><br>
+                                <?php echo date('Y', strtotime($note['dt_date'])); ?></span>
+                            </div>
+                            <div class="clear"></div>
+                            <p class="note_text"><?php echo nl2br($note['s_text']); ?></p>
+                        </div>
+                    <?php }; ?>
+                <?php } else { ?>
+                    <div class="note empty-note well ui-rounded-corners">
+                        <p><?php _e("No notes have been added to this applicant", "jobboard"); ?></p>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+        <!-- /dashboard_notes -->
+        <?php if(count($aQuestions) > 0) { ?>
+        <!-- killer-questions -->
+        <div id="killer_questions" class="tab-pane">
+            <h3 class="sidebar-title render-title" style="display:inline-block;" id="kq">
+                <?php _e("Killer questions", "jobboard"); ?> <span id="sum_punctuations"><?php echo $score; ?></span>/10<?php if(@$people['b_corrected']) { ?><i id="applicant_status" class="circle circle-green" style="position: relative;top: 6px;padding-right: 4px;padding-left: 4px;"> <?php _e('Corrected', 'jobboard'); ?> </i><?php } ?>
+            </h3>
+            <div class="clear"></div>
+            <div id="killer_questions_applicant" style="margin-top:15px;">
+                <div id="kq_table_div">
+                    <div id="killerquestions">
+                        <?php foreach($aQuestions['questions'] as $key => $q) { ?>
+                        <div id="question_<?php echo $q['pk_i_id'];?>" data-id="<?php echo $q['pk_i_id'];?>" class="well rounded-well" style="margin-bottom: 15px;">
+                            <?php _e('Question', 'jobboard'); ?> <?php echo $key;?>
+                            <p><?php echo $q['s_text'];?></p>
+                            <?php if($q['a_answers']!==false){ ?>
+                            <p>
+                                <ol style="padding-left:0px;">
+                                    <?php foreach($q['a_answers'] as $key_ => $a){ ?>
+                                    <li>
+                                        <?php $b_answer = @$aAnswers[$q['pk_i_id']]['fk_i_answer_id'] == $a['pk_i_id'];
+                                        if($b_answer) { ?>
+                                        <i class="circle circle-green" style="width: 25px;position: relative;top: 6px;">&#10142;</i>
+                                        <?php } else { ?>
+                                        <i style="width: 29px;display: inline-block;"></i>
+                                        <?php } ?>
+                                        <span class="input-large"><?php echo osc_esc_html($a['s_text']);?></span>
+                                        <span style="display:inline-block;">
+                                            <i class="circle circle-<?php if($b_answer) { echo "red";} else {echo "gray";}?>" style="position: relative;top: 6px;padding-right: 4px;padding-left: 4px;"> <?php echo $a['s_punctuation'];?> </i>
+                                        </span>
+                                    </li>
+                                    <?php } ?>
+                                </ol>
+                            </p>
+                            <?php } else { // opened answer
+                                // get punctuation of open question ! -> $default
+                                $default = $aAnswers[$q['pk_i_id']]['s_punctuation'];
+                                ?>
+                            <p>
+                                <i class="circle circle-green" style="width: 25px;position: relative;top: 6px;">&#10142;</i>
+                                <textarea class="required" name="question[<?php echo $q['pk_i_id']; ?>][open]"><?php echo osc_esc_html(@$aAnswers[$q['pk_i_id']]['s_answer_opened']); ?></textarea>
+                                <label class="score">
+                                    <?php
+                                    $hide_circle = false;
+                                    $puntuationShow = '?';
+                                    if(@$aAnswers[$q['pk_i_id']]['s_punctuation']!='') {
+                                        $puntuationShow = @$aAnswers[$q['pk_i_id']]['s_punctuation'];
+                                    }
+                                    ?>
+                                    <i class="score-unit circle circle-red"><?php echo $puntuationShow;?></i>
+                                    <?php if($q['a_answers']===false){ ?>
+                                    <select class="answer_punctuation" data-question-id="<?php echo $q['pk_i_id'];?>"
+                                    data-killerform-id="<?php echo @$aAnswers[$q['pk_i_id']]['fk_i_killer_form_id']; ?>"
+                                    data-applicant-id="<?php echo @$aAnswers[$q['pk_i_id']]['fk_i_applicant_id']; ?>">
+                                        <option value="" <?php if(@$default==''){ echo 'selected'; } ?>><?php _e('Select score', 'jobboard'); ?></option>
+                                        <option value="reject" <?php if(@$default=='reject'){ echo 'selected'; } ?>><?php _e('Reject', 'jobboard'); ?></option>
+                                        <option value="1" <?php if(@$default=='1'){ echo 'selected'; } ?>>1</option>
+                                        <option value="2" <?php if(@$default=='2'){ echo 'selected'; } ?>>2</option>
+                                        <option value="3" <?php if(@$default=='3'){ echo 'selected'; } ?>>3</option>
+                                        <option value="4" <?php if(@$default=='4'){ echo 'selected'; } ?>>4</option>
+                                        <option value="5" <?php if(@$default=='5'){ echo 'selected'; } ?>>5</option>
+                                        <option value="6" <?php if(@$default=='6'){ echo 'selected'; } ?>>6</option>
+                                        <option value="7" <?php if(@$default=='7'){ echo 'selected'; } ?>>7</option>
+                                        <option value="8" <?php if(@$default=='8'){ echo 'selected'; } ?>>8</option>
+                                        <option value="9" <?php if(@$default=='9'){ echo 'selected'; } ?>>9</option>
+                                        <option value="10" <?php if(@$default=='10'){ echo 'selected'; } ?>>10</option>
+                                    </select>
+                                    <?php } ?>
+                                </label>
+                            </p>
+                            <?php }  ?>
+                        </div>
+                        <?php } ?>
+                    </div>
                 </div>
-                <?php if($countMail > 5) { echo " </div>";} else { $countMail++; } ?>
+            </div>
+            <div id="jobboard-loading-container" style="display:none;">
+                <div id="jobboard-loading-image" ></div>
+            </div>
+        </div>
+        <!-- /killer-questions -->
         <?php } ?>
-        <?php if($countMail > 5) { ?> <div id="view-more-mails"><label><?php _e("View all", "jobboard") ?></label></div> <?php } ?>
-    <?php } else { ?>
-        <label id="no-mail"><?php _e("You haven't sent any emails yet.", "jobboard"); ?></label>
-    <?php } ?>
+        <div id="messages" class="tab-pane">
+            <h3 class="render-title jobboard-title"><?php _e('Mails sent', 'jobboard'); ?></h3>
+            <?php if(count($aMails) > 0)  { ?>
+                <?php $countMail = 1; ?>
+                <?php foreach($aMails as $aMail)  { ?>
+                        <?php if($countMail > 5) { echo " <div class='show-more-mails'>";} ?>
+                        <div class="p-mail">
+                        <?php $aMessage = json_decode($aMail["s_mail"], true); ?>
+                        <label class="mail-subject"><?php echo $aMessage["subject"] . " - "; ?></label>
+                        <label class="mail-date"><?php echo date("d-M-Y H:i:s", strtotime($aMail["dt_date"])); ?></label>
+                        <label class="mail-body"><?php echo $aMessage["body"]; ?></label>
+                        </div>
+                        <?php if($countMail > 5) { echo " </div>";} else { $countMail++; } ?>
+                <?php } ?>
+                <?php if($countMail > 5) { ?> <div id="view-more-mails"><label><?php _e("View all", "jobboard") ?></label></div> <?php } ?>
+            <?php } else { ?>
+            <label id="no-mail"><?php _e("You haven't sent any emails yet.", "jobboard"); ?></label>
+        <?php } ?>
+        </div>
     </div>
-
-
-
-
+    <!-- /tab-content -->
 </div>
-
-
-
 <div id="dialog-note-delete" title="<?php echo osc_esc_html(__('Delete note', 'jobboard')); ?>" class="has-form-actions hide" data-note-id="">
     <div class="form-horizontal">
         <div class="form-row">

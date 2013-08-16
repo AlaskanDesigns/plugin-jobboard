@@ -70,6 +70,7 @@ osc_register_script('jobboard-item-add', osc_plugin_url(__FILE__) . 'assets/js/i
 osc_register_script('jobboard-items', osc_plugin_url(__FILE__) . 'assets/js/items.js', array('jquery'));
 osc_register_script('jobboard-admin-page', osc_plugin_url(__FILE__) . 'assets/js/jb_admin.js', 'jquery');
 osc_register_script('hopscotch', osc_plugin_url(__FILE__) . 'assets/lib/hopscotch/js/hopscotch-0.1.min.js', array('jquery'));
+osc_register_script('tabs', osc_plugin_url(__FILE__) . 'assets/js/tab.js', array('jquery'));
 
 /* -- Register js and css scripts -- */
 

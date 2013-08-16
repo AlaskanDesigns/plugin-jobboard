@@ -261,56 +261,8 @@ $(document).ready(function() {
     });
 
     $('label.score').hover(function(){
-    $(this).addClass('show-box');
-    },function(){
-    $(this).removeClass('show-box');
-    });
-
-    $(".nav-options").click(function() {
-        $('.nav-options').removeClass("active");
-        $(this).addClass("active");
-    });
-
-    hideNotes();
-    hideMails();
-    $("#viewCV").click(function() {
-        showCv();
-        hideNotes();
-        hideMails();
-    });
-    $("#viewNotes").click(function() {
-        showNotes();
-        hideCv();
-        hideMails();
-    });
-    $("#viewEmails").click(function() {
-        showMails();
-        hideNotes();
-        hideCv();
+        $(this).addClass('show-box');
+    }, function(){
+        $(this).removeClass('show-box');
     });
 });
-
-function showNotes(){
-    $("#dashboard_notes").show();
-    $(".note_plus").show();
-}
-function hideNotes(){
-    $("#dashboard_notes").hide();
-    $(".note_plus").hide();
-}
-function hideCv() {
-    $(".applicant-cover-letter").hide();
-    $("#applicant-resume").hide();
-    $("#applicant-resume-title").hide();
-}
-function showCv() {
-    $(".applicant-cover-letter").show();
-    $("#applicant-resume").show();
-    $("#applicant-resume-title").show();
-}
-function hideMails() {
-    $(".show-mails-applicant-box").hide();
-}
-function showMails() {
-    $(".show-mails-applicant-box").show();
-}
