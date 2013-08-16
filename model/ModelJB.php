@@ -89,15 +89,6 @@
         }
 
         /**
-         * Return table name jobs emails
-         * @return string
-         */
-        public function getTable_JobsEmails()
-        {
-            return DB_TABLE_PREFIX.'t_item_job_email' ;
-        }
-
-        /**
          * Import sql file
          * @param type $file
          */
@@ -121,7 +112,6 @@
             $this->dao->query('DROP TABLE '. $this->getTable_JobsApplicants());
             $this->dao->query('DROP TABLE '. $this->getTable_JobsAttrDescription());
             $this->dao->query('DROP TABLE '. $this->getTable_JobsAttr());
-            $this->dao->query('DROP TABLE '. $this->getTable_JobsEmails());
             //$this->dao->query('DROP TABLE '. ModelKQ::newInstance()->getTable_KillerForm());
 
             $page = Page::newInstance()->findByInternalName('email_resumes_jobboard');
@@ -884,43 +874,6 @@
                     array(  'd_score'       => $score,
                             'b_corrected'   => $bCorrected),
                     array('pk_i_id' => $applicantId));
-        }
-
-        /**
-         * Get number
-         *
-         * @param type $locale
-         */
-        public function getEmailsPerApplicant($applicantId) {
-            $this->dao->select();
-            $this->dao->from($this->getTable_JobsEmails());
-            $this->dao->where("fk_i_applicant_id", $applicantId);
-            $this->dao->orderBy("pk_i_id", 'desc');
-            $result = $this->dao->get();
-            if( !$result) {
-                return array() ;
-            }
-
-            return $result->result();
-        }
-
-        /**
-         * Insert a notification by mail in DB
-         *
-         * @param int $applicantId
-         * @param string $jsonMail defaul FALSE
-         */
-        public function insertEmail($applicantId, $jsonMail = false) {
-            if(empty($jsonMail)) {
-                return null;
-            }
-            $aSet = array(
-                'fk_i_applicant_id' => $applicantId,
-                'dt_date         '  => date("Y-m-d H:i:s"),
-                's_mail'            => $jsonMail
-            );
-
-            return $this->dao->insert($this->getTable_JobsEmails(), $aSet);
         }
     }
 

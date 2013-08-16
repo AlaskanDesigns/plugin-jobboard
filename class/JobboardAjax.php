@@ -169,11 +169,7 @@ class JobboardAjax
         }
 
         // save email format json
-        $aMail = array();
-        $aMail["subject"] = $subject;
-        $aMail["body"]    = $message;
-        $jsonMail         = json_encode($aMail);
-        ModelJB::newInstance()->insertEmail($applicantID, $jsonMail);
+        applicant_emailsent_insert($applicantID, $subject, $body);
 
         return true;
     }

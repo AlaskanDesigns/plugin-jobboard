@@ -15,7 +15,7 @@
     $notes  = $mjb->getNotesFromApplicant($applicantId);
 
     $aMails = array();
-    $aMails = ModelJB::newInstance()->getEmailsPerApplicant($applicantId);
+    $aMails = applicant_emailsent_get($applicantId);
 
     $job = Item::newInstance()->findByPrimaryKey($people['fk_i_item_id']);
 
