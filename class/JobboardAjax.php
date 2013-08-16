@@ -139,6 +139,7 @@ class JobboardAjax
         $params = array(
             'to'       => $aApplicant['s_email'],
             'to_name'  => $aApplicant['s_name'],
+            'reply_to' => osc_contact_email(),
             'subject'  => $subject,
             'body'     => $message
         );
