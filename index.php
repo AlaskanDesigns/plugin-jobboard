@@ -14,6 +14,7 @@ define('JOBBOARD_PATH', dirname(__FILE__) . '/') ;
 require_once(JOBBOARD_PATH . 'model/ModelJB.php');
 require_once(JOBBOARD_PATH . 'model/ModelKQ.php');
 require_once(JOBBOARD_PATH . 'model/ModelLogJB.php');
+require_once(JOBBOARD_PATH . 'model/ApplicantEmails.php');
 require_once(JOBBOARD_PATH . 'helpers.php');
 require_once(JOBBOARD_PATH . 'class/Stream.class.php');
 require_once(JOBBOARD_PATH . 'class/JobboardInstallUpdate.php');

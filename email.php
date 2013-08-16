@@ -20,6 +20,7 @@
             break;
         }
 
+
         $email_subject = sprintf(__('Job application received at %1$s', 'jobboard'), $email_txt['company_name']);
         $email_body    = sprintf(__('Hi %1$s,
 
@@ -30,6 +31,7 @@ This is just an automatic message, to check the status of your application go to
 Thanks and good luck!
 %5$s', "jobboard"), $email_txt['applicant_name'], $email_txt['job_offer_link'],$email_txt['company_link'], $email_txt['company_name'], $email_txt['company_link']);
 
+        applicant_emailsent_insert(View::newInstance()->_get('applicantID'), $email_subject, $email_body);
 
         $params = array(
             'to'       => Params::getParam('yourEmail'),
@@ -38,6 +40,7 @@ Thanks and good luck!
             'subject'  => $email_subject,
             'body'     => nl2br($email_body)
         );
+
         osc_sendMail($params);
     }
 
