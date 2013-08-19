@@ -201,13 +201,11 @@ if(!function_exists('_jobboard_time_elapsed_string')) {
                 } else if($str == 'hour') {
                     $ret = ($ago === true ) ? sprintf(_n('%1$d hour ago', '%1$d hours ago', $r, 'jobboard'), $r) : sprintf(_n('%1$d hour', '%1$d hours', $r, 'jobboard'), $r);
                 } else if($str == 'minute') {
-                    error_log('minute. ' . $r);
                     $ret = ($ago === true ) ? sprintf(_n('%1$d minute ago', '%1$d minutes ago', $r, 'jobboard'), $r) : sprintf(_n('%1$d minute', '%1$d minutes', $r, 'jobboard'), $r);
                 } else if($str == 'second') {
                     $ret = ($ago === true ) ? sprintf(_n('%1$d second ago', '%1$d seconds ago', $r, 'jobboard'), $r) : sprintf(_n('%1$d second', '%1$d seconds', $r, 'jobboard'), $r);
                 }
 
-                    error_log('return value. ' . $ret);
                 return $ret;
             }
         }
