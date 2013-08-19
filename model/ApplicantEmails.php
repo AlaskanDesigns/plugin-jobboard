@@ -79,7 +79,18 @@
 
             return $result->result();
         }
+        
+        /**
+         * Remove saved emails sended to applicant with applicantID
+         *
+         * @param type $applicantID
+         */
+        function deleteEmails($applicantID)
+        {
+            return $this->dao->delete($this->getTableName(), array('fk_i_applicant_id' => $applicantID));
+        }
     }
+
 
     function applicant_emailsent_insert($applicantID, $subject, $body) {
         return ApplicantEmails::newInstance()->insertEmail($applicantID, $subject, $body);
