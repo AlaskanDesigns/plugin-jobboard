@@ -21,7 +21,7 @@
         <?php if( osc_get_osclass_location() != 'contact' ) { ?>
         float: right;
         position: relative;
-        left: -200px;
+        left: -180px;
         <?php } ?>
         width: 245px;
         margin-top: 15px;
