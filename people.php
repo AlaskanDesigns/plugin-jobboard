@@ -15,8 +15,13 @@
 
         public function main()
         {
-            if( $_SERVER['REQUEST_METHOD'] === 'POST' && Params::getParam("add_new_applicant") ) {
-                $this->add_applicant();
+            if( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+                if( Params::getParam('add_new_applicant') ) {
+                    $this->add_applicant();
+                }
+                if( Params::getParam('delete_applicant') ) {
+                    $this->delete_applicant();
+                }
             }
 
             $search = array();
@@ -269,6 +274,11 @@
             //insert file in disk
             $jobboardContact = new JobboardContact();
             $jobboardContact->uploadCV($applFile, $aApplicant["pk_i_id"]);
+        }
+
+        private function delete_applicant()
+        {
+            ModelJB::newInstance()->deleteApplicant(Params::getParam('id'));
         }
     }
 

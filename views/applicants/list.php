@@ -295,11 +295,8 @@
         osc_show_pagination_admin($aData);
     ?>
 </div>
-<form id="dialog-people-delete" method="post" action="<?php echo osc_admin_base_url(true); ?>" class="has-form-actions hide" title="<?php echo osc_esc_html(__('Delete applicant', 'jobboard')); ?>">
-    <input type="hidden" name="page" value="plugins" />
-    <input type="hidden" name="action" value="renderplugin" />
-    <input type="hidden" name="file" value="<?php echo osc_plugin_folder(__FILE__); ?>actions.php" />
-    <input type="hidden" name="paction" value="delete_applicant" />
+<form id="dialog-people-delete" method="post" action="" class="has-form-actions hide nocsrf" title="<?php echo osc_esc_html(__('Delete applicant', 'jobboard')); ?>">
+    <input type="hidden" name="delete_applicant" value="true" />
     <input type="hidden" id="delete_id" name="id" value="" />
     <div class="form-horizontal">
         <div class="form-row">

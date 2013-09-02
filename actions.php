@@ -5,10 +5,6 @@
     }
 
     switch(Params::getParam('paction')) {
-        case 'delete_applicant':
-            ModelJB::newInstance()->deleteApplicant(Params::getParam("id"));
-            job_js_redirect_to(osc_admin_render_plugin_url("jobboard/people.php"));
-        break;
         case 'delete_killer_form':
             $result = ModelKQ::newInstance()->removeKillerForm(Params::getParam("id"));
             if($result!==false) {
