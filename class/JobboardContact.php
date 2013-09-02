@@ -75,7 +75,8 @@ class JobboardContact
      * @param type $uploadCV
      * @return type
      */
-    function jobboard_common_contact($itemID, $url, $uploadCV = '') {
+    function jobboard_common_contact($itemID, $url, $uploadCV = '')
+    {
         $error_attachment   = false;
         $convert_to_pdf     = false;
 
@@ -121,7 +122,6 @@ class JobboardContact
                 header('Location: ' . $url); die;
             }
         }
-
         if( $sex === '' ) {
             osc_add_flash_error_message(__("Sex is required", 'jobboard'));
             $this->_save_jobboard_contact_listing();
@@ -207,15 +207,12 @@ class JobboardContact
                     }
                 }
             }
-
             if( $aCV['error'] == UPLOAD_ERR_OK ) {
-
                 if( !in_array($aCV['type'], $aMimesAllowed) ) {
                     osc_add_flash_error_message(__("The file you tried to upload does not have a valid extension", 'jobboard'));
                     $this->_save_jobboard_contact_listing();
                     header('Location: ' . $url); die;
                 }
-
                 $_name = $aCV['name'];
                 if(preg_match('/pdf$/', strtolower($_name))==0) {
                     $convert_to_pdf = true;
@@ -234,7 +231,8 @@ class JobboardContact
             header('Location: ' . $url); die;
         }
 
-        if($source!='linkedin') {
+	if($source!='linkedin')
+	{
             $fileName = date('YmdHis') . '_' . $aCV['name'];
             if($uploadCV=='') {
                 if(isset($aCV['name']) && $aCV['error'] == UPLOAD_ERR_OK) {
@@ -262,37 +260,9 @@ class JobboardContact
                 osc_add_flash_error_message(__("There were some problem processing your application, please try again", 'jobboard'));
                 header('Location: ' . $url); die;
             } else {
-                /*
-                 * send file to convert -> server pdf convert
-                 */
-                if( $convert_to_pdf === true ) {
-                    $applicantCv = ModelJB::newInstance()->getCVFromApplicant($applicantID);
-
-                    $tmpfile    = osc_get_preference('upload_path', 'jobboard_plugin') . $fileName;
-                    $filename   = basename($aCV['name']);
-
-                    $callback   = osc_base_url(true) .'?page=ajax&action=custom&ajaxfile='.dirname( osc_plugin_folder(__FILE__) ).'/reciveCv.php';
-
-                    $data = array(
-                        'uploaded_file' => '@'.$tmpfile,
-                        'applicantId'   => $applicantID,
-                        'secret'        => $applicantCv['s_secret'],
-                        'callback'      => $callback
-                    );
-
-                    $url = osc_get_preference('url_pdf_convert', 'jobboard_plugin');
-
-                    $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-                    curl_setopt($ch, CURLOPT_URL, $url);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                    // debug curl
-                    curl_setopt($ch, CURLOPT_VERBOSE, 1);
-                    if( ! $result = curl_exec($ch))
-                    {
-                        trigger_error(curl_error($ch));
-                    }
-                    curl_close($ch);
+		if( $convert_to_pdf === true )
+		{
+		    $this->convertFileToPDF($applicantID, $fileName, $aCV['name']);
                 }
             }
         } else {
@@ -334,6 +304,42 @@ class JobboardContact
 
         return true;
     }
+
+
+   /**
+    *  send file to convert -> server pdf convert
+    */
+    function convertFileToPDF($applicantID, $fileName, $cvName)
+    {
+	$applicantCv = ModelJB::newInstance()->getCVFromApplicant($applicantID);
+	$tmpfile     = osc_get_preference('upload_path', 'jobboard_plugin') . $fileName;
+	$filename    = basename($cvName);
+	$callback    = osc_base_url(true) .'?page=ajax&action=custom&ajaxfile='.dirname( osc_plugin_folder(__FILE__) ).'/reciveCv.php';
+
+	$data = array(
+	    'uploaded_file' => '@'.$tmpfile,
+	    'applicantId'   => $applicantID,
+	    'secret'        => $applicantCv['s_secret'],
+	    'callback'      => $callback
+	);
+
+	$url = osc_get_preference('url_pdf_convert', 'jobboard_plugin');
+
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	// debug curl
+	curl_setopt($ch, CURLOPT_VERBOSE, 1);
+	if( ! $result = curl_exec($ch))
+	{
+	    trigger_error(curl_error($ch));
+	}
+	curl_close($ch);
+    }
+
+
+
 
     /**
      * save jobboard contact fields into session

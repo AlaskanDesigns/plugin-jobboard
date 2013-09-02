@@ -113,9 +113,9 @@ class JobboardEnqueue
         $langs['openquestion']          = __('Open question by default', 'jobboard');
         $langs['removeQuestionLink']    = __('Remove question', 'jobboard');
         $langs['removeQuestionLink']    = __('Remove question', 'jobboard');
-        $langs['country_required']      = __('Country is obligatory. ', 'jobboard');
-        $langs['region_required']       = __('Region is obligatory. ', 'jobboard');
-        $langs['city_required']         = __('City is obligatory. ', 'jobboard');
+        $langs['country_required']      = __('Country is obligatory.', 'jobboard');
+        $langs['region_required']       = __('Region is obligatory.', 'jobboard');
+        $langs['city_required']         = __('City is obligatory.', 'jobboard');
 
         // hopscotch
         $langs['hopscotch']['i18n'] = array(

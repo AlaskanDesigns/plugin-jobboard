@@ -10,7 +10,9 @@ Short Name: jobboard_plugin
 Plugin update URI: job-board
 */
 
-define('JOBBOARD_PATH', dirname(__FILE__) . '/') ;
+define('JOBBOARD_PATH', dirname(__FILE__) . '/');
+define('JOBBOARD_VIEWS', JOBBOARD_PATH . 'views/');
+
 require_once(JOBBOARD_PATH . 'model/ModelJB.php');
 require_once(JOBBOARD_PATH . 'model/ModelKQ.php');
 require_once(JOBBOARD_PATH . 'model/ModelLogJB.php');
@@ -31,7 +33,6 @@ if( OC_ADMIN ) {
     require_once(JOBBOARD_PATH . 'class/JobboardNotices.class.php');
     require_once(JOBBOARD_PATH . 'class/ShareJobOffer.class.php');
     require_once(JOBBOARD_PATH . 'class/JobboardManageListings.php');
-    require_once(JOBBOARD_PATH . 'class/JobboardManageApplicants.php');
     require_once(JOBBOARD_PATH . 'class/JobboardAdminMenu.php');
     require_once(JOBBOARD_PATH . 'class/JobboardCustomTitles.php');
     require_once(JOBBOARD_PATH . 'class/JobboardCustomHelp.php');
@@ -57,7 +58,7 @@ osc_add_hook('init', array(new JobboardInstallUpdate(), 'jobboard_update_version
  */
 osc_register_script('jquery-rating', osc_plugin_url(__FILE__) . 'assets/lib/rating/jquery.rating.js', 'jquery');
 osc_register_script('jquery-metadata', osc_plugin_url(__FILE__) . 'assets/lib/rating/jquery.MetaData.js', 'jquery');
-osc_register_script('jobboard-people', osc_plugin_url(__FILE__) . 'assets/js/people.js', 'jquery');
+osc_register_script('jobboard-people', osc_plugin_url(__FILE__) . 'assets/js/people.js', array('jquery', 'jquery-validate','jquery-ui'));
 osc_register_script('jobboard-killer-form', osc_plugin_url(__FILE__) . 'assets/js/killerForm.js', 'jquery');
 osc_register_script('jobboard-manage-killer-form', osc_plugin_url(__FILE__) . 'assets/js/manageKillerForm.js', 'jquery');
 osc_register_script('jobboard-people-detail', osc_plugin_url(__FILE__) . 'assets/js/people_detail.js', 'jquery');
