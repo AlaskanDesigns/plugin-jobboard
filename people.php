@@ -28,9 +28,9 @@
             $status = jobboard_status();
 
             // get notes and listing info
-            foreach($people as &$p) {
-                $p['notes']   = ModelJB::newInstance()->getNotesFromApplicant($p['pk_i_id']);
-                $p['listing'] = ModelJB::newInstance()->getJobsAttrByItemId($p['fk_i_item_id']);
+            for($i = 0; $i < count($people); $i++) {
+                $people[$i]['notes']   = ModelJB::newInstance()->getNotesFromApplicant($people[$i]['pk_i_id']);
+                $people[$i]['listing'] = ModelJB::newInstance()->getJobsAttrByItemId($people[$i]['fk_i_item_id']);
             }
 
             $urlOrder = osc_admin_base_url(true).'?'.$_SERVER['QUERY_STRING'];
