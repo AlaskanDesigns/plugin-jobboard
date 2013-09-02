@@ -47,7 +47,6 @@ class JobboardEnqueue
                 osc_enqueue_style('hopscotch-css', osc_plugin_url(dirname(__FILE__)) . "assets/lib/hopscotch/css/hopscotch.css");
 
                 osc_enqueue_script('jquery-rating');
-                osc_enqueue_script('jobboard-people');
                 osc_enqueue_script('jobboard-dashboard');
                 osc_enqueue_script('hopscotch');
             break;
