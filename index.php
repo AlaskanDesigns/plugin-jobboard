@@ -10,7 +10,9 @@ Short Name: jobboard_plugin
 Plugin update URI: job-board
 */
 
-define('JOBBOARD_PATH', dirname(__FILE__) . '/') ;
+define('JOBBOARD_PATH', dirname(__FILE__) . '/');
+define('JOBBOARD_VIEWS', JOBBOARD_PATH . 'views/');
+
 require_once(JOBBOARD_PATH . 'model/ModelJB.php');
 require_once(JOBBOARD_PATH . 'model/ModelKQ.php');
 require_once(JOBBOARD_PATH . 'model/ModelLogJB.php');
@@ -31,7 +33,6 @@ if( OC_ADMIN ) {
     require_once(JOBBOARD_PATH . 'class/JobboardNotices.class.php');
     require_once(JOBBOARD_PATH . 'class/ShareJobOffer.class.php');
     require_once(JOBBOARD_PATH . 'class/JobboardManageListings.php');
-    require_once(JOBBOARD_PATH . 'class/JobboardManageApplicants.php');
     require_once(JOBBOARD_PATH . 'class/JobboardAdminMenu.php');
     require_once(JOBBOARD_PATH . 'class/JobboardCustomTitles.php');
     require_once(JOBBOARD_PATH . 'class/JobboardCustomHelp.php');
