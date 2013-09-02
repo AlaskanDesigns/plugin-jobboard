@@ -5,7 +5,7 @@
 
     $times_seen = (int) osc_get_preference('dashboard_tour_times_seen', 'jobboard_plugin');
     if( $times_seen < 3 ) {
-	osc_set_preference('dashboard_tour_times_seen', $times_seen + 1, 'jobboard_plugin');
+        osc_set_preference('dashboard_tour_times_seen', $times_seen + 1, 'jobboard_plugin');
     }
 
     $status = jobboard_status();

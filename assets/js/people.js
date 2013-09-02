@@ -97,6 +97,31 @@ $(document).ready(function() {
     );
 });
 
+var applicant = {
+    tour: {
+        id: "applicant",
+        steps: [
+            {
+                target: 'add-applicant',
+                title: jobboard.langs.hopscotch.feature.add_applicant.title,
+                content: jobboard.langs.hopscotch.feature.add_applicant.content,
+                placement: "left",
+                yOffset: "-16px",
+            }
+        ],
+        scrollTopMargin: 100,
+        showCloseButton: false,
+        i18n: {
+            nextBtn: jobboard.langs.hopscotch.i18n.nextBtn,
+            prevBtn: jobboard.langs.hopscotch.i18n.prevBtn,
+            doneBtn: jobboard.langs.hopscotch.i18n.doneBtn,
+            skipBtn: jobboard.langs.hopscotch.i18n.skipBtn,
+            closeTooltip: jobboard.langs.hopscotch.i18n.closeTooltip,
+            stepNums: [jobboard.langs.hopscotch.feature.add_applicant.bubble]
+        }
+    }
+}
+
 function delete_applicant(id) {
     $("#delete_id").attr("value", id);
     $("#dialog-people-delete").dialog('open');

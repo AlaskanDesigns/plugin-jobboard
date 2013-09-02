@@ -1,7 +1,7 @@
 <?php if ( ! defined('ABS_PATH')) exit('ABS_PATH is not loaded. Direct access is not allowed.'); ?>
 <h2 class="render-title"><?php _e('Resumes', 'jobboard'); ?>
     <a id="show-filters" class="btn btn-mini"><?php _e('Show filters', 'jobboard'); ?></a>
-    <a id="add-applicant" class="btn btn-green float-right"><?php _e('Add applicant', 'jobboard'); ?></a>
+    <a id="add-applicant" class="btn btn-blue float-right"><?php _e('Add applicant', 'jobboard'); ?></a>
 </h2>
 <div class="relative resumes">
     <div class="search-filter hide">
@@ -384,3 +384,13 @@
         </div>
     </form>
 </div>
+<?php if( ((int) osc_get_preference('new_feature_add_applicant', 'jobboard_plugin')) === 0 ) { ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        hopscotch.startTour(applicant.tour);
+    });
+</script>
+<style type="text/css">
+    div.hopscotch-bubble .hopscotch-bubble-number{ font-size: 11px; text-transform: uppercase; }
+</style>
+<?php } ?>

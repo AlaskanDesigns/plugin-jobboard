@@ -5,7 +5,13 @@
 
     class JobboardPeople
     {
-        public function __construct(){}
+        public function __construct()
+        {
+            $feature = (int) osc_get_preference('new_feature_add_applicant', 'jobboard_plugin');
+            if( $feature === 0 ) {
+                osc_set_preference('new_feature_add_applicant', 1, 'jobboard_plugin');
+            }
+        }
 
         public function main()
         {

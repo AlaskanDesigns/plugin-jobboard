@@ -171,4 +171,19 @@ function applicant_admin_menu_current($class) {
     return $class;
 }
 osc_add_filter('current_admin_menu_corporateboard', 'applicant_admin_menu_current');
+
+
+osc_add_hook('add_admin_toolbar_menus', 'osc_admin_toolbar_new_feature');
+function osc_admin_toolbar_new_feature() {
+    $feature = (int) osc_get_preference('new_feature_add_applicant', 'jobboard_plugin');
+    if( $feature === 0 ) {
+        AdminToolbar::newInstance()->add_menu( array(
+            'id'        => 'new_features',
+            'title'     => __('Add your applicants manually <sup>new</sup>', 'jobboard'),
+            'href'      => osc_admin_render_plugin_url('jobboard/people.php'),
+            'meta'      => array('class' => 'new-features')
+        ) );
+    }
+}
+
 // End of file

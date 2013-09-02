@@ -60,6 +60,9 @@ class JobboardEnqueue
                 osc_enqueue_style('jquery-rating', osc_plugin_url(dirname(__FILE__)) . 'assets/lib/rating/jquery.rating.css');
             break;
             case('jobboard/people.php'):
+                osc_enqueue_style('hopscotch-css', osc_plugin_url(dirname(__FILE__)) . "assets/lib/hopscotch/css/hopscotch.css");
+                osc_enqueue_script('hopscotch');
+
                 osc_enqueue_script('jquery-rating');
                 osc_enqueue_script('jquery-metadata');
                 osc_enqueue_script('jobboard-people');
@@ -149,6 +152,12 @@ class JobboardEnqueue
                 'title'   => __('That\'s all for now!', 'jobboard'),
                 'content' => __('You can repeat the tour anytime by clicking the link below.', 'jobboard')
             )
+        );
+        $langs['hopscotch']['feature'] = array();
+        $langs['hopscotch']['feature']['add_applicant'] = array(
+            'bubble'  => 'new',
+            'title'   => __('Add your applicants', 'jobboard'),
+            'content' => __('Now you can add the candidates and their CV manually - manage everything in one place!', 'jobboard')
         );
 
         return $langs;
