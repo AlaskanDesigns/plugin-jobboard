@@ -261,8 +261,8 @@
             ModelJB::newInstance()->insertFile($aApplicant["pk_i_id"], $applFile["name"]);
 
             //insert file in disk
-            $path  = osc_get_preference('upload_path', 'jobboard_plugin') . $applFile["name"];
-            move_uploaded_file($applFile["tmp_name"], $path);
+            $jobboardContact = new JobboardContact();
+            $jobboardContact->uploadCV($applFile, $aApplicant["pk_i_id"]);
         }
     }
 
