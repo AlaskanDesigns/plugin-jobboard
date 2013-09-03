@@ -131,11 +131,15 @@ class JobboardContact
             $this->_save_jobboard_contact_listing();
             header('Location: ' . $url); die;
         }
-        if( isset($aCV['name']) && $aCV['name'] === '' ) {
+        $attachedCV = false;
+        if($aCV['error'] === UPLOAD_ERR_NO_FILE) {
+            $attachedCV = false;
+        }
+        /*if( isset($aCV['name']) && $aCV['name'] === '' ) {
             osc_add_flash_error_message(__("CV is required", 'jobboard'));
             $this->_save_jobboard_contact_listing();
             header('Location: ' . $url); die;
-        }
+        }*/
         $s_source = '';
         if($source == 'linkedin') {
             $s_source = 'linkedinapply';
@@ -231,7 +235,7 @@ class JobboardContact
         }
 
         if( $source != 'linkedin' ) {
-            if( !$this->uploadCV($aCV, $applicantID) ) {
+            if( !$this->uploadCV($aCV, $applicantID) && $attachedCV) {
                 ModelJB::newInstance()->deleteApplicant($applicantID);
                 $this->_save_jobboard_contact_listing();
                 osc_add_flash_error_message(__("There were some problem processing your application, please try again", 'jobboard'));
