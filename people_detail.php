@@ -8,6 +8,7 @@
 
     $mjb    = ModelJB::newInstance();
     $people = $mjb->getApplicant($applicantId);
+    $emailsSent = ApplicantEmails::newInstance()->getEmailsPerApplicant($applicantId);
 
     $file   = $mjb->getCVFromApplicant($applicantId);
     ModelJB::newInstance()->changeSecret($file['pk_i_id']);
@@ -135,15 +136,21 @@
                 <p><?php echo nl2br($people['s_cover_letter']); ?></p>
             </div>
             <h3  id="applicant-resume-title" class="render-title jobboard-title"><?php _e('Applicant CV', 'jobboard'); ?>
-            <a class="btn btn-blue btn-mini float-right" style="height:14px" href="<?php echo osc_base_url(true).'?page=ajax&action=custom&ajaxfile='; ?>jobboard/download.php?data=<?php echo $applicantId; ?>|<?php echo $file['s_secret']; ?>"><?php _e('Download', 'jobboard'); ?></a>
-            </h3>
+            <?php if(empty($file)) {
+                echo "</h3>";
+                if(empty($emailsSent)) { ?>
+                    <label class="message-applicant"><?php _e("This applicant has not sumitted any resume. Do you want contact by email?", "jobboard"); ?></label>
+                    <a id="first-email"><?php _e("Send email", 'jobboard'); ?></a>
+                <?php } else { ?>
+                    <label class="message-applicant"><?php _e("This applicant has not sumitted any resume and you has sent an email. See Messages.", "jobboard"); ?></label>
+               <?php }
+            } else { ?>
+               <a class="btn btn-blue btn-mini float-right" style="height:14px" href="<?php echo osc_base_url(true).'?page=ajax&action=custom&ajaxfile='; ?>jobboard/download.php?data=<?php echo $applicantId; ?>|<?php echo $file['s_secret']; ?>"><?php _e('Download', 'jobboard'); ?></a>
+               </h3>
             <div id="applicant-resume">
-                <?php if(empty($file)) {
-                    _e("This applicant has not sumitted any resume", "jobboard");
-                } else { ?>
                 <iframe src="<?php echo osc_base_url(true) .'?page=ajax&action=custom&ajaxfile='.osc_plugin_folder(__FILE__).'viewer/viewer.php'; ?>?file=<?php echo osc_base_url() . str_replace(osc_base_path(), '', osc_uploads_path()) . $file['s_name']; ?>" ></iframe>
-                <?php } ?>
             </div>
+            <?php } ?>
         </div>
         <!-- /cover-letter-cv-section -->
         <!-- dashboard_notes -->
@@ -271,7 +278,7 @@
                 <?php } ?>
                 <?php if($countMail > 5) { ?> <div id="view-more-mails"><label><?php _e("View all", "jobboard") ?></label></div> <?php } ?>
             <?php } else { ?>
-            <label id="no-mail"><?php _e("You haven't sent any emails yet.", "jobboard"); ?></label>
+            <label class="message-applicant"><?php _e("You haven't sent any emails yet.", "jobboard"); ?></label>
         <?php } ?>
         </div>
     </div>

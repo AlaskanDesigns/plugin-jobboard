@@ -254,6 +254,11 @@
             $applFile   = Params::getFiles("applicant-attachment");
             $applRating = Params::getParam("applicant-rating");
 
+            $attachedCV = true;
+            if($applFile["error"] === UPLOAD_ERR_NO_FILE) {
+                $attachedCV = false;
+            }
+
             //insert applicant
             ModelJB::newInstance()->insertApplicant($applJob, $applName, $applEmail, '', $applPhone, $applBday, $applSex);
 
@@ -268,12 +273,14 @@
                 ModelJB::newInstance()->changeStatus($aApplicant["pk_i_id"], $applStatus);
             }
 
-            //insert file in DB
-            ModelJB::newInstance()->insertFile($aApplicant["pk_i_id"], $applFile["name"]);
+            if($attachedCV) {
+                //insert file in DB
+                ModelJB::newInstance()->insertFile($aApplicant["pk_i_id"], $applFile["name"]);
 
-            //insert file in disk
-            $jobboardContact = new JobboardContact();
-            $jobboardContact->uploadCV($applFile, $aApplicant["pk_i_id"]);
+                //insert file in disk
+                $jobboardContact = new JobboardContact();
+                $jobboardContact->uploadCV($applFile, $aApplicant["pk_i_id"]);
+            }
         }
 
         private function delete_applicant()
