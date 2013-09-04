@@ -312,7 +312,7 @@
         </div>
     </div>
 </div>
-<div id="dialog-applicant-status" class="has-form-actions hide" style="height: 350px; width: 725px;">
+<div id="dialog-applicant-email" class="has-form-actions hide" style="height: 350px; width: 725px;">
     <div class="form-horizontal">
         <div class="form-row">
             <input type="text" id="applicant-status-notification-subject" style="width: 695px; height: 20px;" placeholder="<?php echo osc_esc_html(_e('Subject', 'jobboard')); ?>"></div>

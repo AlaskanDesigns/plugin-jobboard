@@ -382,10 +382,10 @@
         </div>
     </form>
 </div>
-<div id="dialog-applicant-email" title="<?php echo osc_esc_html(__('Applicant email')); ?>" class="has-form-actions hide" style="height: 350px; width: 725px;">
+<div id="dialog-applicant-email" title="<?php echo osc_esc_html(__('Send email to the applicant', 'jobboard')); ?>" class="has-form-actions hide" style="height: 350px; width: 725px;">
     <input id="applicant_email_id" type="hidden" value="">
     <div class="form-horizontal">
-	<div class="form-row"><input type="text" id="applicant-status-notification-subject" style="width: 695px; height: 20px;"></div>
+	<div class="form-row"><input type="text" id="applicant-status-notification-subject" style="width: 695px; height: 20px;" placeholder="<?php echo osc_esc_html(_e('Subject', 'jobboard')); ?>"></div>
 	<div class="form-row"><textarea id="applicant-status-notification-message" style="width: 700px; height: 150px;"></textarea></div>
 	<div class="form-actions">
 	    <div class="wrapper">

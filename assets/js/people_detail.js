@@ -151,7 +151,7 @@ $(document).ready(function() {
         $("#applicant-status-notification-subject").val(subject);
         $("#applicant-status-notification-message").val(body);
         tinyMCE.activeEditor.setContent(body);
-        $("#dialog-applicant-status").dialog({width:740, title: title}).dialog('open');
+        $("#dialog-applicant-email").dialog({width:740, title: title}).dialog('open');
     }
 
     $("#send-email-status").on("click", function(event) {

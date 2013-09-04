@@ -131,8 +131,6 @@ $(document).ready(function() {
 	    'json'
 	);
     });
-
->>>>>>> send email to applicant from people and people detail pages
 });
 
 var applicant = {
