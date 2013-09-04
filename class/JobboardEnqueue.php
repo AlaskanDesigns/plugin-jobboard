@@ -60,6 +60,8 @@ class JobboardEnqueue
                 osc_enqueue_style('jquery-rating', osc_plugin_url(dirname(__FILE__)) . 'assets/lib/rating/jquery.rating.css');
             break;
             case('jobboard/people.php'):
+		osc_enqueue_script('tiny_mce');
+		osc_enqueue_script('jobboard-init-tinymce');
                 osc_enqueue_style('hopscotch-css', osc_plugin_url(dirname(__FILE__)) . "assets/lib/hopscotch/css/hopscotch.css");
                 osc_enqueue_script('hopscotch');
 
