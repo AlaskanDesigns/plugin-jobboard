@@ -95,7 +95,7 @@ $(document).ready(function() {
     });
     // /notes
 
-    $("#dialog-applicant-status").dialog({
+    $("#dialog-applicant-email").dialog({
         autoOpen: false,
         modal: true
     });
@@ -116,22 +116,15 @@ $(document).ready(function() {
                 "subject" : $("#applicant-status-notification-subject").val()
             },
             function(data){
-                $('#dialog-applicant-status').dialog('close');
+                $('#dialog-applicant-email').dialog('close');
                 $('.option-send-email').hide();
-                if($('.show-mails-applicant-box').css('display') == 'none') {
-                    location.href += "&show=cvs";
-                } else {
-                    location.href += "&show=mails";
-                }
-                location.reload();
             },
             'json'
         );
-
     });
 
     $("#applicant-status-cancel").click(function() {
-        $('#dialog-applicant-status').dialog('close');
+        $('#dialog-applicant-email').dialog('close');
         $(".option-send-email").hide();
     });
 
@@ -154,7 +147,14 @@ $(document).ready(function() {
         $(".option-send-email").hide();
     });
 
-    $("#send-email").click(function(){
+    var modal_send_email = function(subject, body) {
+        $("#applicant-status-notification-subject").val(subject);
+        $("#applicant-status-notification-message").val(body);
+        tinyMCE.activeEditor.setContent(body);
+        $("#dialog-applicant-email").dialog({width:740}).dialog('open');
+    }
+
+    $("#send-email-status").on("click", function(event) {
         $.post(jobboard.ajax.applicant_status_message, {
                 "applicantID" : $('#applicant_status').attr('data-applicant-id'),
                 "status" : $("#applicant_status option:selected").attr("value")
@@ -163,13 +163,16 @@ $(document).ready(function() {
                 if( data.error) {
                     return false;
                 }
-                $("#applicant-status-notification-subject").val(data.subject);
-                $("#applicant-status-notification-message").val(data.message);
-                tinyMCE.activeEditor.setContent(data.message);
-                $("#dialog-applicant-status").dialog({width:740}).dialog('open');
+                $("#dialog-applicant-email .form-horizontal .form-row").first().show();
+                modal_send_email(data.subject, data.message);
             },
             'json'
         );
+    });
+
+    $("#send-email").on("click", function(event, element){
+        $("#dialog-applicant-email .form-horizontal .form-row").first().hide();
+         modal_send_email('', '');
     });
 
     $('.auto-star').rating({
