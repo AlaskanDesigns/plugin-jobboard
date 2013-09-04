@@ -170,7 +170,7 @@ class JobboardAjax
         }
 
         // save email format json
-        applicant_emailsent_insert($applicantID, $subject, $body);
+        applicant_emailsent_insert($applicantID, $subject, $message);
 
         return true;
     }

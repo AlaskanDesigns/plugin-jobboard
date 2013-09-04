@@ -118,6 +118,9 @@ class JobboardEnqueue
         $langs['country_required']      = __('Country is obligatory.', 'jobboard');
         $langs['region_required']       = __('Region is obligatory.', 'jobboard');
         $langs['city_required']         = __('City is obligatory.', 'jobboard');
+        // modal applicant detail page
+        $langs['applicant_change_status_modal'] = __('Change applicant status', 'jobboard');
+        $langs['applicant_send_email_modal']    = __('Send email to the applicant', 'jobboard');
 
         // hopscotch
         $langs['hopscotch']['i18n'] = array(

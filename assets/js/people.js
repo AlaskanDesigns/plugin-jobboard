@@ -79,7 +79,7 @@ $(document).ready(function() {
         }
     );
 
-    jQuery.validator.addMethod("file_required", function(value, element) {
+    /*jQuery.validator.addMethod("file_required", function(value, element) {
         if($("#applicant-attachment")[0].files[0]) {
             return true;
         } else {
@@ -94,7 +94,7 @@ $(document).ready(function() {
                 file_required: jobboard.langs.applicant_file_required
             }
         }
-    );
+    );*/
 });
 
 var applicant = {

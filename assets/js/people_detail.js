@@ -154,7 +154,14 @@ $(document).ready(function() {
         $(".option-send-email").hide();
     });
 
-    $("#send-email").click(function(){
+    var modal_send_email = function(subject, body, title) {
+        $("#applicant-status-notification-subject").val(subject);
+        $("#applicant-status-notification-message").val(body);
+        tinyMCE.activeEditor.setContent(body);
+        $("#dialog-applicant-status").dialog({width:740, title: title}).dialog('open');
+    }
+
+    $("#send-email").on("click", function(event) {
         $.post(jobboard.ajax.applicant_status_message, {
                 "applicantID" : $('#applicant_status').attr('data-applicant-id'),
                 "status" : $("#applicant_status option:selected").attr("value")
@@ -163,13 +170,14 @@ $(document).ready(function() {
                 if( data.error) {
                     return false;
                 }
-                $("#applicant-status-notification-subject").val(data.subject);
-                $("#applicant-status-notification-message").val(data.message);
-                tinyMCE.activeEditor.setContent(data.message);
-                $("#dialog-applicant-status").dialog({width:740}).dialog('open');
+                modal_send_email(data.subject, data.message, jobboard.langs.applicant_change_status_modal);
             },
             'json'
         );
+    });
+
+    $("#first-email").on("click", function(event, element) {
+         modal_send_email('', '', jobboard.langs.applicant_send_email_modal);
     });
 
     $('.auto-star').rating({
