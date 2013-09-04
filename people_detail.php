@@ -57,7 +57,8 @@
     <div class="applicant-header">
         <h2 class="render-title"><?php echo @$people['s_name']; ?>
             <div class="options">
-            <a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>&amp;jb_action=unread&amp;applicantID=<?php echo $applicantId; ?>"><?php _e('Mark as unread', 'jobboard'); ?></a>
+		<a id="send-email"><?php _e('Send email', 'jobboard'); ?></a>
+		<a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>&amp;jb_action=unread&amp;applicantID=<?php echo $applicantId; ?>"><?php _e('Mark as unread', 'jobboard'); ?></a>
             </div>
         </h2>
     </div>
@@ -110,7 +111,7 @@
                 <div class="option-send-email">
                     <h4><?php _e("Do you want to send an email?","jobboard"); ?></h4>
                     <div class="send-email-buttons">
-                        <button type="button" id="send-email" class="btn btn-blue"><?php _e("Send","jobboard"); ?></button>
+			<button type="button" id="send-email-status" class="btn btn-blue"><?php _e("Send","jobboard"); ?></button>
                         <button type="button" id="cancel-send-email" class="btn"><?php _e("Not now","jobboard"); ?></button>
                     </div>
                 </div>

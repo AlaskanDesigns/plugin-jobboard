@@ -95,7 +95,7 @@ $(document).ready(function() {
     });
     // /notes
 
-    $("#dialog-applicant-status").dialog({
+    $("#dialog-applicant-email").dialog({
         autoOpen: false,
         modal: true
     });
@@ -116,22 +116,15 @@ $(document).ready(function() {
                 "subject" : $("#applicant-status-notification-subject").val()
             },
             function(data){
-                $('#dialog-applicant-status').dialog('close');
+		$('#dialog-applicant-email').dialog('close');
                 $('.option-send-email').hide();
-                if($('.show-mails-applicant-box').css('display') == 'none') {
-                    location.href += "&show=cvs";
-                } else {
-                    location.href += "&show=mails";
-                }
-                location.reload();
             },
             'json'
         );
-
     });
 
     $("#applicant-status-cancel").click(function() {
-        $('#dialog-applicant-status').dialog('close');
+	$('#dialog-applicant-email').dialog('close');
         $(".option-send-email").hide();
     });
 
@@ -161,7 +154,7 @@ $(document).ready(function() {
         $("#dialog-applicant-status").dialog({width:740, title: title}).dialog('open');
     }
 
-    $("#send-email").on("click", function(event) {
+    $("#send-email-status").on("click", function(event) {
         $.post(jobboard.ajax.applicant_status_message, {
                 "applicantID" : $('#applicant_status').attr('data-applicant-id'),
                 "status" : $("#applicant_status option:selected").attr("value")
@@ -176,7 +169,7 @@ $(document).ready(function() {
         );
     });
 
-    $("#first-email").on("click", function(event, element) {
+    $("#first-email, #send-email").on("click", function(event, element) {
          modal_send_email('', '', jobboard.langs.applicant_send_email_modal);
     });
 
