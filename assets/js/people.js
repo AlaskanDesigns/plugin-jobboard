@@ -97,39 +97,39 @@ $(document).ready(function() {
     );*/
 
     $("#dialog-applicant-email").dialog({
-	autoOpen: false,
-	modal: true,
-	minWidth: 736,
-	resizable: false
+        autoOpen: false,
+        modal: true,
+        minWidth: 736,
+        resizable: false
     });
 
     $("#applicant-status-cancel").click(function() {
-	$('#dialog-applicant-email').dialog('close');
-	$(".option-send-email").hide();
+        $('#dialog-applicant-email').dialog('close');
+        $(".option-send-email").hide();
     });
 
     $("#applicant-status-submit").click(function() {
-	$.post(jobboard.ajax.applicant_status_notification,
-	    {
-		"applicantID" : $("#applicant_email_id").val(),
-		"message" : tinyMCE.activeEditor.getContent(),
-		"subject" : $("#applicant-status-notification-subject").val()
-	    },
-	    function(data){},
-	    'json'
-	);
-	$.post(jobboard.ajax.applicant_save_notification,
-	    {
-		"applicantID" : $("#applicant_email_id").val(),
-		"message" : tinyMCE.activeEditor.getContent(),
-		"subject" : $("#applicant-status-notification-subject").val()
-	    },
-	    function(data){
-		$('#dialog-applicant-email').dialog('close');
-		$('.option-send-email').hide();
-	    },
-	    'json'
-	);
+        $.post(jobboard.ajax.applicant_status_notification,
+            {
+                "applicantID" : $("#applicant_email_id").val(),
+                "message" : tinyMCE.activeEditor.getContent(),
+                "subject" : $("#applicant-status-notification-subject").val()
+            },
+            function(data){},
+            'json'
+        );
+        $.post(jobboard.ajax.applicant_save_notification,
+            {
+                "applicantID" : $("#applicant_email_id").val(),
+                "message" : tinyMCE.activeEditor.getContent(),
+                "subject" : $("#applicant-status-notification-subject").val()
+            },
+            function(data){
+                $('#dialog-applicant-email').dialog('close');
+                $('.option-send-email').hide();
+            },
+            'json'
+        );
     });
 });
 
@@ -156,9 +156,6 @@ var applicant = {
             stepNums: [jobboard.langs.hopscotch.feature.add_applicant.bubble]
         }
     }
-
-
-
 }
 
 function delete_applicant(id) {

@@ -672,26 +672,25 @@
             return $result->result();
         }
 
+        /**
+         * Get all the applicants
+         *
+         * @return array
+         */
+        public function getLastApplicant() {
 
-	/**
-	 * Get all the applicants
-	 *
-	 * @return array
-	 */
-	public function getLastApplicant() {
+            $this->dao->select();
+            $this->dao->from($this->getTable_JobsApplicants());
+            $this->dao->orderBy("pk_i_id", "DESC");
+            $this->dao->limit(1);
 
-	    $this->dao->select();
-	    $this->dao->from($this->getTable_JobsApplicants());
-	    $this->dao->orderBy("pk_i_id", "DESC");
-	    $this->dao->limit(1);
+            $result = $this->dao->get();
+            if( !$result ) {
+            return array() ;
+            }
 
-	    $result = $this->dao->get();
-	    if( !$result ) {
-		return array() ;
-	    }
-
-	    return $result->result();
-	}
+            return $result->result();
+        }
 
         /**
          * Get applicant's CV

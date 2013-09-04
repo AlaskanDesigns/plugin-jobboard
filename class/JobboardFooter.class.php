@@ -8,29 +8,29 @@ class JobboardFooter
 {
     public function __construct()
     {
-	osc_add_filter('osclasscom_footer_links', array(&$this, 'footer_links'));
+        osc_add_filter('osclasscom_footer_links', array(&$this, 'footer_links'));
     }
 
     function footer_links($footer)
     {
-	if( Params::getParam('page') !== 'plugins' ) {
-	    return $footer;
-	}
+        if( Params::getParam('page') !== 'plugins' ) {
+            return $footer;
+        }
 
-	switch( urldecode(Params::getParam('file')) ) {
-	    case('jobboard/dashboard.php'):
-		$footer['dashboard_tour'] = array(
-		    'class' => '',
-		    'link'  => '#',
-		    'text'  => __('Take a tour', 'jobboard'),
-		    'attr'  => array(
-			'id' => 'dashboard_tour_link'
-		    )
-		);
-	    break;
-	}
+        switch( urldecode(Params::getParam('file')) ) {
+            case('jobboard/dashboard.php'):
+            $footer['dashboard_tour'] = array(
+                'class' => '',
+                'link'  => '#',
+                'text'  => __('Take a tour', 'jobboard'),
+                'attr'  => array(
+                'id' => 'dashboard_tour_link'
+                )
+            );
+            break;
+        }
 
-	return $footer;
+        return $footer;
     }
 }
 

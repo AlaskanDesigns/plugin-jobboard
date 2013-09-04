@@ -245,7 +245,7 @@
                             <div class="actions">
                                 <ul>
                                     <li><a href="javascript:delete_applicant(<?php echo $p['pk_i_id']; ?>);" ><?php _e("Delete", "jobboard"); ?></a></li>
-				    <li><a href="javascript:send_email(<?php echo $p['pk_i_id']; ?>);" ><?php _e("Send email", "jobboard"); ?></a></li>
+                                    <li><a href="javascript:send_email(<?php echo $p['pk_i_id']; ?>);" ><?php _e("Send email", "jobboard"); ?></a></li>
                                 </ul>
                             </div>
                         </td>
@@ -385,15 +385,15 @@
 <div id="dialog-applicant-email" title="<?php echo osc_esc_html(__('Send email to the applicant', 'jobboard')); ?>" class="has-form-actions hide" style="height: 350px; width: 725px;">
     <input id="applicant_email_id" type="hidden" value="">
     <div class="form-horizontal">
-	<div class="form-row"><input type="text" id="applicant-status-notification-subject" style="width: 695px; height: 20px;" placeholder="<?php echo osc_esc_html(_e('Subject', 'jobboard')); ?>"></div>
-	<div class="form-row"><textarea id="applicant-status-notification-message" style="width: 700px; height: 150px;"></textarea></div>
-	<div class="form-actions">
-	    <div class="wrapper">
-		<a id="applicant-status-cancel" class="btn" href="javascript:void(0);"><?php _e("Don't send", 'jobboard'); ?></a>
-		<a id="applicant-status-submit" href="javascript:void(0);" class="btn btn-red" ><?php echo osc_esc_html( __('Send', 'jobboard') ); ?></a>
-		<div class="clear"></div>
-	    </div>
-	</div>
+        <div class="form-row"><input type="text" id="applicant-status-notification-subject" style="width: 695px; height: 20px;" placeholder="<?php echo osc_esc_html(_e('Subject', 'jobboard')); ?>"></div>
+        <div class="form-row"><textarea id="applicant-status-notification-message" style="width: 700px; height: 150px;"></textarea></div>
+        <div class="form-actions">
+            <div class="wrapper">
+            <a id="applicant-status-cancel" class="btn" href="javascript:void(0);"><?php _e("Don't send", 'jobboard'); ?></a>
+            <a id="applicant-status-submit" href="javascript:void(0);" class="btn btn-red" ><?php echo osc_esc_html( __('Send', 'jobboard') ); ?></a>
+            <div class="clear"></div>
+            </div>
+        </div>
     </div>
 </div>
 <?php if( ((int) osc_get_preference('new_feature_add_applicant', 'jobboard_plugin')) === 0 ) { ?>

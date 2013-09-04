@@ -23,8 +23,6 @@ class JobboardListingActions
         osc_add_hook('save_input_session', array(&$this, 'job_save_inputs_into_session') );
     }
 
-
-
     /*
      * Remove - vacancy
      */
