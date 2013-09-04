@@ -1,0 +1,16 @@
+{
+    "name": "jobboard"
+  , "description": "Job board plugin"
+  , "version": "1.0.0"
+  , "keywords": ["js", "less"]
+  , "homepage": "http://osclass.org/"
+  , "author": "Osclass"
+  , "repository": {
+      "type": "git"
+    , "url": "git@github.com:osclass/plugin-jobboard.git"
+  }
+  , "devDependencies": {
+     "grunt": "~0.4.1",
+     "grunt-contrib-less": "~0.7.0"
+  }
+}

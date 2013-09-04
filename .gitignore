@@ -3,3 +3,6 @@
 
 # Sublime 2
 sftp-config*
+
+# Node.js
+node_modules
