@@ -8,7 +8,6 @@
 
     $mjb    = ModelJB::newInstance();
     $people = $mjb->getApplicant($applicantId);
-    /*$emailsSent = ApplicantEmails::newInstance()->getEmailsPerApplicant($applicantId);*/
 
     $file   = $mjb->getCVFromApplicant($applicantId);
     ModelJB::newInstance()->changeSecret($file['pk_i_id']);
@@ -136,11 +135,11 @@
                 <p><?php echo nl2br($people['s_cover_letter']); ?></p>
             </div>
             <h3  id="applicant-resume-title" class="render-title jobboard-title"><?php _e('Applicant CV', 'jobboard'); ?>
-            <?php if(empty($file)) {
-                echo "</h3>"; ?>
-                <label class="message-applicant"><?php _e("This applicant has not sumitted any resume. Do you want contact by email?", "jobboard"); ?></label>
-                <a id="first-email"><?php _e("Send email", 'jobboard'); ?></a>
-                <!--<label class="message-applicant"><?php _e("This applicant has not sumitted any resume and you has sent an email. See Messages.", "jobboard"); ?></label>-->
+                <?php if(empty($file)) { ?>
+            </h3>
+                <div class="message-applicant">
+                    <?php _e("This applicant has not submitted any resume yet. Do you want to contact by email?", "jobboard"); ?> <a id="first-email"><?php _e("Send email", 'jobboard'); ?></a>
+                </div>
             <?php } else { ?>
                <a class="btn btn-blue btn-mini float-right" style="height:14px" href="<?php echo osc_base_url(true).'?page=ajax&action=custom&ajaxfile='; ?>jobboard/download.php?data=<?php echo $applicantId; ?>|<?php echo $file['s_secret']; ?>"><?php _e('Download', 'jobboard'); ?></a>
                </h3>
@@ -312,10 +311,10 @@
         </div>
     </div>
 </div>
-<div id="dialog-applicant-status" title="<?php echo osc_esc_html(__('Applicant status')); ?>" class="has-form-actions hide" style="height: 350px; width: 725px;">
+<div id="dialog-applicant-status" class="has-form-actions hide" style="height: 350px; width: 725px;">
     <div class="form-horizontal">
-        <div class="form-row"><?php _e('Do you want to send an email to the applicant notifying the status of the application?', 'jobboard'); ?></div>
-        <div class="form-row"><input type="text" id="applicant-status-notification-subject" style="width: 695px; height: 20px;"></div>
+        <div class="form-row">
+            <input type="text" id="applicant-status-notification-subject" style="width: 695px; height: 20px;" placeholder="<?php echo osc_esc_html(_e('Subject', 'jobboard')); ?>"></div>
         <div class="form-row"><textarea id="applicant-status-notification-message" style="width: 700px; height: 150px;"></textarea></div>
         <div class="form-actions">
             <div class="wrapper">

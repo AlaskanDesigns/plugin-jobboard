@@ -154,11 +154,11 @@ $(document).ready(function() {
         $(".option-send-email").hide();
     });
 
-    var modal_send_email = function(subject, body) {
+    var modal_send_email = function(subject, body, title) {
         $("#applicant-status-notification-subject").val(subject);
         $("#applicant-status-notification-message").val(body);
         tinyMCE.activeEditor.setContent(body);
-        $("#dialog-applicant-status").dialog({width:740}).dialog('open');
+        $("#dialog-applicant-status").dialog({width:740, title: title}).dialog('open');
     }
 
     $("#send-email").on("click", function(event) {
@@ -170,16 +170,14 @@ $(document).ready(function() {
                 if( data.error) {
                     return false;
                 }
-                $("#dialog-applicant-status .form-horizontal .form-row").first().show();
-                modal_send_email(data.subject, data.message);
+                modal_send_email(data.subject, data.message, jobboard.langs.applicant_change_status_modal);
             },
             'json'
         );
     });
 
-    $("#first-email").on("click", function(event, element){
-        $("#dialog-applicant-status .form-horizontal .form-row").first().hide();
-         modal_send_email('', '');
+    $("#first-email").on("click", function(event, element) {
+         modal_send_email('', '', jobboard.langs.applicant_send_email_modal);
     });
 
     $('.auto-star').rating({
