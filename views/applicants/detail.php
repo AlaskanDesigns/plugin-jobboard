@@ -100,8 +100,8 @@
         <div id="notes" class="tab-pane">
             <h3 class="sidebar-title render-title jobboard-title"><?php _e("Notes", "jobboard"); ?> <span class="note_plus"><a class="add_note btn btn-mini" href="javascript:void(0);"><?php _e("Add note", "jobboard"); ?></a></span></h3>
             <div id="nots_table_div">
-                <?php if(count($notes)>0) { ?>
-                    <?php foreach($notes as $note) { ?>
+                <?php if(count($aNotes)>0) { ?>
+                    <?php foreach($aNotes as $note) { ?>
                         <div class="note well ui-rounded-corners">
                             <div class="note-actions">
                                 <a class="delete_note" href="javascript:void(0);" data-note-id="<?php echo $note['pk_i_id']; ?>"><?php _e("Delete", "jobboard"); ?></a>
@@ -112,6 +112,7 @@
                                 <span><?php echo date('M', strtotime($note['dt_date'])); ?><br>
                                 <?php echo date('Y', strtotime($note['dt_date'])); ?></span>
                             </div>
+                            <div class="note-username"><?php echo $note["admin_username"]; ?></div>
                             <div class="clear"></div>
                             <p class="note_text"><?php echo nl2br($note['s_text']); ?></p>
                         </div>

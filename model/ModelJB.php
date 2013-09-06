@@ -847,7 +847,7 @@
 
         public function insertNote($id, $text)
         {
-            $success = $this->dao->insert($this->getTable_JobsNotes(), array('dt_date' => date("Y-m-d H:i:s"), 's_text' => $text, 'fk_i_applicant_id' => $id));
+            $success = $this->dao->insert($this->getTable_JobsNotes(), array('dt_date' => date("Y-m-d H:i:s"), 's_text' => $text, 'fk_i_applicant_id' => $id, 'fk_i_admin_id' => osc_logged_admin_id()));
 
             if( !$success ) {
                 return false;
@@ -860,7 +860,7 @@
 
         public function updateNote($id, $text)
         {
-            return $this->dao->update($this->getTable_JobsNotes(), array('dt_date' => date("Y-m-d H:i:s"), 's_text' => $text), array('pk_i_id' => $id));
+            return $this->dao->update($this->getTable_JobsNotes(), array('dt_date' => date("Y-m-d H:i:s"), 's_text' => $text, 'fk_i_admin_id' => osc_logged_admin_id()), array('pk_i_id' => $id));
         }
 
         public function changeStatus($applicantId, $status)
@@ -896,6 +896,13 @@
                             'b_corrected'   => $bCorrected),
                     array('pk_i_id' => $applicantId));
         }
+
+        public function getAdminUsername($adminId) {
+            $admin = Admin::newInstance()->findByPrimaryKey($adminId);
+
+            return $admin['s_username'];
+        }
+
     }
 
     // End of file: ./jobboard/model/ModelJB.php

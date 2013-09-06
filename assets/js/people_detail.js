@@ -46,9 +46,11 @@ $(document).ready(function() {
             },
             function(data) {
                 $('.delete_note[data-note-id="' + $("#dialog-note-delete").attr('data-note-id') + '"]').parents('.note').remove();
-                var note_container = $('<div>').attr('class', 'note empty-note well ui-rounded-corners').append($('<p>').html(jobboard.langs.empty_note_text));
-                $('#nots_table_div').append(note_container);
-                $(note_container).effect("highlight", {}, 500);
+                if(!$('div').hasClass('note well')) {
+                    var note_container = $('<div>').attr('class', 'note empty-note well ui-rounded-corners').append($('<p>').html(jobboard.langs.empty_note_text));
+                    $('#nots_table_div').append(note_container);
+                    $(note_container).effect("highlight", {}, 500);
+                }
                 $("#dialog-note-delete").dialog('close');
             },
             'json'
@@ -71,20 +73,23 @@ $(document).ready(function() {
             function(data) {
                 if( $("#dialog-note-form").attr('data-note-action') == 'add') {
                     var note_container = $('<div>').attr('class', 'note well ui-rounded-corners');
-                    var note_actions = $('<div>').attr('class', 'note-actions');
-                    var delete_note = $('<a>').attr('class', 'delete_note').attr('href', 'javascript:void(0);').attr('data-note-id', data.pk_i_id).html(jobboard.langs.delete_string);
-                    var edit_note = $('<a>').attr('class', 'edit_note').attr('href', 'javascript:void(0);').attr('data-note-id', data.pk_i_id).attr('data-note-text', data.s_text).html(jobboard.langs.edit_string);
-                    var date_note = $('<div>').attr('class', 'note-date').append($('<b>').html(data.day)).append($('<span>').html(data.month + '<br/>' + data.year));
-                    var clear_div = $('<div>').attr('class', 'clear');
-                    var note_text = $('<p>').attr('class', 'note_text').html(data.s_text.replace(/\n/g, '<br/>'));
+                    var note_actions   = $('<div>').attr('class', 'note-actions');
+                    var delete_note    = $('<a>').attr('class', 'delete_note').attr('href', 'javascript:void(0);').attr('data-note-id', data.pk_i_id).html(jobboard.langs.delete_string);
+                    var edit_note      = $('<a>').attr('class', 'edit_note').attr('href', 'javascript:void(0);').attr('data-note-id', data.pk_i_id).attr('data-note-text', data.s_text).html(jobboard.langs.edit_string);
+                    var date_note      = $('<div>').attr('class', 'note-date').append($('<b>').html(data.day)).append($('<span>').html(data.month + '<br/>' + data.year));
+                    var usename_note   = $('<div>').attr('class', 'note-username').html(data.admin_username);
+                    var clear_div      = $('<div>').attr('class', 'clear');
+                    var note_text      = $('<p>').attr('class', 'note_text').html(data.s_text.replace(/\n/g, '<br/>'));
 
-                    $(note_container).append($(note_actions).append(delete_note).append(edit_note)).append(date_note).append(clear_div).append(note_text);
+                    $(note_container).append($(note_actions).append(delete_note).append(edit_note)).append(date_note).append(usename_note).append(clear_div).append(note_text);
                     $('#nots_table_div').prepend(note_container);
                     $('.empty-note').remove();
                     $(note_container).effect("highlight", {}, 500);
                 } else {
                     var note = $('.delete_note[data-note-id="' + $("#dialog-note-form").attr('data-note-id') + '"]').parents('.note');
                     $(note).children('.edit_note').attr('data-note-text', data.s_text);
+                    $(note).children('.note-date').empty().append($('<b>').html(data.day)).append($('<span>').html(data.month + '<br/>' + data.year));
+                    $(note).children('.note-username').html(data.admin_username);
                     $(note).children('.note_text').html(data.s_text);
                     $(note).effect("highlight", {}, 500);
                 }

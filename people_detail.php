@@ -20,7 +20,18 @@
             $file   = $mjb->getCVFromApplicant($applicantId);
             ModelJB::newInstance()->changeSecret($file['pk_i_id']);
             $file   = $mjb->getCVFromApplicant($applicantId);
+
             $notes  = $mjb->getNotesFromApplicant($applicantId);
+            $aNotes = array();
+            if(count($notes)>0) {
+                foreach($notes as $note) {
+                    $note["admin_username"] = ModelJB::newInstance()-> getAdminUsername($note["fk_i_admin_id"]);
+                    $aNotes[] = $note;
+                }
+            }
+
+            $adminManager = Admin::newInstance();
+            $aAdmin       = $adminManager->findByPrimaryKey(osc_logged_admin_id());
 
             $aMails = array();
             $aMails = applicant_emailsent_get($applicantId);
