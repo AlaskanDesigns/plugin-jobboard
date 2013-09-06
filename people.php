@@ -39,10 +39,18 @@
             $status = jobboard_status();
 
             // get notes and listing info
-            for($i = 0; $i < count($people); $i++) {
-                $people[$i]['notes']   = ModelJB::newInstance()->getNotesFromApplicant($people[$i]['pk_i_id']);
-                $people[$i]['listing'] = ModelJB::newInstance()->getJobsAttrByItemId($people[$i]['fk_i_item_id']);
+            $aPeopleIdsSearch = array();
+            if(count($people) > 0) {
+                for($i = 0; $i < count($people); $i++) {
+                    $aPeopleIdsSearch[] = $people[$i]['pk_i_id'];
+                    $people[$i]['notes']   = ModelJB::newInstance()->getNotesFromApplicant($people[$i]['pk_i_id']);
+                    $people[$i]['listing'] = ModelJB::newInstance()->getJobsAttrByItemId($people[$i]['fk_i_item_id']);
+                }
             }
+
+            //guardamos los id de los applicants de la busqueda en este campo en DB
+            $jsonSearchApplicantsIds = json_encode($aPeopleIdsSearch);
+            osc_set_preference('applicant_ids_search', $jsonSearchApplicantsIds, 'jobboard');
 
             $urlOrder = osc_admin_base_url(true).'?'.$_SERVER['QUERY_STRING'];
             $urlOrder = preg_replace('/&iPage=(\d+)?/', '', $urlOrder) ;

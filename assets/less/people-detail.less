@@ -28,6 +28,8 @@
     border-bottom:solid 2px #DDD;
     margin-bottom: 15px;
     margin-top: 10px;
+    clear: both;
+    padding-top: 15px;
 }
 #applicant-detail .applicant-header h2{
     margin-bottom:5px;
@@ -394,4 +396,25 @@ label.score .score-manage{
 }
 #first-email:hover {
     cursor:pointer
+}
+.prev-appl {width: 50%; margin-top: 4px;}
+.next-appl {margin-top: 4px;}
+.next-appl:hover, .prev-appl:hover {cursor:pointer; text-decoration: underline;}
+#applicant-detail .left-arrow, #applicant-detail .right-arrow{
+    width: 24px;
+    opacity: 0.6;
+    height: 24px;
+    background-size: 24px 24px;
+}
+#applicant-detail .left-arrow{
+    float:left;
+    background-image: url(../img/left-arrow.png);
+    left: 7px;
+    top: -10px;
+}
+#applicant-detail .right-arrow{
+    float:right;
+    background-image: url(../img/right-arrow.png);
+    left: 7px;
+    top: -10px;
 }

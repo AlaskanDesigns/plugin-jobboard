@@ -1,5 +1,12 @@
 <div id="applicant-detail">
-    <span><a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>" ><?php _e('Applicants', 'jobboard'); ?></a> &raquo; <?php echo @$people['s_name']; ?></span>
+    <span>
+        <a <?php if($prevApplicantId === false) { echo 'style="display:none"'; } ?> class="float-left prev-appl" href="<?php echo osc_admin_render_plugin_url("jobboard/people_detail.php") . "&people=". $prevApplicantId; ?>">
+            <div class="left-arrow"></div><div class="prev-appl"><?php _e('Previous applicant', 'jobboard'); ?></div>
+        </a>
+        <a  <?php if($nextApplicantId === false) { echo 'style="display:none"'; } ?> class="float-right" href="<?php echo osc_admin_render_plugin_url("jobboard/people_detail.php") . "&people=" . $nextApplicantId; ?>">
+            <div class="right-arrow"></div><div class="float-right next-appl"><?php _e('Next applicant', 'jobboard'); ?></div>
+        </a>
+    </span>
     <div class="applicant-header">
         <h2 class="render-title"><?php echo @$people['s_name']; ?>
             <div class="options">
