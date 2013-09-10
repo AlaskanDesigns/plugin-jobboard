@@ -150,9 +150,12 @@ function jobboard_status_by_id($statusID) {
     $aStatus   = array();
     foreach($aStatuses as $status) {
         if($status["id"] == $statusID) {
-
             $aStatus = $status;
         }
+    }
+
+    if(empty($aStatus)) {
+        return false;
     }
 
     return $aStatus;

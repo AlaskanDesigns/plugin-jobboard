@@ -559,14 +559,17 @@
             return $total['total'];
         }
 
-        public function countApplicantsByStatus($statusId)
+        public function countApplicantsByStatus($statusId = false)
         {
             $this->dao->select('COUNT(*) AS total');
             $this->dao->from($this->getTable_JobsApplicants());
             if( Params::getParam('jobId') !== '' ) {
                 $this->dao->where('fk_i_item_id', Params::getParam('jobId'));
             }
-            $this->dao->where('i_status', $statusId);
+            if($statusId !== false) {
+                $this->dao->where('i_status', $statusId);
+            }
+
             $result = $this->dao->get();
             if( !$result ) {
                 return  0;
@@ -649,6 +652,27 @@
             }
 
             return $result->row();
+        }
+
+        /**
+         * Get num applicants by status
+         *
+         * @param $statusID
+         *
+         * @return integer
+         */
+        public function getNumApplicantsByStatus($statusID)
+        {
+            $this->dao->select('COUNT(*) AS total');
+            $this->dao->from($this->getTable_JobsApplicants());
+            $this->dao->where("i_status", $statusID);
+            $result = $this->dao->get();
+            if( !$result ) {
+                return  0;
+            }
+
+            $total = $result->row();
+            return $total['total'];
         }
 
         /**
@@ -936,7 +960,7 @@
             $aSet   = array('i_status' => $newStatus);
             $aWhere = array('i_status' => $oldStatus);
             if($newStatus == '-1') {
-                $aSet["b_read"] = '0';                
+                $aSet["b_read"] = '0';
             }
             if($applicantID) {
                 $aWhere["pk_i_id"] = $applicantID;

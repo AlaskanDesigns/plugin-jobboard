@@ -147,7 +147,7 @@
                                 }
                             }
                         echo '</tbody></table>';
-                        echo '<p class="view-all"><a href="'.osc_admin_render_plugin_url("jobboard/people.php").'&iStatus='.$k.'">'.__('View all','jobboard').' '.$aStatus["name"].'</a></p>';
+                        echo '<p class="view-all"><a href="'.osc_admin_render_plugin_url("jobboard/people.php").'&statusId='.$aStatus["id"].'">'.__('View all','jobboard').' '.$aStatus["name"].'</a></p>';
                         echo '</div>';
                     }
                     ?>

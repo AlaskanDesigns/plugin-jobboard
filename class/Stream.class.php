@@ -159,7 +159,7 @@
 
         function log_change_status_application($applicantID, $status)
         {
-            $aStatus   = jobboard_status();
+            $aStatus   = jobboard_status_by_id($status);
             $applicant = ModelJB::newInstance()->getApplicant($applicantID);
 
             $title = __('Spontaneous application', 'jobboard');
@@ -168,7 +168,7 @@
                 $title = $job['s_title'];
             }
 
-            $data = sprintf(__('%1$s has changed "%2$s" applicant status to %3$s (%4$s)', 'jobboard'), osc_logged_admin_name(), $applicant['s_name'], $aStatus[$status], $title);
+            $data = sprintf(__('%1$s has changed "%2$s" applicant status to %3$s (%4$s)', 'jobboard'), osc_logged_admin_name(), $applicant['s_name'], $aStatus['name'], $title);
             $this->log->logJobboard('changestatus', $applicantID, $data);
         }
     }

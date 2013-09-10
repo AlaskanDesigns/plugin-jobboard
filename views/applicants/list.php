@@ -1,8 +1,13 @@
 <?php if ( ! defined('ABS_PATH')) exit('ABS_PATH is not loaded. Direct access is not allowed.'); ?>
 <h2 class="render-title"><?php _e('Resumes', 'jobboard'); ?>
     <a id="show-filters" class="btn btn-mini"><?php _e('Show filters', 'jobboard'); ?></a>
-    <a id="status_manage" class="btn btn-blue float-right"><?php _e('Manage statuses', 'jobboard'); ?></a>
-    <a id="add-applicant" class="btn btn-green float-right"><?php _e('Add applicant', 'jobboard'); ?></a>
+    <div class="menu-applicant">
+        <a class="float-right"><div class="img-menu"></div></a>
+        <ul id="menu-applicant-options" class="dropdown-menu float-right" >
+            <li id="status_manage" role="presentation" class="dropdown-header"><a id="status_manage"><?php _e('Manage statuses', 'jobboard'); ?></a></li>
+            <li id="add-applicant " role="presentation" class="dropdown-header"><a id="add-applicant"><?php _e('Add applicant', 'jobboard'); ?></a></li>
+        </ul>
+    </div>
 </h2>
 <div class="relative resumes">
     <div class="search-filter hide">
@@ -103,9 +108,8 @@
                                     <?php $statusId = Params::getParam('statusId'); ?>
                                     <select name="statusId" class="">  <!-- status selector         -->
                                         <option value="-1" <?php if( $statusId != '' && $statusId == (int)$key ) echo "selected"; ?>><?php _e('All status', 'jobboard'); ?></option>
-                                        <?php $aStatus = jobboard_status();
-                                        foreach( $aStatus as $key => $value ) { ?>
-                                        <option value="<?php echo $key; ?>" <?php if( $statusId != '' && $statusId == (int)$key ) echo "selected"; ?>><?php echo $value; ?></option>
+                                        <?php foreach( $aStatuses as $key => $value ) { ?>
+                                        <option value="<?php echo $value["id"]; ?>" <?php if( $statusId != '' && $statusId == (int)$value["id"] ) echo "selected"; ?>><?php echo $value["name"]; ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -138,16 +142,11 @@
         </form>
     </div>
     <div class="applicant-shortcuts">
-        <?php
-            $i = 0;
-            foreach($navbar as $k => $v) {
-                $class = array();
-                if($v['active']) $class[] = 'btn-blue';
-                if($i == 0) $class[] = 'first';
-                if(($i == (count($navbar) - 1)) && $i !== 0) $class[] = 'last';
-        ?>
-        <a class="btn <?php echo implode(' ', $class); ?>" href="<?php echo $v['url'] ?>"><?php echo $v['text']; ?></a>
-        <?php $i++; } ?>
+        <select name="select-statuses" id="select-statuses" class="select-box-extra">
+         <?php foreach($navbar as $k => $v) { ?>
+            <option value="<?php echo $k; ?>" data-status-url="<?php echo $v['url'] ?>" <?php if($v["id"] == $statusID) { echo 'selected="selected"'; } ?>><?php echo $v['text']; ?></option>
+        <?php } ?>
+        </select>
         <form method="get" action="<?php echo osc_admin_base_url(true); ?>" class="inline">
             <?php foreach( Params::getParamsAsArray('get') as $key => $value ) { ?>
             <?php if( $key != 'iDisplayLength' ) { ?>
@@ -239,14 +238,14 @@
                             $correctedForm  = $p['b_corrected'];
                         }
                     ?>
-                    <tr <?php if($p['b_read']==0){ echo 'style="background-color:#FFF0DF;"';}?>>
+                    <tr data-applicant-id="<?php echo $p['pk_i_id']; ?>" <?php if($p['b_read']==0){ echo 'style="background-color:#FFF0DF;"';}?>>
                         <td class="applicant"><a href="<?php echo osc_admin_render_plugin_url("jobboard/people_detail.php");?>&people=<?php echo $p['pk_i_id']; ?>" title="<?php echo @$p['s_name']; ?>" ><?php echo @$p['s_name']; ?></a>
                         <?php if($p['b_has_notes'] == 1 ) { ?><span class="note" data-tooltip="<?php echo $note_tooltip; ?>"></span><?php } ?>
                         <?php if($p['s_source'] == 'linkedinapply' ) { ?><span class="linkedin"></span><?php } ?>
-                            <div class="actions">
+                        <div class="actions">
                                 <ul>
                                     <li><a href="javascript:delete_applicant(<?php echo $p['pk_i_id']; ?>);" ><?php _e("Delete", "jobboard"); ?></a></li>
-                                    <li><a href="javascript:send_email(<?php echo $p['pk_i_id']; ?>);" id="contact-mail" ><?php _e("Contact", "jobboard"); ?></a></li>
+                                    <li><a href="javascript:reassign_applicant(<?php echo $p['pk_i_id'] . ', ' . $p['i_status'] . ", '" . $p['s_name'] . "'"; ?>);" ><?php _e("Reassign", "jobboard"); ?></a></li>
                                 </ul>
                             </div>
                         </td>
@@ -254,7 +253,8 @@
                         <td><?php echo jobboard_sex_to_string( @$p['s_sex'] ); ?></td>
                         <td><?php echo @$p['s_email']; ?></td>
                         <td><?php echo $p['fk_i_item_id']==''?__('Spontaneous application', 'jobboard'):@$p['s_title']; ?></td>
-                        <td><?php echo $status[isset($p['i_status'])?$p['i_status']:0]; ?></td>
+                        <?php $status = jobboard_status_by_id($p['i_status']); ?>
+                        <td><?php if($status) { echo $status["name"]; } ?></td>
                         <?php if($has_killerForm) { ?>
                         <td><?php if($correctedForm){ echo '<b>'.$score.'/10</b>'; } else { _e('Needs correction', 'jobboard'); } ?> </td>
                         <?php } else { ?>
@@ -296,6 +296,18 @@
         );
         osc_show_pagination_admin($aData);
     ?>
+</div>
+<div id="reall-appl-status" title="<?php echo osc_esc_html(__('Assign status', 'jobboard')); ?>">
+    <span><p class="form-row"><?php echo osc_esc_html(__('You will change the status to', 'jobboard')); ?><label id="applicant-username"></label></p></span>
+        <select id="select-appl-status" name="select-appl-status" data-applicant-id="">
+            <option value="default" selected="selected"><?php _e("Select a status", "jobboard"); ?></option>
+            <option value="-1"><?php _e("Unread", "jobboard"); ?></option>
+        </select>
+        <div class="form-actions">
+            <div class="wrapper">
+            <a class="btn" href="javascript:void(0);" onclick="$('#reall-appl-status').dialog('close', 'jobboard');"><?php _e('Cancel', 'jobboard'); ?></a>
+            </div>
+        </div>
 </div>
 <form id="dialog-people-delete" method="post" action="" class="has-form-actions hide nocsrf" title="<?php echo osc_esc_html(__('Delete applicant', 'jobboard')); ?>">
     <input type="hidden" name="delete_applicant" value="true" />
@@ -354,9 +366,8 @@
         <div class="applicant-selector">
             <select id="applicant-status" name="applicant-status">
                 <option value="" selected="selected"><?php _e("Select a status", "jobboard"); ?></option>
-                <?php $st_array = jobboard_status();
-                foreach($st_array as $k => $v) {
-                    echo '<option value="'.$k.'">'.$v.'</option>';
+                <?php foreach($aStatuses as $status) {
+                    echo '<option value="'. $status['id'] .'">' . $status["name"] . '</option>';
                 } ?>
             </select>
             <div class="clear"></div>
@@ -366,16 +377,6 @@
             <div class="error-message"><?php _e('Please attach the applicant\'s CV', 'jobboard'); ?></div>
             <input type="file" name="applicant-attachment" id="applicant-attachment">
         </div>
-        <?php /*
-        <div id="rating">
-            <label><?php _e("Select a rating"); ?></label>
-            <div id="rating-filter" class="rater big-star">
-            <?php for($k=1; $k<=5; $k++) {
-                echo '<input name="applicant-rating" type="radio" class="filter-star" value="'.$k.'" title="'.$k.'" '.($k==Params::getParam('rating')?'checked="checked"':'').'/>';
-            } ?>
-            </div>
-        </div>
-        */ ?>
         <div id="applicant-buttons">
             <button type="submit" class="btn btn-blue float-right"><?php _e('Add', 'jobboard') ; ?></button>
             <button type="button" class="btn float-right" id="cancel-dialog" name="cancel-dialog"><?php _e('Cancel', 'jobboard') ; ?></button>
@@ -384,6 +385,10 @@
     </form>
 </div>
 <div id="dialog-new_status" title="<?php _e("Manage statuses", "jobboard"); ?>">
+    <div id="help-box">
+    <a href="#" class="btn ico ico-20 ico-close">x</a>
+    <p><?php _e('Here you can add and remove statuses and also order these as you want dragging and dropping each one. </br>When you delete a status you can reassign those applicants to other status. If you remove all statuses the system will add four statuses by default.', 'jobboard'); ?></p>
+    </div>
     <ul id="error_list"></ul>
     <table class="table" cellpadding="0" cellspacing="0">
         <thead>
@@ -393,7 +398,6 @@
             </tr>
         </thead>
         <tbody>
-        <?php $aStatuses = jobboard_status(); ?>
         <?php foreach($aStatuses as $aStatus) { ?>
         <tr>
             <td><label id="<?php echo $aStatus["id"]; ?>"><?php echo $aStatus["name"]; ?></label></td>
@@ -407,8 +411,8 @@
         <span id="status-appl-info"><?php _e("Number applicants: ", "jobboard"); ?><label id="status-appl-num-info"></label></span>
         <input type="hidden" id="unread-option" value="<?php _e("Unread", "jobboard"); ?>">
         <select id="selector-new-statuses"> </select>
-        <button type="button" class="btn btn-blue btn-mini" id="button-reallocate"><?php _e("Reallocate!", "jobboard"); ?></button>
-        <button type="button" class="btn btn-mini" id="button-reallocate-close"><?php _e("Cancel", "jobboard"); ?></button>
+        <button type="button" class="btn btn-blue btn-mini" id="button-reassign"><?php _e("Reassign!", "jobboard"); ?></button>
+        <button type="button" class="btn btn-mini" id="button-reassign-close"><?php _e("Cancel", "jobboard"); ?></button>
     </div>
     <div class="adding-new-status">
         <div class="form-row">
@@ -431,16 +435,4 @@
         hopscotch.startTour(applicant.tour);
     });
 </script>
-<style type="text/css">
-    div.hopscotch-bubble .hopscotch-bubble-number{ font-size: 11px; text-transform: uppercase; }
-</style>
 <?php } ?>
-<style>
- #reallocating-applicants #status-appl-info {font-weight: bold;color: #727270;margin-top: 9px;float: left;margin-right: 20px;}
- #reallocating-applicants #status-appl-info label {margin-left: 5px;}
- #reallocating-applicants { display: none;margin-top: 30px;}
- #reallocating-applicants button {font-weight: normal; }
- #dialog-new_status .adding-new-status {margin-top: 30px;}
- #new_status table tbody tr:hover{cursor: pointer;}
- #subject {width: 97%; margin-left: 1px;}
-</style>

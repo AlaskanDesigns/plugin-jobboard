@@ -35,8 +35,16 @@
 
             // pagination
             $search['pagination'] = $this->get_search_pagination(count($people), $displayed, $total);
+
             // different status
-            $status = jobboard_status();
+            $aStatus   = jobboard_status();
+            $aStatuses = $aStatus;
+            $status    = array();
+            if(count($aStatus) > 0) {
+                foreach($aStatus as $aS) {
+                    $status[$aS["id"]] = $aS["name"];
+                }
+            }
 
             // get notes and listing info
             for($i = 0; $i < count($people); $i++) {
@@ -56,6 +64,15 @@
 
             // navbar
             $navbar = $this->navbar();
+
+            $statusID = 0;
+            if(Params::getParam("viewUnread") && Params::getParam("viewUnread") == 1 ) {
+                $statusID = '-1';
+            } else if(Params::getParam("viewAll") && Params::getParam("viewAll") == 1 ) {
+                $statusID = 'all';
+            } else if(Params::getParam("statusId")) {
+                $statusID = Params::getParam("statusId");
+            }
 
             // load
             require_once(JOBBOARD_VIEWS . 'applicants/list.php');
@@ -85,6 +102,10 @@
             if(Params::getParam('viewUnread')=='1') {
                 $conditions['unread'] = 1;
                 unset( $conditions['status'] );
+            }
+            if(Params::getParam('viewAll')=='1') {
+                $conditions = null;
+                unset($conditions['status'] );
             }
             if(Params::getParam('uncorrected_forms')!='') {
                 $conditions['uncorrected_forms'] = Params::getParam('uncorrected_forms');
@@ -192,8 +213,21 @@
 
         private function navbar() {
             $shortcuts = array();
+
+            $shortcuts['all'] = array();
+            $totalApplicantsShortcut = ModelJB::newInstance()->countApplicantsByStatus(false /*all*/);
+            $shortcuts['all']["id"] = 'all';
+            $shortcuts['all']['total'] = $totalApplicantsShortcut;
+            $shortcuts['all']['url'] = osc_admin_render_plugin_url('jobboard/people.php') . '&viewAll=1';
+            $shortcuts['all']['active'] = false;
+            if( Params::getParam('viewAll') ) {
+                $shortcuts['all']['active'] = true;
+            }
+            $shortcuts['all']['text'] = sprintf(__('All (%1$s)', 'jobboard'), $totalApplicantsShortcut);
+
             $shortcuts['unread'] = array();
             $totalApplicantsShortcut = ModelJB::newInstance()->countApplicantsUnread();
+            $shortcuts['unread']["id"] = '-1';
             $shortcuts['unread']['total'] = $totalApplicantsShortcut;
             $shortcuts['unread']['url'] = osc_admin_render_plugin_url('jobboard/people.php') . '&viewUnread=1';
             $shortcuts['unread']['active'] = false;
@@ -201,42 +235,21 @@
                 $shortcuts['unread']['active'] = true;
             }
             $shortcuts['unread']['text'] = sprintf(__('Unread (%1$s)', 'jobboard'), $totalApplicantsShortcut);
-            $shortcuts['active'] = array();
-            $totalApplicantsShortcut = ModelJB::newInstance()->countApplicantsByStatus('0');
-            $shortcuts['active']['total'] = $totalApplicantsShortcut;
-            $shortcuts['active']['url'] = osc_admin_render_plugin_url('jobboard/people.php') . '&statusId=0';
-            $shortcuts['active']['active'] = false;
-            if( Params::getParam('statusId') == '0' && !Params::getParam('viewUnread') ) {
-                $shortcuts['active']['active'] = true;
+
+            $aStatuses = jobboard_status();
+            foreach($aStatuses as $aStatus) {
+                $statusName = strtolower($aStatus["name"]);
+                $shortcuts[$statusName] = array();
+                $totalApplicantsShortcut = ModelJB::newInstance()->countApplicantsByStatus($aStatus["id"]);
+                $shortcuts[$statusName]["id"]     = $aStatus["id"];
+                $shortcuts[$statusName]['total']  = $totalApplicantsShortcut;
+                $shortcuts[$statusName]['url']    = osc_admin_render_plugin_url('jobboard/people.php') . '&statusId=' . $aStatus["id"] ;
+                $shortcuts[$statusName]['active'] = false;
+                if( Params::getParam('statusId') == '0' && !Params::getParam('viewUnread') && !Params::getParam('viewAll') ) {
+                    $shortcuts[$statusName]['active'] = true;
+                }
+                $shortcuts[$statusName]['text'] = sprintf(__('%1$s (%2$s)', 'jobboard'), $aStatus["name"], $totalApplicantsShortcut);
             }
-            $shortcuts['active']['text'] = sprintf(__('Active (%1$s)', 'jobboard'), $totalApplicantsShortcut);
-            $shortcuts['interview'] = array();
-            $totalApplicantsShortcut = ModelJB::newInstance()->countApplicantsByStatus('1');
-            $shortcuts['interview']['total'] = $totalApplicantsShortcut;
-            $shortcuts['interview']['url'] = osc_admin_render_plugin_url('jobboard/people.php') . '&statusId=1';
-            $shortcuts['interview']['active'] = false;
-            if( Params::getParam('statusId') == '1' ) {
-                $shortcuts['interview']['active'] = true;
-            }
-            $shortcuts['interview']['text'] = sprintf(__('Interview (%1$s)', 'jobboard'), $totalApplicantsShortcut);
-            $shortcuts['rejected'] = array();
-            $totalApplicantsShortcut = ModelJB::newInstance()->countApplicantsByStatus('2');
-            $shortcuts['rejected']['total'] = $totalApplicantsShortcut;
-            $shortcuts['rejected']['url'] = osc_admin_render_plugin_url('jobboard/people.php') . '&statusId=2';
-            $shortcuts['rejected']['active'] = false;
-            if( Params::getParam('statusId') == '2' ) {
-                $shortcuts['rejected']['active'] = true;
-            }
-            $shortcuts['rejected']['text'] = sprintf(__('Rejected (%1$s)', 'jobboard'), $totalApplicantsShortcut);
-            $shortcuts['hired'] = array();
-            $totalApplicantsShortcut = ModelJB::newInstance()->countApplicantsByStatus('3');
-            $shortcuts['hired']['total'] = $totalApplicantsShortcut;
-            $shortcuts['hired']['url'] = osc_admin_render_plugin_url('jobboard/people.php') . '&statusId=3';
-            $shortcuts['hired']['active'] = false;
-            if( Params::getParam('statusId') == '3' ) {
-                $shortcuts['hired']['active'] = true;
-            }
-            $shortcuts['hired']['text'] = sprintf(__('Hired (%1$s)', 'jobboard'), $totalApplicantsShortcut);
 
             return $shortcuts;
         }

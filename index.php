@@ -143,8 +143,8 @@ osc_add_hook('init_admin', 'jobboard_post_actions');
 
 function add_applicant_status() {
     $savedStatus = osc_get_preference("applicant_statuses", "jobboard");
-
-    if(!$savedStatus) {
+    $savedStatus = json_decode($savedStatus, true);
+    if(empty($savedStatus)) {
         $aStatus   = array();
         $aStatus[] = array("id" => "0", "name" => __("Active", "jobboard"));
         $aStatus[] = array("id" => "1", "name" => __("Interview", "jobboard"));

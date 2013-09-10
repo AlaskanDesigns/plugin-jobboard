@@ -69,7 +69,6 @@
     <div class="applicant-header">
         <h2 class="render-title"><?php echo @$people['s_name']; ?>
             <a href="<?php echo osc_admin_render_plugin_url("jobboard/people.php"); ?>&amp;jb_action=unread&amp;applicantID=<?php echo $applicantId; ?>" class="options-people-details float-right" style="height:14px;"><?php _e('Mark as unread', 'jobboard'); ?></a>
-            <a id="send-email" class="options-people-details float-right" style="height:14px;"><?php _e('Send an email', 'jobboard'); ?></a>
         </h2>
     </div>
     <div>
@@ -99,6 +98,7 @@
                     } ?>
                 </div>
                 <select id="applicant_status" name="applicant_status" class="select-box-medium" data-applicant-id="<?php echo $applicantId; ?>">
+                    <option value="default" selected="selected"><?php _e("Assign a status", 'jobboard'); ?></option>
                     <?php
                     $aStatuses = jobboard_status();
                     foreach($aStatuses as $aStatus) {
@@ -131,12 +131,12 @@
         <div class="clear"></div>
     </div>
     <ul class="nav nav-tabs">
-        <li class="active"><a class="nav-options" href="#profile" data-toggle="tab"><?php _e("Profile", "jobboard"); ?></a></li>
+        <li class="active"><a id="viewCV" class="nav-options" href="#profile" data-toggle="tab"><?php _e("Profile", "jobboard"); ?></a></li>
         <?php if(count($aQuestions) > 0) { ?>
         <li><a class="nav-options" href="#killer_questions" data-toggle="tab"><?php _e("Killer Questions", "jobboard"); ?></a></li>
         <?php } ?>
-        <li><a class="nav-options" href="#messages" data-toggle="tab"><?php _e("Messages", "jobboard"); ?></a></li>
-        <li><a class="nav-options" href="#notes" data-toggle="tab"><?php _e("Notes", "jobboard"); ?></a></li>
+        <li><a id="viewEmails" class="nav-options" href="#messages" data-toggle="tab"><?php _e("Messages", "jobboard"); ?></a></li>
+        <li><a id="viewNotes" class="nav-options" href="#notes" data-toggle="tab"><?php _e("Notes", "jobboard"); ?></a></li>
     </ul>
     <div class="tab-content">
         <!-- cover-letter-cv-section -->
@@ -269,23 +269,27 @@
         <div id="jobboard-loading-image" ></div>
     </div>
     <?php } ?>
-    <div class="show-mails-applicant-box">
+        <div id="messages" class="tab-pane">
         <h3 class="render-title jobboard-title"><?php _e('Mails sent', 'jobboard'); ?></h3>
     <?php if(count($aMails) > 0)  { ?>
-        <?php $numMail = 1; ?>
+                <?php $countMail = 1; ?>
         <?php foreach($aMails as $aMail)  { ?>
-                <div class="p-mail<?php if($numMail >= 6) { echo " show-mail";} else { $numMail++; } ?>">
+                        <?php if($countMail > 5) { echo " <div class='show-more-mails'>";} ?>
+                        <div class="p-mail">
                 <?php $aMessage = json_decode($aMail["s_mail"], true); ?>
                 <label class="mail-subject"><?php echo $aMessage["subject"] . " - "; ?></label>
                 <label class="mail-date"><?php echo date("d-M-Y H:i:s", strtotime($aMail["dt_date"])); ?></label>
                 <label class="mail-body"><?php echo $aMessage["body"]; ?></label>
                 </div>
+                        <?php if($countMail > 5) { echo " </div>";} else { $countMail++; } ?>
         <?php } ?>
-        <?php if($numMail >= 6) { ?> <div id="view-all-mails"><label><?php _e("View all", "jobboard") ?></label></div> <?php } ?>
+                <?php if($countMail > 5) { ?> <div id="view-more-mails"><label><?php _e("View all", "jobboard") ?></label></div> <?php } ?>
     <?php } else { ?>
-        <label id="no-mail"><?php _e("You haven't sent any emails yet.", "jobboard"); ?></label>
+            <label class="message-applicant"><?php _e("You haven't sent any emails yet.", "jobboard"); ?></label>
     <?php } ?>
     </div>
+</div>
+    <!-- /tab-content -->
 </div>
 <div id="dialog-note-delete" title="<?php echo osc_esc_html(__('Delete note', 'jobboard')); ?>" class="has-form-actions hide" data-note-id="">
     <div class="form-horizontal">
