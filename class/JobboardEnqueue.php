@@ -32,6 +32,7 @@ class JobboardEnqueue
         jobboard.dashboard = <?php echo json_encode($this->dashboard_settings()); ?>;
         jobboard.max_killer_questions = '<?php echo osc_get_preference('max_killer_questions', 'jobboard_plugin'); ?>';
         jobboard.tinymce_content_css = '<?php echo osc_plugin_url(dirname(__FILE__))  . "assets/css/styles.css" ?>';
+        jobboard.admin_users = '<?php echo osc_get_admin_users(); ?>';
     </script>
 <?php
     }
@@ -86,9 +87,7 @@ class JobboardEnqueue
             }
         }
         if(Params::getParam('page')=='admins') {
-            if(Params::getParam('action')=='add' || Params::getParam('action')=='edit') {
-                osc_enqueue_script('jobboard-admin-page');
-            }
+            osc_enqueue_script('jobboard-admin-page');
         }
     }
 

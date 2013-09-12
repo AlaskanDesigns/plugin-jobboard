@@ -186,4 +186,18 @@ function osc_admin_toolbar_new_feature() {
     }
 }
 
+if(!function_exists('osc_get_admin_users') ) {
+    function osc_get_admin_users() {
+        $allAdmins = Admin::newInstance()->listAll();
+        $aAdmins   = array();
+        $aAdmins["admin_option"] = __('User type', 'jobboard');
+        foreach($allAdmins as $aAdmin) {
+            $aAdmins[$aAdmin["pk_i_id"]] = $aAdmin["b_moderator"] == 0 ? __('admin', 'jobboard') : __('moderator', 'jobboard') ;
+        }
+
+        return json_encode($aAdmins);
+    }
+    osc_add_hook('init_admin', 'osc_get_admin_users' );
+}
+
 // End of file
