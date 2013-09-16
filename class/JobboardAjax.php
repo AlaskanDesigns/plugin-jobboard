@@ -185,9 +185,10 @@ class JobboardAjax
             $st->log_new_note(Params::getParam('applicantID'));
         }
         $aNote = ModelJB::newInstance()->getNoteByID($noteID);
-        $aNote['day']   = date('d', strtotime($aNote['dt_date']));
-        $aNote['month'] = date('M', strtotime($aNote['dt_date']));
-        $aNote['year']  = date('Y', strtotime($aNote['dt_date']));
+        $aNote["admin_username"] = ModelJB::newInstance()->getAdminUsername($aNote["fk_i_admin_id"]);
+        $aNote['day']            = date('d', strtotime($aNote['dt_date']));
+        $aNote['month']          = date('M', strtotime($aNote['dt_date']));
+        $aNote['year']           = date('Y', strtotime($aNote['dt_date']));
         echo json_encode($aNote);
     }
 
@@ -201,9 +202,11 @@ class JobboardAjax
             $st->log_edit_note(Params::getParam('applicantID'), Params::getParam('noteID'));
         }
         $aNote = ModelJB::newInstance()->getNoteByID(Params::getParam('noteID'));
-        $aNote['day']   = date('d', strtotime($aNote['dt_date']));
-        $aNote['month'] = date('M', strtotime($aNote['dt_date']));
-        $aNote['year']  = date('Y', strtotime($aNote['dt_date']));
+        $aNote["admin_username"] = ModelJB::newInstance()->getAdminUsername($aNote["fk_i_admin_id"]);
+        $aNote['day']            = date('d', strtotime($aNote['dt_date']));
+        $aNote['month']          = date('M', strtotime($aNote['dt_date']));
+        $aNote['year']           = date('Y', strtotime($aNote['dt_date']));
+
         echo json_encode($aNote);
     }
 
