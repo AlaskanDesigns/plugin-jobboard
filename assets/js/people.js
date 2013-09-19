@@ -26,9 +26,9 @@ $(document).ready(function() {
         $(value).osc_tooltip($(value).attr('data-tooltip'), {layout: 'gray-tooltip', position: {x: 'right', y: 'middle'}});
     });
 
-    $("#new_applicant_dialog").dialog({ modal: true, minWidth: 400,minHeight: 300, resizable: false,autoOpen: false });
-    $("#add-applicant").click(function() { $("#new_applicant_dialog").dialog("open");  });
-    $("#cancel-dialog").click(function() { $("#new_applicant_dialog").dialog("close"); });
+    $("#new_applicant_dialog").dialog({modal: true, minWidth: 400,minHeight: 300, resizable: false,autoOpen: false});
+    $("#add-applicant").click(function() {$("#new_applicant_dialog").dialog("open");});
+    $("#cancel-dialog").click(function() {$("#new_applicant_dialog").dialog("close");});
 
     $("#add_new_applicant_form").validate({
         onkeyup: false,
@@ -79,22 +79,60 @@ $(document).ready(function() {
         }
     );
 
-    /*jQuery.validator.addMethod("file_required", function(value, element) {
-        if($("#applicant-attachment")[0].files[0]) {
-            return true;
-        } else {
-            return false;
+
+    //********************************//
+    //***** ADD && REMOVE TAGS ******//
+    //********************************//
+
+    //add tag to div
+    $("#tags").on("change", function() {
+        $("#search_tags").show();
+        var tag_id   = $.trim($(this).val());
+        var tag_name = $('#tags [value="' + tag_id + '"]').text();
+
+        var open_div  = '<div class="tag-info" data-tag-id="' + tag_id + '">';
+        var span1     = '<span>' + tag_name + '</span>';
+        var span2     = '<span class="del-tag">x</span>'
+        var close_div = '</div>';
+
+        if(tag_id != '-1') {
+            $("#search_tags").append(open_div + span1 + span2 + close_div);
+            $('#tags option[value="' + tag_id + '"]').remove();
         }
     });
 
-    $("#applicant-attachment").rules(
-        "add", {
-            'file_required': true,
-            messages: {
-                file_required: jobboard.langs.applicant_file_required
-            }
-        }
-    );*/
+    //remove tag from div
+    $(document.body).on('click', '.del-tag', function() {
+       //get id && value
+       var tag_id   = $(this).parent().data("tag-id");
+       var tag_name = $(this).parent().children('span').first().text();
+
+       //remove element
+       $(this).parent().remove();
+
+       //add to selector again
+       $("#tags").append('<option value="' + tag_id + '" >' + tag_name + '</option>');
+
+        //order selector alphabetically
+        var default_option = $('#tags option').first();
+        default_option.remove();
+
+        var listitems = $('#tags').children('option').get();
+        //console.log(listitems);
+        listitems.sort(function(a, b) {
+            var compA = $(a).text().toUpperCase();
+            var compB = $(b).text().toUpperCase();
+
+            return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+        })
+        $.each(listitems, function(idx, itm) {$('#tags').append(itm);});
+        $('#tags').prepend(default_option);
+    });
+
+    //********************************//
+    //**** EN ADD && REMOVE TAGS *****//
+    //********************************//
+
 
     $("#dialog-applicant-email").dialog({
         autoOpen: false,
@@ -131,6 +169,15 @@ $(document).ready(function() {
             'json'
         );
     });
+
+    $("#shortcut-filters").submit(function(event) {
+       var tags = '';
+       $("#search_tags").children().each(function(b, element) {
+           tags = tags + $(this).children('span').first().text() + ',';
+       });
+       tags = tags.slice(0,tags.length-1);
+       $("#current_tags").val(tags);
+    });
 });
 
 var applicant = {
@@ -142,7 +189,7 @@ var applicant = {
                 title: jobboard.langs.hopscotch.feature.add_applicant.title,
                 content: jobboard.langs.hopscotch.feature.add_applicant.content,
                 placement: "left",
-                yOffset: "-16px",
+                yOffset: "-16px"
             }
         ],
         scrollTopMargin: 100,

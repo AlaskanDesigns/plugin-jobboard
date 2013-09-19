@@ -51,18 +51,34 @@
                                     </select>
                                 </div>
                             </div>
+                            <?php if(count($aTags) > 0) { ?>
                             <div class="form-row">
                                 <div class="form-label">
-                                    <?php _e('Rating', 'jobboard'); ?>
+                                    <?php _e('Tags', 'jobboard'); ?>
                                 </div>
                                 <div class="form-controls">
-                                    <div id="rating-filter" class="rater big-star">
-                                        <?php for($k=1; $k<=5; $k++) {
-                                            echo '<input name="rating" type="radio" class="filter-star" value="'.$k.'" title="'.$k.'" '.($k==Params::getParam('rating')?'checked="checked"':'').'/>';
-                                        } ?>
-                                    </div>
+                                    <select name="tags" id="tags">  <!--        tag selector       -->
+                                        <option value="-1" <?php if( Params::getParam('tag') == '' ) echo "selected" ?>><?php _e('Select tags', 'jobboard'); ?></option>
+                                        <?php foreach($aTags as $key => $aTag) {?>
+                                            <option value="<?php echo $aTag["pk_i_id"]; ?>" ><?php echo $aTag["s_name"]; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <?php if(count($aCurrentTags) > 0) { ?>
+                                        <div id="search_tags" name="search_tags" class="container-tags large">
+                                        <?php foreach($aCurrentTags as $aCurrentTags) { ?>
+                                            <div class="tag-info" data-tag-id="<?php echo $aCurrentTags["pk_i_id"]; ?>">
+                                                <span><?php echo $aCurrentTags["s_name"]; ?></span>
+                                                <span class="del-tag">x</span>
+                                            </div>
+                                        <?php } ?>
+                                        </div>
+                                    <?php } else { ?>
+                                        <div id="search_tags" name="search_tags" class="container-tags large hide"></div>
+                                    <?php } ?>
+                                        <input type="hidden" name="current_tags" id="current_tags" value="">
                                 </div>
                             </div>
+                            <?php } ?>
                         </div>
                     </div>
                     <div class="grid-row grid-50">
@@ -115,6 +131,18 @@
                                 </div>
                                 <div class="form-controls">
                                     <?php ManageItemsForm::category_select(null, null, null, true) ; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-label">
+                                <?php _e('Rating', 'jobboard'); ?>
+                            </div>
+                            <div class="form-controls">
+                                <div id="rating-filter" class="rater big-star">
+                                    <?php for($k=1; $k<=5; $k++) {
+                                        echo '<input name="rating" type="radio" class="filter-star" value="'.$k.'" title="'.$k.'" '.($k==Params::getParam('rating')?'checked="checked"':'').'/>';
+                                    } ?>
                                 </div>
                             </div>
                         </div>

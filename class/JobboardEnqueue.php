@@ -193,8 +193,11 @@ class JobboardEnqueue
             'dismiss_tip' => osc_admin_ajax_hook_url('dismiss_tip'),
             'question_delete' => osc_admin_ajax_hook_url('question_delete'),
             'answer_punctuation' => osc_admin_ajax_hook_url('jobboard_answer_punctuation'),
-            'dashboard_tour' => osc_admin_ajax_hook_url('dashboard_tour')
-        );
+            'dashboard_tour' => osc_admin_ajax_hook_url('dashboard_tour'),
+            'get_tags' => osc_admin_ajax_hook_url('get_tags'),
+            'save_applicant_tag' => osc_admin_ajax_hook_url('save_applicant_tag'),
+            'del_applicant_tag' => osc_admin_ajax_hook_url('del_applicant_tag')
+            );
 
         return $ajax;
     }

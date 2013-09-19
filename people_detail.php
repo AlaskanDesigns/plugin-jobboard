@@ -21,6 +21,9 @@
             ModelJB::newInstance()->changeSecret($file['pk_i_id']);
             $file   = $mjb->getCVFromApplicant($applicantId);
 
+            $aTags = json_decode($people["s_tags"], true);
+
+
             $notes  = $mjb->getNotesFromApplicant($applicantId);
             $aNotes = array();
             if(count($notes)>0) {

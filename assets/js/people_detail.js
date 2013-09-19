@@ -271,4 +271,53 @@ $(document).ready(function() {
     }, function(){
         $(this).removeClass('show-box');
     });
+
+
+    refresh_autocomplete_tags();
+    $("#add_tag").on('click', function() {
+      $.post(jobboard.ajax.save_applicant_tag,
+        {
+            'applicant_id' : $("#applicant_status").attr('data-applicant-id'),
+            'tag_name'     : $("#tags_appl").val()
+        },
+        function(data){
+            var obj = jQuery.parseJSON(data);
+            if(obj.length > 0) {
+                var tag_id         = obj.length + 1;
+                var div_tag        = '<div class="tag" data-tag-id="' + tag_id + '">';
+                var tag_name       = '<span><label>' + $("#tags_appl").val() + '</label>';
+                var div_img        = '<div class="icon-remv-tag">';
+                var close_elements = '</span></div></div>';
+                $(".current-tags").append(div_tag + tag_name + div_img + close_elements);
+            }
+        }).done(function(){
+            refresh_autocomplete_tags();
+        });
+    });
+
+    //DELETE TAG
+    $(document.body).on('click', '.icon-remv-tag', function() {
+        var applicant_id = $("#applicant_status").attr('data-applicant-id');
+        var tag_id       = $(this).parent().data('tag-id');
+        var tag_name     = $('.tag[data-tag-id="' + tag_id + '"] span:first').text();
+        $.post(jobboard.ajax.del_applicant_tag,
+        {
+            'applicant_id' : applicant_id,
+            'tag_name': tag_name
+        },
+        function(data) {
+            $('.tag[data-tag-id="' + tag_id + '"]').remove();
+        });
+    });
 });
+
+function refresh_autocomplete_tags() {
+    $.post(jobboard.ajax.get_tags,{}, function(data){
+        var availableTags = new Array();
+        var obj = jQuery.parseJSON(data);
+        for (var i=0;i<obj.length;i++) {
+            availableTags[i] = obj[i].s_name;
+        }
+        $("#tags_appl").autocomplete({ source: availableTags });
+    });
+}

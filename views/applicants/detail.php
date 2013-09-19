@@ -73,6 +73,7 @@
         <?php } ?>
         <li><a class="nav-options" href="#messages" data-toggle="tab"><?php _e("Messages", "jobboard"); ?></a></li>
         <li><a class="nav-options" href="#notes" data-toggle="tab"><?php _e("Notes", "jobboard"); ?></a></li>
+        <li><a class="nav-options" href="#tags" data-toggle="tab"><?php _e("Tags", "jobboard"); ?></a></li>
     </ul>
     <div class="tab-content">
         <!-- cover-letter-cv-section -->
@@ -225,51 +226,66 @@
             <label class="message-applicant"><?php _e("You haven't sent any emails yet.", "jobboard"); ?></label>
         <?php } ?>
         </div>
-    </div>
+        <div id="tags" class="tab-pane">
+            <h3 class="render-title jobboard-title"><?php _e('Current tags for applicant', 'jobboard'); ?></h3>
+            <div>
+                <input class="input-large" name="tags_appl" id="tags_appl" type="text" value="" /><input type="button" id="add_tag" class="btn btn-blue btn-mini" value="<?php _e('Add', 'jobboard'); ?>" />
+                    <div class="current-tags">
+                    <?php if(count($aTags) > 0) { ?>
+                        <?php foreach($aTags as $key => $value) { ?>
+                        <div class="tag" data-tag-id="<?php echo $key; ?>">
+                            <span><?php echo $value; ?></span>
+                            <span class="icon-remv-tag"></span>
+                        </div>
+                        <?php } ?>
+                    <?php } ?>
+                    </div>
+            </div>
+        </div>
     <!-- /tab-content -->
-</div>
-<div id="dialog-note-delete" title="<?php echo osc_esc_html(__('Delete note', 'jobboard')); ?>" class="has-form-actions hide" data-note-id="">
-    <div class="form-horizontal">
-        <div class="form-row">
-            <?php _e('Are you sure you want to delete this note?', 'jobboard'); ?>
-        </div>
-        <div class="form-actions">
-            <div class="wrapper">
-                <a class="btn" href="javascript:void(0);" onclick="$('#dialog-note-delete').dialog('close');"><?php _e('Cancel', 'jobboard'); ?></a>
-                <a id="note-delete-submit" class="btn btn-red" href="javascript:void(0);" ><?php echo osc_esc_html( __('Delete', 'jobboard') ); ?></a>
-                <div class="clear"></div>
+    </div>
+    <div id="dialog-note-delete" title="<?php echo osc_esc_html(__('Delete note', 'jobboard')); ?>" class="has-form-actions hide" data-note-id="">
+        <div class="form-horizontal">
+            <div class="form-row">
+                <?php _e('Are you sure you want to delete this note?', 'jobboard'); ?>
+            </div>
+            <div class="form-actions">
+                <div class="wrapper">
+                    <a class="btn" href="javascript:void(0);" onclick="$('#dialog-note-delete').dialog('close');"><?php _e('Cancel', 'jobboard'); ?></a>
+                    <a id="note-delete-submit" class="btn btn-red" href="javascript:void(0);" ><?php echo osc_esc_html( __('Delete', 'jobboard') ); ?></a>
+                    <div class="clear"></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div id="dialog-note-form" title="<?php echo osc_esc_html(__('Note', 'jobboard')); ?>" class="has-form-actions hide" data-note-id="" data-note-action="" data-applicant-id="<?php echo $applicantId; ?>">
-    <div class="form-horizontal">
-        <div class="form-row">
-            <?php _e('Note', 'jobboard'); ?>
-        </div>
-        <div class="form-row">
-            <textarea id="note_edit_text" name="note_text" style="margin: 2px 0px; width: 255px; height: 90px; "></textarea>
-        </div>
-        <div class="form-actions">
-            <div class="wrapper">
-                <a class="btn" href="javascript:void(0);" onclick="$('#dialog-note-form').dialog('close');"><?php _e('Cancel', 'jobboard'); ?></a>
-                <a id="note-form-submit" href="javascript:void(0);" class="btn btn-red" ><?php echo osc_esc_html( __('Save', 'jobboard') ); ?></a>
-                <div class="clear"></div>
+    <div id="dialog-note-form" title="<?php echo osc_esc_html(__('Note', 'jobboard')); ?>" class="has-form-actions hide" data-note-id="" data-note-action="" data-applicant-id="<?php echo $applicantId; ?>">
+        <div class="form-horizontal">
+            <div class="form-row">
+                <?php _e('Note', 'jobboard'); ?>
+            </div>
+            <div class="form-row">
+                <textarea id="note_edit_text" name="note_text" style="margin: 2px 0px; width: 255px; height: 90px; "></textarea>
+            </div>
+            <div class="form-actions">
+                <div class="wrapper">
+                    <a class="btn" href="javascript:void(0);" onclick="$('#dialog-note-form').dialog('close');"><?php _e('Cancel', 'jobboard'); ?></a>
+                    <a id="note-form-submit" href="javascript:void(0);" class="btn btn-red" ><?php echo osc_esc_html( __('Save', 'jobboard') ); ?></a>
+                    <div class="clear"></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div id="dialog-applicant-email" class="has-form-actions hide" style="height: 350px; width: 725px;">
-    <div class="form-horizontal">
-        <div class="form-row">
-            <input type="text" id="applicant-status-notification-subject" style="width: 695px; height: 20px;" placeholder="<?php echo osc_esc_html(_e('Subject', 'jobboard')); ?>"></div>
-        <div class="form-row"><textarea id="applicant-status-notification-message" style="width: 700px; height: 150px;"></textarea></div>
-        <div class="form-actions">
-            <div class="wrapper">
-                <a id="applicant-status-cancel" class="btn" href="javascript:void(0);"><?php _e("Don't send", 'jobboard'); ?></a>
-                <a id="applicant-status-submit" href="javascript:void(0);" class="btn btn-red" ><?php echo osc_esc_html( __('Send', 'jobboard') ); ?></a>
-                <div class="clear"></div>
+    <div id="dialog-applicant-email" class="has-form-actions hide" style="height: 350px; width: 725px;">
+        <div class="form-horizontal">
+            <div class="form-row">
+                <input type="text" id="applicant-status-notification-subject" style="width: 695px; height: 20px;" placeholder="<?php echo osc_esc_html(_e('Subject', 'jobboard')); ?>"></div>
+            <div class="form-row"><textarea id="applicant-status-notification-message" style="width: 700px; height: 150px;"></textarea></div>
+            <div class="form-actions">
+                <div class="wrapper">
+                    <a id="applicant-status-cancel" class="btn" href="javascript:void(0);"><?php _e("Don't send", 'jobboard'); ?></a>
+                    <a id="applicant-status-submit" href="javascript:void(0);" class="btn btn-red" ><?php echo osc_esc_html( __('Send', 'jobboard') ); ?></a>
+                    <div class="clear"></div>
+                </div>
             </div>
         </div>
     </div>
-</div>

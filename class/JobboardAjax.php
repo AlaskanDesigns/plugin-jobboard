@@ -15,7 +15,10 @@ class JobboardAjax
         osc_add_hook('ajax_admin_note_delete', array(&$this, 'ajax_note_delete'));
         osc_add_hook('ajax_admin_question_delete', array(&$this, 'ajax_question_delete'));
         osc_add_hook('ajax_admin_dashboard_tour', array(&$this, 'ajax_dashboard_tour'));
-    }
+        osc_add_hook('ajax_admin_get_tags', array(&$this, 'ajax_get_tags'));
+        osc_add_hook('ajax_admin_save_applicant_tag', array(&$this, 'ajax_save_applicant_tag'));
+        osc_add_hook('ajax_admin_del_applicant_tag', array(&$this, 'ajax_del_applicant_tag'));
+     }
 
     /**
      * Set applicant rating, logging the action
@@ -239,6 +242,84 @@ class JobboardAjax
     {
         osc_set_preference('dashboard_tour_visible', false, 'jobboard_plugin');
         echo json_encode(array('status' => true));
+    }
+
+    function ajax_get_tags()
+    {
+        $aTags = array();
+        $aTags = ModelJB::newInstance()->getTags(/*SELECT*/ '*');
+        if(empty($aTags)) {
+            return '';
+        }
+
+        echo json_encode($aTags);
+        return true;
+    }
+
+    /**
+     * Save applicant tag
+     */
+    function ajax_save_applicant_tag() {
+        $applicant_id = Params::getParam('applicant_id');
+        $tag          = Params::getParam('tag_name');
+        $mjb          = ModelJB::newInstance();
+
+        if(empty($applicant_id) || empty($tag)) {
+            return null;
+        }
+
+        // COMPANY TAGS
+        $aGeneralTags = $mjb->getTags('s_name');
+        foreach($aGeneralTags as $key => $aTag) {
+            $aTempTags[] = $aTag["s_name"];
+        }
+        if(count(preg_grep( "/^". $tag ."$/i" , $aTempTags )) == 0) {
+             $mjb->insertTag($tag);
+        }
+
+        //TAGS BY APPLICANT
+        $aTags = json_decode($mjb->getApplicantTags($applicant_id), true);
+        if(!empty($aTags)) {
+            if(count(preg_grep( "/^". $tag ."$/i" , $aTags )) == 0) {
+                $aTags[]  = $tag;
+                $jsonTags = json_encode($aTags);
+                $mjb->updateApplicantTags($applicant_id, $jsonTags);
+            } else {
+                echo json_encode(array());
+                return true;
+            }
+        } else {
+            $jsonTags = json_encode(array($tag));
+            $mjb->updateApplicantTags($applicant_id, $jsonTags);
+        }
+
+        echo $jsonTags;
+        return true;
+    }
+
+    /**
+     * Delete applicant tag
+     */
+    function ajax_del_applicant_tag() {
+        $applicant_id = Params::getParam('applicant_id');
+        $tag_name     = Params::getParam('tag_name');
+        $mjb          = ModelJB::newInstance();
+        $aTags        = json_decode($mjb->getApplicantTags($applicant_id), true);
+        $aCurrentTags = array();
+
+        if(count($aTags) > 0) {
+            foreach($aTags as $value) {
+                if(strtolower($tag_name) != strtolower($value)) {
+                    $aCurrentTags[] = $value;
+                }
+            }
+            $jsonTags = json_encode($aCurrentTags);
+            $mjb->updateApplicantTags($applicant_id, $jsonTags);
+        }
+        unset($aTags);
+        unset($aCurrentTags);
+
+        return true;
     }
 }
 

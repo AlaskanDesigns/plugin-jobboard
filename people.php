@@ -38,6 +38,9 @@
             // different status
             $status = jobboard_status();
 
+            //get tags
+            $aTags = ModelJB::newInstance()->getTags('*' /*Select*/, "s_name" );
+
             // get notes and listing info
             for($i = 0; $i < count($people); $i++) {
                 $people[$i]['notes']   = ModelJB::newInstance()->getNotesFromApplicant($people[$i]['pk_i_id']);
@@ -56,6 +59,19 @@
 
             // navbar
             $navbar = $this->navbar();
+
+            // MANAGE TAGS
+            $aSearchTags  = explode(',', Params::getParam('current_tags'));
+            $aCurrentTags = array();
+            foreach($aTags as $k => $aTag) {
+                foreach($aSearchTags as $tagName) {
+                    if($aTag["s_name"] == $tagName) {
+                        unset($aTags[$k]);
+                        $aCurrentTags[] = array("pk_i_id" => $aTag["pk_i_id"], "s_name" => $aTag["s_name"] );
+                    }
+                }
+            }
+            unset($aSearchTags);
 
             // load
             require_once(JOBBOARD_VIEWS . 'applicants/list.php');
@@ -110,6 +126,9 @@
             }
             if(Params::getParam('rating')!='') {
                 $conditions['rating'] = Params::getParam('rating');
+            }
+            if(Params::getParam('current_tags')!='') {
+                $conditions['tags'] = explode(',', Params::getParam('current_tags'));
             }
 
             return $conditions;

@@ -89,6 +89,15 @@
         }
 
         /**
+         * Return table name jobs tags
+         * @return string
+         */
+        public function getTable_JobsTags()
+        {
+            return DB_TABLE_PREFIX.'t_item_job_tags' ;
+        }
+
+        /**
          * Import sql file
          * @param type $file
          */
@@ -410,6 +419,11 @@
                         foreach($aux as $catId) { $array[] = $catId['pk_i_id']; }
                         $cond[] = "i.fk_i_category_id IN (".  implode(',', $array).")";
                     }
+                    if($k=='tags') {
+                        foreach($v as $tag) {
+                            $cond[] = 'a.s_tags like \'%"'. $tag . '"%\'';
+                        }
+                    }
                     if($k=='sex') {
                         $cond[] = "a.s_sex = '".$this->dao->connId->real_escape_string($v)."'";
                     }
@@ -425,7 +439,6 @@
                     if($k=='rating') {
                         $cond[] = "a.i_rating >= ". $this->dao->connId->real_escape_string($v) ;
                     }
-
                 }
             }
             $cond_str = '';
@@ -903,6 +916,44 @@
             return $admin['s_username'];
         }
 
+        public function getTags($select = '*', $order_by = "pk_i_id")
+        {
+            $this->dao->select($select);
+            $this->dao->from($this->getTable_JobsTags());
+            $this->dao->orderBy($order_by);
+            $result = $this->dao->get();
+            if( !$result ) {
+                return array() ;
+            }
+
+            return $result->result();
+        }
+
+        public function insertTag($tag_name) {
+            return $this->dao->insert($this->getTable_JobsTags(), array('s_name' => $tag_name));
+        }
+
+        public function deleteTag($tag_id) {
+            return $this->dao->delete($this->getTable_JobsTags(), array('pk_i_id' => $tag_id));
+        }
+
+        public function getApplicantTags($applicantId)
+        {
+            $this->dao->select("s_tags");
+            $this->dao->from($this->getTable_JobsApplicants());
+            $this->dao->where("pk_i_id", $applicantId);
+            $result = $this->dao->get();
+            $tags   = $result->row();
+            if( !$result ) {
+                return false ;
+            }
+
+            return $tags["s_tags"];
+        }
+
+        public function updateApplicantTags($applicantId, $tags) {
+            return $this->dao->update($this->getTable_JobsApplicants(), array('s_tags' => $tags), array('pk_i_id' => $applicantId));
+        }
     }
 
     // End of file: ./jobboard/model/ModelJB.php
