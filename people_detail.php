@@ -41,6 +41,9 @@
             if($people['b_read']==0) {
                 ModelJB::newInstance()->changeRead($applicantId);
             }
+
+            list($prevApplicantId, $nextApplicantId) = $this->get_search_applicant_ids($applicantId);
+
             // show: This user has applied to more jobs
             $aApplicants = $mjb->search(0,2,array('email' => $people['s_email']));
             if(count($aApplicants)>1) {
@@ -74,6 +77,33 @@
             // load
             require_once(JOBBOARD_VIEWS . 'applicants/detail.php');
         }
+
+
+        public function get_search_applicant_ids($applicantId) {
+            $json_search_applicant_ids = osc_get_preference('applicant_ids_search', 'jobboard');
+            $aSearchApplicantsIds = json_decode($json_search_applicant_ids, true);
+            $prevApplId  = false;
+            $nextApplId  = false;
+            if(count($aSearchApplicantsIds) > 0) {
+                foreach ($aSearchApplicantsIds as $key => $value) {
+                    if($value == $applicantId) {
+                        if($key == '0') {
+                            $prevApplId = false;
+                        } else {
+                            $prevApplId = $aSearchApplicantsIds[$key-1];
+                        }
+                        if(end($aSearchApplicantsIds) == $applicantId) {
+                            $nextApplId = false;
+                        } else {
+                            $nextApplId = $aSearchApplicantsIds[$key+1];
+                        }
+                    }
+                }
+            }
+
+            return array($prevApplId, $nextApplId);
+        }
+
     }
 
     $jpd = new JobboardPeopleDetail();
