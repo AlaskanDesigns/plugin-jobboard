@@ -6,7 +6,7 @@ class JobboardListingActions
         // add/add-post
         osc_add_hook('item_form',          array(&$this, 'jobboard_form') );
         osc_add_hook('posted_item',        array(&$this, 'jobboard_form_post') );
-        osc_add_hook('posted_item',        array(&$this, 'convert_item_premium'), 6 );
+        osc_add_hook('posted_item',        array(&$this, 'convert_item_premium') );
         // edit/edit-post
         osc_add_hook('item_edit',          array(&$this, 'jobboard_item_edit') );
         osc_add_hook('item_edit_post',     array(&$this, 'jobboard_item_edit_post') );
@@ -130,7 +130,11 @@ class JobboardListingActions
     }
 
     function convert_item_premium($aItem) {
-        osc_redirect_to( osc_admin_base_url(true) . "?page=plugins&action=renderplugin&file=jobboard/convert_item_premium.php?item_id=" . $aItem["pk_i_id"] ); //&action=post
+        Session::newInstance()->_set("page", "plugins");
+        Session::newInstance()->_set("action", "renderplugin");
+        Session::newInstance()->_set("file", "premium_ads/view/settings.php");
+        Session::newInstance()->_set("item_id", $aItem["pk_i_id"]);
+        osc_redirect_to(osc_admin_render_plugin_url("premium_ads/view/settings.php"));
     }
 
     /*
