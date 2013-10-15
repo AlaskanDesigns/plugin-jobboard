@@ -130,11 +130,13 @@ class JobboardListingActions
     }
 
     function convert_item_premium($aItem) {
-        Session::newInstance()->_set("page", "plugins");
-        Session::newInstance()->_set("action", "renderplugin");
-        Session::newInstance()->_set("file", "premium_ads/view/settings.php");
-        Session::newInstance()->_set("item_id", $aItem["pk_i_id"]);
-        osc_redirect_to(osc_admin_render_plugin_url("premium_ads/view/settings.php"));
+        if(osc_active_plugins("premium_ads") && osc_available_premium_ads_pack()) {
+            Session::newInstance()->_set("page", "plugins");
+            Session::newInstance()->_set("action", "renderplugin");
+            Session::newInstance()->_set("file", "premium_ads/view/settings.php");
+            Session::newInstance()->_set("item_id", $aItem["pk_i_id"]);
+            osc_redirect_to(osc_admin_render_plugin_url("premium_ads/view/settings.php"));
+        }
     }
 
     /*
